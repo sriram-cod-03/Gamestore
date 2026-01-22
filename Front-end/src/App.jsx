@@ -1,41 +1,37 @@
-import { useState } from 'react'
-import './App.css'
-import Navbar from './Components/Navbar'
-import { Routes, Route, Link } from 'react-router-dom'
-import Home from './Pages/Home'
-import LoginPage from './Pages/LoginPage'
-import PageNotFound from './Components/PageNotFound'
-import Footer from './Components/Footer'
-import SignUp from './Pages/SignUp'
-import GameDetails from './Pages/GameDetails'
-import SearchResults from './Pages/SearchResults'
-import GamesCategory from './Components/GamesCategory'
-import PaymentPage from './Components/PaymentPage'
-
+import { Routes, Route, Navigate } from "react-router-dom";
+import Login from "./pages/Login";
+import Signup from "./pages/Signup";
+import Dashboard from "./pages/Dashboard";
+import Workouts from "./pages/Workouts";
+import ProtectedRoute from "./components/ProtectedRoute";
 
 function App() {
-  
-
   return (
-    <>
-      <Navbar/>
-      
-      <div>
-        <Routes>
-          <Route path="/" element={<Home/>} />
-          <Route path="/game/:id" element={<GameDetails/>}/>
-          <Route path="/search/:query" element={<SearchResults/>}/>
-          <Route path="/login" element={<LoginPage/>}/>
-          <Route path="/signUp" element={<SignUp/>} />
-          <Route path='*' element={<PageNotFound/>}/>
-            {/* Dynamic category route */}
-                <Route path="/games/:category" element={< GamesCategory/>} />
-            <Route path="/payment/:id" element={<PaymentPage/>} />
-        </Routes>
-      </div>
-       <Footer/>
-    </>
-  )
+    <Routes>
+      {/* when path is "/", redirect to /login */}
+      <Route path="/" element={<Navigate to="/login" replace />} />
+
+      <Route path="/login" element={<Login />} />
+      <Route path="/signup" element={<Signup />} />
+
+      <Route
+        path="/dashboard"
+        element={
+          <ProtectedRoute>
+            <Dashboard />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/workouts"
+        element={
+          <ProtectedRoute>
+            <Workouts />
+          </ProtectedRoute>
+        }
+      />
+    </Routes>
+  );
 }
 
-export default App
+export default App;

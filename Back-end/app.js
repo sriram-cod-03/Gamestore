@@ -7,9 +7,9 @@ var cors = require('cors');
 var mongoose = require('mongoose');
 require('dotenv').config();  // load .env
 
-var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/users');
-var paymentRouter = require('./routes/payment'); // ✅ payment routes
+var indexRouter = require('./routes/index.js');
+var usersRouter = require('./routes/users.js');
+var paymentRouter = require('./routes/payment.js'); // ✅ payment routes
 
 var app = express();
 
@@ -38,7 +38,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 // Routes
 app.use('/', indexRouter);
-app.use('/api', usersRouter);          // /api/signup, /api/login, /api/test
+app.use('/api',usersRouter);          // /api/signup, /api/login, /api/test
 app.use('/api/payment', paymentRouter); // /api/payment/checkout, /test
 
 module.exports = app;

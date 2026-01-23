@@ -1,5 +1,5 @@
 import { Routes, Route, Navigate } from "react-router-dom";
-import Login from "./pages/Login";
+import LoginPage from "./Pages/LoginPage";
 import Signup from "./pages/Signup";
 import Dashboard from "./pages/Dashboard";
 import Workouts from "./pages/Workouts";
@@ -11,7 +11,7 @@ function App() {
       {/* when path is "/", redirect to /login */}
       <Route path="/" element={<Navigate to="/login" replace />} />
 
-      <Route path="/login" element={<Login />} />
+      <Route path="/login" element={<LoginPage />} />
       <Route path="/signup" element={<Signup />} />
 
       <Route

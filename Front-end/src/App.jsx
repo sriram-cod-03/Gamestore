@@ -1,6 +1,6 @@
 import { Routes, Route, Navigate } from "react-router-dom";
 import LoginPage from "./Pages/LoginPage";
-import Signup from "./pages/Signup";
+import SignUp from "./pages/SignUp";
 import Dashboard from "./pages/Dashboard";
 import Workouts from "./pages/Workouts";
 import ProtectedRoute from "./components/ProtectedRoute";
@@ -12,7 +12,7 @@ function App() {
       <Route path="/" element={<Navigate to="/login" replace />} />
 
       <Route path="/login" element={<LoginPage />} />
-      <Route path="/signup" element={<Signup />} />
+      <Route path="/signup" element={<SignUp />} />
 
       <Route
         path="/dashboard"

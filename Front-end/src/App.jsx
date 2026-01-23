@@ -1,35 +1,23 @@
 import { Routes, Route, Navigate } from "react-router-dom";
 import LoginPage from "./Pages/LoginPage";
 import SignUp from "./Pages/SignUp";
-import Dashboard from "./pages/Dashboard";
-import Workouts from "./pages/Workouts";
-import ProtectedRoute from "./components/ProtectedRoute";
+import SearchResults from "./Pages/SearchResults";
+import GameDetails from "./Pages/GameDetails";
+import Home from "./Pages/Home";
+
+
 
 function App() {
   return (
     <Routes>
       {/* when path is "/", redirect to /login */}
       <Route path="/" element={<Navigate to="/login" replace />} />
-
       <Route path="/login" element={<LoginPage />} />
       <Route path="/signup" element={<SignUp/>} />
+      <Route path="/searchresults" element={<SearchResults/>}/>
+      <Route path="/gamedetails" element={<GameDetails/>}/>
+      <Route path="/home" element={<Home/>}/>
 
-      <Route
-        path="/dashboard"
-        element={
-          <ProtectedRoute>
-            <Dashboard />
-          </ProtectedRoute>
-        }
-      />
-      <Route
-        path="/workouts"
-        element={
-          <ProtectedRoute>
-            <Workouts />
-          </ProtectedRoute>
-        }
-      />
     </Routes>
   );
 }

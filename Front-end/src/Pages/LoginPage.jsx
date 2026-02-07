@@ -3,18 +3,19 @@ import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import loginBg from "../assets/images/LoginBGimage.jpg";
 
+// ✅ Backend base URL from .env
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 const LoginPage = () => {
   const navigate = useNavigate();
 
-  // states
+  // state
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  // ✅ If already logged in → redirect to dashboard
+  // ✅ If already logged in → go to dashboard
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (token) {
@@ -22,7 +23,7 @@ const LoginPage = () => {
     }
   }, [navigate]);
 
-  // LOGIN FUNCTION
+  // ✅ LOGIN HANDLER
   const handleLogin = async () => {
     if (!email || !password) {
       alert("Please enter email and password");
@@ -33,14 +34,14 @@ const LoginPage = () => {
 
     try {
       const res = await axios.post(
-        `${API_BASE_URL}/users/login`, // ✅ CORRECT ROUTE
+        `${API_BASE_URL}/api/login`, // ✅ CORRECT ROUTE
         {
           email: email.trim().toLowerCase(),
           password: password.trim(),
         }
       );
 
-      // save JWT token
+      // save token
       localStorage.setItem("token", res.data.token);
 
       alert("✅ Login successful!");
@@ -51,7 +52,9 @@ const LoginPage = () => {
       let msg = "Login failed";
 
       if (!err.response) {
-        msg = "❌ Cannot reach server (backend sleeping?)";
+        msg = "❌ Cannot reach server (backend may be sleeping)";
+      } else if (err.response?.data?.error) {
+        msg = err.response.data.error;
       } else if (err.response?.data?.message) {
         msg = err.response.data.message;
       }
@@ -65,7 +68,7 @@ const LoginPage = () => {
   return (
     <div
       style={{
-        height: "100vh",
+        minHeight: "100vh",
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
@@ -77,12 +80,13 @@ const LoginPage = () => {
       <div
         className="card shadow-lg"
         style={{
-          width: "500px",
+          width: "420px",
           borderRadius: "15px",
-          backgroundColor: "transparent",
+          backgroundColor: "rgba(0,0,0,0.6)",
+          color: "white",
         }}
       >
-        <div className="card-body text-white">
+        <div className="card-body">
           <h4 className="text-center mb-3">
             Welcome to <b>The GameStore</b>
           </h4>
@@ -93,7 +97,7 @@ const LoginPage = () => {
             <input
               type="email"
               className="form-control"
-              placeholder="Enter your email"
+              placeholder="Enter email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
             />
@@ -106,7 +110,7 @@ const LoginPage = () => {
               <input
                 type={showPassword ? "text" : "password"}
                 className="form-control"
-                placeholder="Enter your password"
+                placeholder="Enter password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
               />
@@ -129,8 +133,10 @@ const LoginPage = () => {
             {loading ? "Logging in..." : "Login"}
           </button>
 
-          {/* SIGNUP LINK */}
-          <p className="text-center mt-3">Don't have an account?</p>
+          {/* SIGNUP */}
+          <p className="text-center mt-3">
+            Don't have an account?
+          </p>
           <Link to="/signup" className="btn btn-link text-white w-100">
             Sign Up
           </Link>

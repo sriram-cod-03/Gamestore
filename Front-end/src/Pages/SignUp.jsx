@@ -1,9 +1,11 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import signupBg from "../assets/images/SignUpBGimage.jpg";
 
+// ✅ Backend base URL
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
 const SignUp = () => {
   const navigate = useNavigate();
 
@@ -32,13 +34,9 @@ const SignUp = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (
-      !formData.firstName ||
-      !formData.lastName ||
-      !formData.email ||
-      !formData.password ||
-      !formData.mobile
-    ) {
+    const { firstName, lastName, email, password, mobile } = formData;
+
+    if (!firstName || !lastName || !email || !password || !mobile) {
       setErrorMsg("All fields are required");
       return;
     }
@@ -47,19 +45,20 @@ const SignUp = () => {
 
     try {
       const res = await axios.post(
-        `${API_BASE_URL}/api/auth/signup`, // ✅ correct API
+        `${API_BASE_URL}/api/signup`, // ✅ CORRECT ROUTE
         {
-          name: `${formData.firstName} ${formData.lastName}`,
-          email: formData.email.trim().toLowerCase(),
-          password: formData.password.trim(),
-          mobile: formData.mobile.trim(),
+          firstName,
+          lastName,
+          email: email.trim().toLowerCase(),
+          password: password.trim(),
+          mobile: mobile.trim(),
         }
       );
 
       setSuccessMsg(res.data.message || "Signup successful!");
       setErrorMsg("");
 
-      // redirect to login after short delay
+      // redirect to login
       setTimeout(() => {
         navigate("/login");
       }, 1500);
@@ -69,10 +68,10 @@ const SignUp = () => {
       let msg = "Signup failed";
 
       if (!err.response) {
-        msg = "❌ Cannot reach server. Backend may be sleeping.";
+        msg = "❌ Cannot reach server (backend may be sleeping)";
       } else if (err.response?.data?.message) {
         msg = err.response.data.message;
-      } else if (err.response?.status === 409) {
+      } else if (err.response?.status === 400) {
         msg = "User already exists. Please login.";
       }
 
@@ -96,9 +95,9 @@ const SignUp = () => {
       <div
         className="card shadow-lg"
         style={{
-          width: "500px",
+          width: "450px",
           borderRadius: "15px",
-          backgroundColor: "transparent",
+          backgroundColor: "rgba(0,0,0,0.65)",
           color: "white",
         }}
       >
@@ -128,7 +127,6 @@ const SignUp = () => {
                 name="firstName"
                 value={formData.firstName}
                 onChange={handleChange}
-                required
               />
             </div>
 
@@ -141,7 +139,6 @@ const SignUp = () => {
                 name="lastName"
                 value={formData.lastName}
                 onChange={handleChange}
-                required
               />
             </div>
 
@@ -154,7 +151,6 @@ const SignUp = () => {
                 name="email"
                 value={formData.email}
                 onChange={handleChange}
-                required
               />
             </div>
 
@@ -168,7 +164,6 @@ const SignUp = () => {
                   name="password"
                   value={formData.password}
                   onChange={handleChange}
-                  required
                 />
                 <button
                   type="button"
@@ -189,14 +184,13 @@ const SignUp = () => {
                 name="mobile"
                 value={formData.mobile}
                 onChange={handleChange}
-                required
               />
             </div>
 
             {/* SUBMIT */}
             <button
               type="submit"
-              className="btn btn-outline-dark w-100"
+              className="btn btn-outline-success w-100"
               disabled={loading}
             >
               {loading ? "Creating account..." : "Sign Up"}

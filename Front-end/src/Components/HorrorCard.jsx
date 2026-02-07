@@ -1,86 +1,100 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { requireAuthAndNavigate } from "../utils/auth";
+import "../styles/horror.css";
 
-// CACHE
-let horrorGameCache = null;
+let horrorCache = null;
 
 const HorrorCard = () => {
-  const [HorrorGameData, setHorrorGameData] = useState(horrorGameCache || []);
-  const [isLoading, setIsLoading] = useState(!horrorGameCache);
+  const [games, setGames] = useState(horrorCache || []);
+  const [loading, setLoading] = useState(!horrorCache);
+
   const navigate = useNavigate();
 
-  const HorrorGames = [
-    "Resident Evil: Village",
-    "Resident Evil (2002)",
+  const horrorGameNames = [
+    "Resident Evil Village",
+    "Resident Evil 2002",
     "Song of Horror",
-    "The Backrooms 1998 - Found Footage Survival Horror Game",
+    "The Backrooms 1998",
   ];
 
   useEffect(() => {
-    if (horrorGameCache) return;
+    if (horrorCache) return;
 
     const fetchHorrorGames = async () => {
-      const apiKey = "10339595c43349fe932bbf361059223a";
-      const tempData = [];
+      try {
+        const apiKey = "10339595c43349fe932bbf361059223a";
 
-      for (const name of HorrorGames) {
-        const url = `https://api.rawg.io/api/games?search=${encodeURIComponent(
-          name
-        )}&key=${apiKey}`;
+        // ⚡ Parallel fetch (FAST)
+        const requests = horrorGameNames.map((name) =>
+          fetch(
+            `https://api.rawg.io/api/games?search=${encodeURIComponent(
+              name
+            )}&key=${apiKey}`
+          ).then((res) => res.json())
+        );
 
-        try {
-          const response = await fetch(url);
-          const data = await response.json();
-          if (data.results && data.results.length > 0) {
-            tempData.push(data.results[0]);
-          }
-        } catch (err) {
-          console.error("fetch error", err);
-        }
+        const responses = await Promise.all(requests);
+
+        const finalGames = responses
+          .map((r) => r.results?.[0])
+          .filter(Boolean);
+
+        horrorCache = finalGames;
+        setGames(finalGames);
+      } catch (err) {
+        console.error("Horror games fetch failed", err);
+      } finally {
+        setLoading(false);
       }
-      horrorGameCache = tempData;    //cache
-      setHorrorGameData(tempData);
-      setIsLoading(false);
     };
 
     fetchHorrorGames();
   }, []);
 
-  if (isLoading) return <p className="text-center text-white"></p>;
-  if (!isLoading && HorrorGameData.length === 0)
-    return <p className="text-center text-white"></p>;
+  const handleShowMore = (id) => {
+    requireAuthAndNavigate(navigate, `/game/${id}`);
+  };
+
+  // ✅ MAIN FIX: hide everything while loading
+  if (loading) {
+    return null;
+  }
+
+  // Safety check
+  if (games.length === 0) {
+    return null;
+  }
 
   return (
-    <div className="container mt-4">
-      <h4 className="mt-3 text-white">Horror Games</h4>
-      <div className="row">
-        {HorrorGameData.map((game) => (
-          <div className="col-md-3 mb-4" key={game.id}>
-            <div className="card h-100 shadow">
-              <img
-                src={game.background_image}
-                alt={game.name}
-                className="card-img-top"
-                style={{ height: "200px", objectFit: "cover" }}
-              />
-              <div
-                className="card-body text-white"
-                style={{ backgroundColor: "black" }}
-              >
-                <h5 className="card-title">{game.name}</h5>
-                <p className="card-text">🎯 Rating: {game.rating} / 5</p>
-                <p className="card-text">📅 Released: {game.released}</p>
-                <p className="card-text">
-                  🎮 Genres: {game.genres.map((g) => g.name).join(", ")}
-                </p>
-                <button
-                  type="button"
-                  className="btn btn-secondary"
-                  onClick={() => navigate(`/game/${game.id}`)}
-                >
-                  Show more
-                </button>
-              </div>
+    <div className="horror-container">
+      {/* ✅ TITLE SHOWN ONLY AFTER LOAD */}
+      <h4 className="horror-title">Horror Games</h4>
+
+      <div className="horror-grid">
+        {games.map((game) => (
+          <div className="game-card horror-card" key={game.id}>
+            <div
+              className="game-bg"
+              style={{
+                backgroundImage: `url(${game.background_image})`,
+              }}
+            />
+
+            {/* HORROR BADGE */}
+            <span className="horror-badge">HORROR</span>
+
+            <div className="game-overlay">
+              <h5>{game.name}</h5>
+              <p>⭐ {game.rating || "N/A"}</p>
+              <p>📅 {game.released || "Unknown"}</p>
+              <p className="genres">
+                🎮 {game.genres?.map((g) => g.name).slice(0, 2).join(", ")}
+              </p>
+
+              <button onClick={() => handleShowMore(game.id)}>
+                Show More
+              </button>
             </div>
           </div>
         ))}

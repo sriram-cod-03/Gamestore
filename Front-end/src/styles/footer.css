@@ -1,0 +1,56 @@
+/* FOOTER BASE */
+.app-footer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  z-index: 1000;
+
+  display: flex;
+  justify-content: center;
+  padding: 10px 0;
+
+  transition: transform 0.35s ease-in-out;
+}
+
+/* SHOW FOOTER */
+.app-footer.show {
+  transform: translateY(0);
+}
+
+/* HIDE FOOTER (slide down) */
+.app-footer.hide {
+  transform: translateY(120%);
+}
+
+/* CARD STYLE */
+.footer-card {
+  width: 95%;
+  max-width: 1200px;
+  background: #1e1e1e;
+  border-radius: 14px;
+  padding: 16px 24px;
+  box-shadow: 0 -5px 25px rgba(0, 0, 0, 0.6);
+}
+
+.footer-heading {
+  color: #facc15;
+  margin-bottom: 10px;
+}
+
+.footer-links {
+  list-style: none;
+  display: flex;
+  gap: 20px;
+  padding: 0;
+  margin: 0;
+}
+
+.footer-links a {
+  color: white;
+  text-decoration: none;
+}
+
+.footer-links a:hover {
+  color: #00ff88;
+}

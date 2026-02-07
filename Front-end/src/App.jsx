@@ -1,7 +1,11 @@
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, useLocation } from "react-router-dom";
 
+// Components
 import Navbar from "./Components/Navbar";
 import Footer from "./Components/Footer";
+import PageNotFound from "./Components/PageNotFound";
+import PaymentPage from "./Components/PaymentPage";
+import GamesCategory from "./Components/GamesCategory";
 
 // Pages
 import Home from "./Pages/Home";
@@ -9,19 +13,21 @@ import LoginPage from "./Pages/LoginPage";
 import SignUp from "./Pages/SignUp";
 import SearchResults from "./Pages/SearchResults";
 import GameDetails from "./Pages/GameDetails";
-import PageNotFound from "./Components/PageNotFound";
-
-// Components / Pages
-import PaymentPage from "./Components/PaymentPage";
-import GamesCategory from "./Components/GamesCategory";
 
 function App() {
+  const location = useLocation();
+
+  // 🔥 Pages where Navbar & Footer should NOT appear
+  const hideLayout =
+    location.pathname === "/login" || location.pathname === "/signup";
+
   return (
     <>
-      <Navbar />
+      {/* ✅ Navbar hidden on login & signup */}
+      {!hideLayout && <Navbar />}
 
       <Routes>
-        {/* HOME / DASHBOARD */}
+        {/* HOME */}
         <Route path="/" element={<Home />} />
         <Route path="/home" element={<Home />} />
         <Route path="/dashboard" element={<Home />} />
@@ -31,7 +37,7 @@ function App() {
         <Route path="/signup" element={<SignUp />} />
 
         {/* SEARCH */}
-        <Route path="/searchresults" element={<SearchResults />} />
+        <Route path="/search/:query" element={<SearchResults />} />
 
         {/* GAME DETAILS */}
         <Route path="/game/:id" element={<GameDetails />} />
@@ -42,14 +48,14 @@ function App() {
         {/* CATEGORY */}
         <Route path="/games/:category" element={<GamesCategory />} />
 
-        {/* 404 FALLBACK */}
+        {/* 404 */}
         <Route path="*" element={<PageNotFound />} />
       </Routes>
 
-      <Footer />
+      {/* ✅ Footer hidden on login & signup */}
+      {!hideLayout && <Footer />}
     </>
   );
 }
 
 export default App;
-

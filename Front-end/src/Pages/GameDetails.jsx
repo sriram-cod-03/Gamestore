@@ -1,5 +1,6 @@
 import { useParams, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
+import "../styles/gameDetails.css";
 
 const API_KEY = import.meta.env.VITE_RAWG_API_KEY;
 
@@ -13,18 +14,18 @@ const GameDetails = () => {
   const [error, setError] = useState("");
 
   useEffect(() => {
-    const fetchGame = async () => {
+    const fetchGameDetails = async () => {
       try {
         setLoading(true);
 
-        const gameRes = await fetch(
-          `https://api.rawg.io/api/games/${id}?key=${API_KEY}`
-        );
-        const gameData = await gameRes.json();
+        const [gameRes, screenRes] = await Promise.all([
+          fetch(`https://api.rawg.io/api/games/${id}?key=${API_KEY}`),
+          fetch(
+            `https://api.rawg.io/api/games/${id}/screenshots?key=${API_KEY}`
+          ),
+        ]);
 
-        const screenRes = await fetch(
-          `https://api.rawg.io/api/games/${id}/screenshots?key=${API_KEY}`
-        );
+        const gameData = await gameRes.json();
         const screenData = await screenRes.json();
 
         setGame(gameData);
@@ -37,63 +38,83 @@ const GameDetails = () => {
       }
     };
 
-    fetchGame();
+    fetchGameDetails();
   }, [id]);
 
-  if (loading)
-    return <p className="text-center mt-4 text-white">Loading...</p>;
+  if (loading) {
+    return <div className="details-loader">Loading game details...</div>;
+  }
 
-  if (error)
-    return <p className="text-center mt-4 text-danger">{error}</p>;
+  if (error) {
+    return <div className="details-error">{error}</div>;
+  }
 
-  if (!game)
-    return <p className="text-center mt-4 text-white">Game not found</p>;
+  if (!game) {
+    return <div className="details-error">Game not found</div>;
+  }
 
   return (
-    <div className="container mt-4 text-white">
-      <h2>{game.name}</h2>
-
-      {game.background_image && (
-        <img
-          src={game.background_image}
-          alt={game.name}
-          className="img-fluid rounded mb-3"
-        />
-      )}
-
-      <p><strong>⭐ Rating:</strong> {game.rating}</p>
-      <p><strong>📅 Released:</strong> {game.released}</p>
-      <p><strong>⏳ Playtime:</strong> {game.playtime} hrs</p>
-
-      <p>
-        <strong>🎮 Platforms:</strong>{" "}
-        {game.platforms?.map(p => p.platform.name).join(", ")}
-      </p>
-
-      <p>
-        <strong>📖 Description:</strong><br />
-        {game.description_raw || "No description available"}
-      </p>
-
-      <h4 className="mt-4">Screenshots</h4>
-      <div className="row">
-        {screenshots.map(shot => (
-          <div key={shot.id} className="col-md-4 mb-3">
-            <img
-              src={shot.image}
-              alt="screenshot"
-              className="img-fluid rounded"
-            />
-          </div>
-        ))}
+    <div className="game-details-page">
+      {/* 🔥 HERO BANNER */}
+      <div
+        className="game-hero"
+        style={{
+          backgroundImage: `url(${game.background_image})`,
+        }}
+      >
+        <div className="hero-overlay">
+          <h1>{game.name}</h1>
+          <p>{game.genres?.map((g) => g.name).join(" • ")}</p>
+        </div>
       </div>
 
-      <button
-        className="btn btn-outline-warning mt-3"
-        onClick={() => navigate(`/payment/${id}`)}
-      >
-        Buy Now
-      </button>
+      {/* 🔍 INFO CARD */}
+      <div className="game-info-card">
+        <div className="info-grid">
+          <div>
+            ⭐ <strong>Rating:</strong> {game.rating || "N/A"} / 5
+          </div>
+          <div>
+            📅 <strong>Released:</strong> {game.released || "Unknown"}
+          </div>
+          <div>
+            ⏳ <strong>Playtime:</strong> {game.playtime} hrs
+          </div>
+          <div>
+            🎮 <strong>Platforms:</strong>{" "}
+            {game.platforms?.map((p) => p.platform.name).join(", ")}
+          </div>
+        </div>
+
+        <div className="description">
+          <h3>Description</h3>
+          <p>{game.description_raw || "No description available"}</p>
+        </div>
+      </div>
+
+      {/* 📸 SCREENSHOTS */}
+      {screenshots.length > 0 && (
+        <div className="screenshots-section">
+          <h3>Screenshots</h3>
+          <div className="screenshots-grid">
+            {screenshots.map((shot) => (
+              <img
+                key={shot.id}
+                src={shot.image}
+                alt="screenshot"
+                loading="lazy"
+              />
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* 💰 BUY BUTTON */}
+      <div className="buy-section">
+        <button onClick={() => navigate(`/payment/${id}`)}>
+          Buy Now
+        </button>
+      </div>
     </div>
   );
 };

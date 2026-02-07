@@ -1,51 +1,54 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import "../styles/footer.css";
 
 const Footer = () => {
+  const [showFooter, setShowFooter] = useState(true);
+  const [lastScrollY, setLastScrollY] = useState(0);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const currentScrollY = window.scrollY;
+
+      // scroll down → hide footer
+      if (currentScrollY > lastScrollY && currentScrollY > 100) {
+        setShowFooter(false);
+      }
+      // scroll up → show footer
+      else {
+        setShowFooter(true);
+      }
+
+      setLastScrollY(currentScrollY);
+    };
+
+    window.addEventListener("scroll", handleScroll);
+
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [lastScrollY]);
+
   return (
-    <footer className="footer align-items-end mt-5">
-      <div>
-        <div className="card bg-dark text-white shadow-lg">
-          <div className="card-body">
-            <div className="col">
-              {/* OUR GAMES */}
-              <div className="col-12">
-                <h5 className="footer-heading text-warning mb-3">Games</h5>
+    <footer className={`app-footer ${showFooter ? "show" : "hide"}`}>
+      <div className="footer-card">
+        <h5 className="footer-heading">Games</h5>
 
-                <ul className="list-unstyled d-flex gap-4 flex-wrap">
-                  <li>
-                    <Link
-                      to="/games/playstation"
-                      className="nav-link text-white"
-                    >
-                      PlayStation
-                    </Link>
-                  </li>
-                  <li>
-                    <Link to="/games/xbox" className="nav-link text-white">
-                      Xbox
-                    </Link>
-                  </li>
-                  <li>
-                    <Link to="/games/nintendo" className="nav-link text-white">
-                      Nintendo
-                    </Link>
-                  </li>
-                  <li>
-                    <Link to="/games/digital" className="nav-link text-white">
-                      Digital
-                    </Link>
-                  </li>
-                </ul>
-
-              </div>
-            </div>
-          </div>
-        </div>
+        <ul className="footer-links">
+          <li>
+            <Link to="/games/playstation">PlayStation</Link>
+          </li>
+          <li>
+            <Link to="/games/xbox">Xbox</Link>
+          </li>
+          <li>
+            <Link to="/games/nintendo">Nintendo</Link>
+          </li>
+          <li>
+            <Link to="/games/digital">Digital</Link>
+          </li>
+        </ul>
       </div>
     </footer>
   );
 };
 
 export default Footer;
-

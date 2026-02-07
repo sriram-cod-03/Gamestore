@@ -1,25 +1,25 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { requireAuthAndNavigate } from "../utils/auth";
+import "../styles/recommended.css";
 
-// CACHE
+// 🔥 MODULE LEVEL CACHE
 let recommendedCache = null;
 
-const RecommendedGameCards = () => {
-  const [recommendedGameData, setRecommendedGameData] = useState(
-    recommendedCache || []
-  );
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const [isLoading, setIsLoading] = useState(!recommendedCache);
+const ITEMS_PER_PAGE = 4;
 
-  const itemsPerPage = 4;
+const RecommendedGameCards = () => {
+  const [games, setGames] = useState(recommendedCache || []);
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [loading, setLoading] = useState(!recommendedCache);
+
   const navigate = useNavigate();
 
-  const RecommendedGames = [
-    "The Witcher",
-    "Call of Duty: WWII",
-    "Red Dead Redemption",
-    "Assassin’s Creed IV: Black Flag",
+  const recommendedNames = [
+    "The Witcher 3",
+    "Call of Duty WWII",
+    "Red Dead Redemption 2",
+    "Assassin’s Creed IV Black Flag",
     "Cyberpunk 2077",
     "GTA V",
     "Elden Ring",
@@ -29,127 +29,110 @@ const RecommendedGameCards = () => {
   useEffect(() => {
     if (recommendedCache) return;
 
-    const fetchRecommendedGames = async () => {
-      const apiKey = "10339595c43349fe932bbf361059223a";
-      const gameData = [];
+    const fetchGames = async () => {
+      try {
+        const apiKey = "10339595c43349fe932bbf361059223a";
 
-      for (const name of RecommendedGames) {
-        const url = `https://api.rawg.io/api/games?search=${encodeURIComponent(
-          name
-        )}&key=${apiKey}`;
+        const requests = recommendedNames.map((name) =>
+          fetch(
+            `https://api.rawg.io/api/games?search=${encodeURIComponent(
+              name
+            )}&key=${apiKey}`
+          ).then((res) => res.json())
+        );
 
-        try {
-          const response = await fetch(url);
-          const data = await response.json();
+        const responses = await Promise.all(requests);
 
-          if (data.results && data.results.length > 0) {
-            gameData.push(data.results[0]);
-          }
-        } catch (err) {
-          console.error("Fetch error for", name, err);
-        }
+        const finalGames = responses
+          .map((r) => r.results?.[0])
+          .filter(Boolean);
+
+        recommendedCache = finalGames;
+        setGames(finalGames);
+      } catch (err) {
+        console.error("Recommended games fetch failed", err);
+      } finally {
+        setLoading(false);
       }
-
-      recommendedCache = gameData; // cache
-      setRecommendedGameData(gameData);
-      setIsLoading(false);
     };
 
-    fetchRecommendedGames();
+    fetchGames();
   }, []);
 
-  const handleShowMore = (gameId) => {
-    requireAuthAndNavigate(navigate, `/game/${gameId}`);
+  const handleShowMore = (id) => {
+    requireAuthAndNavigate(navigate, `/game/${id}`);
   };
 
   const handleNext = () => {
-    if (currentIndex + itemsPerPage < recommendedGameData.length) {
-      setCurrentIndex(currentIndex + itemsPerPage);
+    if (currentIndex + ITEMS_PER_PAGE < games.length) {
+      setCurrentIndex((prev) => prev + ITEMS_PER_PAGE);
     }
   };
 
   const handlePrev = () => {
-    if (currentIndex - itemsPerPage >= 0) {
-      setCurrentIndex(currentIndex - itemsPerPage);
+    if (currentIndex - ITEMS_PER_PAGE >= 0) {
+      setCurrentIndex((prev) => prev - ITEMS_PER_PAGE);
     }
   };
 
-  if (isLoading) {
-    return (
-      <div className="container mt-4">
-        <p className="text-center text-white mt-4"></p>
-      </div>
-    );
+  // ✅ IMPORTANT PART (THIS SOLVES YOUR PROBLEM)
+  // Hide EVERYTHING while loading
+  if (loading) {
+    return null; // nothing shown
   }
 
-  if (!isLoading && recommendedGameData.length === 0) {
-    return (
-      <div className="container mt-4">
-        <p className="text-center text-white mt-4"></p>
-      </div>
-    );
+  // Optional safety check
+  if (games.length === 0) {
+    return null;
   }
 
   return (
-    <div className="container mt-4 position-relative">
-      <h4 className="mt-3 text-white">Recommended Game</h4>
+    <div className="recommended-container">
+      {/* ✅ TITLE SHOWN ONLY AFTER LOADING */}
+      <div className="recommended-header">
+        <h4>Recommended Games</h4>
 
-      <div className="row">
-        {recommendedGameData
-          .slice(currentIndex, currentIndex + itemsPerPage)
-          .map((game) => (
-            <div className="col-md-3 mb-4" key={game.id}>
-              <div className="card h-100 shadow">
-                <img
-                  src={game.background_image}
-                  alt={game.name}
-                  className="card-img-top"
-                  style={{ height: "200px", objectFit: "cover" }}
-                />
-                <div
-                  className="card-body text-white"
-                  style={{ backgroundColor: "black" }}
-                >
-                  <h5 className="card-title">{game.name}</h5>
-                  <p className="card-text">⭐ Rating: {game.rating} / 5</p>
-                  <p className="card-text">📅 Released: {game.released}</p>
-                  <p className="card-text">
-                    🎮 Genres: {game.genres.map((g) => g.name).join(", ")}
-                  </p>
-                  <button
-                    type="button"
-                    className="btn btn-secondary btn-sm"
-                    onClick={() => handleShowMore(game.id)}
-                  >
-                    Show More
-                  </button>
-                </div>
-              </div>
-            </div>
-          ))}
-      </div>
-
-      {recommendedGameData.length > itemsPerPage && (
-        <div
-          className="position-absolute top-0 end-0 me-3 mt-2"
-          style={{ zIndex: 5 }}
-        >
-          <button
-            className="btn me-2"
-            onClick={handlePrev}
-            disabled={currentIndex === 0}
-          >
+        <div className="nav-buttons">
+          <button onClick={handlePrev} disabled={currentIndex === 0}>
             ⬅
           </button>
           <button
-            className="btn"
             onClick={handleNext}
-            disabled={currentIndex + itemsPerPage >= recommendedGameData.length}
+            disabled={currentIndex + ITEMS_PER_PAGE >= games.length}
           >
             ➡
           </button>
         </div>
-      )}
+      </div>
+
+      {/* ✅ GAME CARDS */}
+      <div className="recommended-grid">
+        {games
+          .slice(currentIndex, currentIndex + ITEMS_PER_PAGE)
+          .map((game) => (
+            <div className="game-card" key={game.id}>
+              <div
+                className="game-bg"
+                style={{
+                  backgroundImage: `url(${game.background_image})`,
+                }}
+              />
+
+              <div className="game-overlay">
+                <h5>{game.name}</h5>
+                <p>⭐ {game.rating || "N/A"}</p>
+                <p>📅 {game.released || "Unknown"}</p>
+                <p className="genres">
+                  🎮 {game.genres?.map((g) => g.name).slice(0, 2).join(", ")}
+                </p>
+
+                <button onClick={() => handleShowMore(game.id)}>
+                  Show More
+                </button>
+              </div>
+            </div>
+          ))}
+      </div>
     </div>
   );
 };

@@ -1,172 +1,120 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import "../styles/gameCarousel.css";
 
-//CACHE
-let carouselGamesCache = null;
+// 🔥 CACHE
+let carouselCache = null;
+
+const AUTO_SLIDE_TIME = 5000;
 
 const GameCarouselCard = () => {
-  const [games, setGames] = useState(carouselGamesCache || []);
-  const [selectedGame, setSelectedGame] = useState(null);
-  const [isLoading, setIsLoading] = useState(!carouselGamesCache);
+  const [games, setGames] = useState(carouselCache || []);
+  const [index, setIndex] = useState(0);
+  const [loading, setLoading] = useState(!carouselCache);
+
   const navigate = useNavigate();
 
-  const SuggestionGameNames = [
+  const gameNames = [
     "Grand Theft Auto V",
     "Red Dead Redemption 2",
     "Assassin's Creed Valhalla",
     "God of War III",
     "Saints Row: The Third",
-    "Need for Speed",
+    "Need for Speed Heat",
   ];
 
   useEffect(() => {
-    if (carouselGamesCache) return;
+    if (carouselCache) return;
 
-    const fetchGameDetails = async () => {
-      const apiKey = "10339595c43349fe932bbf361059223a";
-      const fetchedGames = [];
+    const fetchGames = async () => {
+      try {
+        const apiKey = "10339595c43349fe932bbf361059223a";
 
-      for (const name of SuggestionGameNames) {
-        const url = `https://api.rawg.io/api/games?search=${encodeURIComponent(
-          name
-        )}&key=${apiKey}`;
-        try {
-          const res = await fetch(url);
-          const data = await res.json();
-          if (data.results && data.results.length > 0) {
-            fetchedGames.push(data.results[0]);
-          }
-        } catch (err) {
-          console.error("Error fetching", name, err);
-        }
+        // ⚡ Parallel fetch (FAST)
+        const requests = gameNames.map((name) =>
+          fetch(
+            `https://api.rawg.io/api/games?search=${encodeURIComponent(
+              name
+            )}&key=${apiKey}`
+          ).then((res) => res.json())
+        );
+
+        const responses = await Promise.all(requests);
+        const finalGames = responses
+          .map((r) => r.results?.[0])
+          .filter(Boolean);
+
+        carouselCache = finalGames;
+        setGames(finalGames);
+      } catch (err) {
+        console.error("Carousel fetch error", err);
+      } finally {
+        setLoading(false);
       }
-
-      carouselGamesCache = fetchedGames;   //  cache
-      setGames(fetchedGames);
-      setIsLoading(false);
     };
 
-    fetchGameDetails();
+    fetchGames();
   }, []);
 
-  const handleCardClick = (gameId) => {
+  // 🔁 AUTO SLIDE
+  useEffect(() => {
+    if (!games.length) return;
+
+    const timer = setInterval(() => {
+      setIndex((prev) => (prev + 1) % games.length);
+    }, AUTO_SLIDE_TIME);
+
+    return () => clearInterval(timer);
+  }, [games]);
+
+  const handleNavigate = (id) => {
     const token = localStorage.getItem("token");
-    if (!token) {
-      navigate("/login");
-    } else {
-      navigate(`/game/${gameId}`);
-    }
+    if (!token) navigate("/login");
+    else navigate(`/game/${id}`);
   };
 
-  const handleShowMore = async (gameId) => {
-    const apiKey = "10339595c43349fe932bbf361059223a";
-    const url = `https://api.rawg.io/api/games/${gameId}?key=${apiKey}`;
-    try {
-      const res = await fetch(url);
-      const data = await res.json();
-      setSelectedGame(data);
-    } catch (err) {
-      console.error("Error fetching details:", err);
-    }
-  };
-
-  if (isLoading) {
-    return (
-      <div className="d-flex align-items-center" style={{ color: "white" }}>
-        <strong role="status">Loading...</strong>
-        <div className="spinner-border ms-auto" aria-hidden="true"></div>
-      </div>
-    );
-  }
-
-  if (!isLoading && games.length === 0) {
-    return null;
-  }
-
+  if (!games.length) return null;
+  const game = games[index];
   return (
-    <div className="mt-6">
+    <div className="hero-carousel">
       <div
-        id="favoriteGameCarousel"
-        className="carousel slide"
-        data-bs-ride="carousel"
-      >
-        <h4 className="mb-3 text-white">Suggest for you</h4>
-        <div className="carousel-inner">
-          {games.map((game, index) => (
-            <div
-              className={`carousel-item ${index === 0 ? "active" : ""}`}
-              key={game.id}
-            >
-              <div
-                className="card text-center"
-                style={{ cursor: "pointer" }}
-                onClick={() => handleCardClick(game.id)}
-              >
-                <img
-                  src={
-                    game.short_screenshots?.[0]?.image || game.background_image
-                  }
-                  className="card-img-top"
-                  alt={game.name}
-                  style={{ height: "800px", objectFit: "cover" }}
-                />
-                <div
-                  className="card-body text-white"
-                  style={{ backgroundColor: "black" }}
-                >
-                  <h5 className="card-title">{game.name}</h5>
-                  <p className="card-text">Released: {game.released}</p>
-                  <p className="card-text">Rating: {game.rating} / 5</p>
-                  <small className="text-white">
-                     Click to view (Login required)
-                  </small>
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
+        className="hero-bg"
+        style={{
+          backgroundImage: `url(${
+            game.background_image ||
+            game.short_screenshots?.[0]?.image
+          })`,
+        }}
+      />
 
-        <button
-          className="carousel-control-prev"
-          type="button"
-          data-bs-target="#favoriteGameCarousel"
-          data-bs-slide="prev"
-        >
-          <span
-            className="carousel-control-prev-icon"
-            aria-hidden="true"
-          ></span>
-        </button>
-        <button
-          className="carousel-control-next"
-          type="button"
-          data-bs-target="#favoriteGameCarousel"
-          data-bs-slide="next"
-        >
-          <span
-            className="carousel-control-next-icon"
-            aria-hidden="true"
-          ></span>
+      {/* DARK GRADIENT */}
+      <div className="hero-overlay" />
+
+      {/* CONTENT */}
+      <div className="hero-content">
+        <span className="hero-badge">Suggested for you</span>
+
+        <h1>{game.name}</h1>
+        <p>⭐ {game.rating} / 5</p>
+        <p>📅 Released: {game.released}</p>
+
+        <button onClick={() => handleNavigate(game.id)}>
+          View Game
         </button>
       </div>
 
-      {selectedGame && (
-        <div className="card mt-4 text-white" style={{ background: "#222" }}>
-          <div className="card-body">
-            <h3>{selectedGame.name}</h3>
-            <p dangerouslySetInnerHTML={{ __html: selectedGame.description }} />
-            <p> Rating: {selectedGame.rating} / 5</p>
-            <p> Released: {selectedGame.released}</p>
-            <p> Playtime: {selectedGame.playtime} hrs</p>
-            <button
-              className="btn btn-danger mt-2"
-              onClick={() => setSelectedGame(null)}
-            >
-              Close
-            </button>
-          </div>
-        </div>
-      )}
+      {/* CONTROLS */}
+      <button className="hero-arrow left" onClick={() =>
+        setIndex((index - 1 + games.length) % games.length)
+      }>
+        ❮
+      </button>
+
+      <button className="hero-arrow right" onClick={() =>
+        setIndex((index + 1) % games.length)
+      }>
+        ❯
+      </button>
     </div>
   );
 };

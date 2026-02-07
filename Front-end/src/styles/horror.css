@@ -1,0 +1,120 @@
+.horror-container {
+  margin-top: 50px;
+}
+
+/* TITLE */
+.horror-title {
+  color: #ff4d4d;
+  margin-bottom: 16px;
+  letter-spacing: 1px;
+}
+
+/* GRID */
+.horror-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 22px;
+}
+
+/* CARD */
+.horror-card {
+  position: relative;
+  height: 330px;
+  border-radius: 18px;
+  overflow: hidden;
+  cursor: pointer;
+
+  box-shadow: 0 20px 45px rgba(0, 0, 0, 0.8);
+  transition: transform 0.35s ease, box-shadow 0.35s ease;
+}
+
+.horror-card:hover {
+  transform: translateY(-8px) scale(1.03);
+  box-shadow: 0 0 30px rgba(255, 0, 0, 0.5);
+}
+
+/* BACKGROUND */
+.horror-bg {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+  filter: brightness(0.45) saturate(1.1);
+}
+
+/* HORROR BADGE */
+.horror-badge {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  background: linear-gradient(135deg, #ff0000, #8b0000);
+  color: #fff;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 4px 8px;
+  border-radius: 6px;
+  z-index: 2;
+}
+
+/* OVERLAY */
+.horror-overlay {
+  position: absolute;
+  inset: 0;
+  padding: 16px;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+
+  background: radial-gradient(
+    circle at bottom,
+    rgba(0, 0, 0, 0.95),
+    rgba(0, 0, 0, 0.4)
+  );
+
+  color: #fff;
+}
+
+.horror-overlay h5 {
+  margin-bottom: 6px;
+}
+
+.horror-overlay p {
+  margin: 2px 0;
+  font-size: 13px;
+}
+
+.genres {
+  opacity: 0.85;
+}
+
+/* BUTTON */
+.horror-overlay button {
+  margin-top: 10px;
+  align-self: flex-start;
+  padding: 6px 14px;
+  border-radius: 8px;
+  border: none;
+
+  background: linear-gradient(135deg, #ff0000, #8b0000);
+  color: #fff;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.horror-overlay button:hover {
+  box-shadow: 0 0 18px rgba(255, 0, 0, 0.6);
+}
+
+/* RESPONSIVE */
+@media (max-width: 992px) {
+  .horror-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 576px) {
+  .horror-grid {
+    grid-template-columns: 1fr;
+  }
+}

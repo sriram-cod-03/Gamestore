@@ -6,8 +6,6 @@ import FreeGameCard from "../Components/Freecard";
 import HorrorCard from "../Components/HorrorCard";
 
 
-
-
 const Home = () => {
   return (
     <div className=" mt-3">

@@ -1,10 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import axios from "axios";
 import loginBg from "../assets/images/LoginBGimage.jpg";
 
-// ✅ read backend url from .env
-// .env file: VITE_API_BASE_URL=https://gamestore-backend-paqz.onrender.com
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 const LoginPage = () => {
@@ -13,23 +11,30 @@ const LoginPage = () => {
   const [showPassword, setShowPassword] = useState(false);
 
   const navigate = useNavigate();
-  const location = useLocation(); // redirect after login
+  const location = useLocation();
+
+  // ✅ If already logged in, redirect to dashboard
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      navigate("/dashboard", { replace: true });
+    }
+  }, []);
 
   const handleLogin = async () => {
     try {
       const res = await axios.post(
-        `${API_BASE_URL}/api/login`, // ✅ use env URL
+        `${API_BASE_URL}/api/login`,
         { email, password }
       );
 
-      // save token
       localStorage.setItem("token", res.data.token);
 
       alert("✅ Login successful!");
 
-      // go back to previous route or homepage
-      const from = location.state?.from || "/";
-      navigate(from, { replace: true });
+      // ✅ Always go to dashboard after login
+      navigate("/dashboard", { replace: true });
+
     } catch (err) {
       console.error("Login error:", err);
 
@@ -69,44 +74,37 @@ const LoginPage = () => {
         <div className="card-body text-white row">
           <h4 className="mb-2">Welcome to The GameStore</h4>
 
-          {/* Email */}
           <div className="col-12 mb-4">
-            <label className="form-label">Email address</label>
+            <label>Email address</label>
             <input
               type="email"
               className="form-control"
-              placeholder="Enter your mail"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
             />
           </div>
 
-          {/* Password */}
           <div className="col-12 mb-4">
-            <label className="form-label">Password</label>
-
+            <label>Password</label>
             <div className="input-group">
               <input
                 type={showPassword ? "text" : "password"}
                 className="form-control"
-                placeholder="Enter your password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
               />
-
               <button
                 type="button"
                 className="btn btn-outline-light"
-                onClick={() => setShowPassword((prev) => !prev)}
+                onClick={() => setShowPassword((p) => !p)}
               >
                 {showPassword ? "Hide" : "Show"}
               </button>
             </div>
           </div>
+
           <div className="d-flex justify-content-center">
-            {/* Login Button */}
             <button
-              type="button"
               onClick={handleLogin}
               className="btn btn-outline-danger"
               style={{ width: "120px" }}
@@ -114,14 +112,9 @@ const LoginPage = () => {
               Login
             </button>
           </div>
-          {/* Redirect to Signup */}
-          <p className="mt-3 text-center">Don't have an account?</p>
 
-          <Link
-            to="/signup"
-            className="btn btn-link"
-            style={{ color: "white" }}
-          >
+          <p className="mt-3 text-center">Don't have an account?</p>
+          <Link to="/signup" className="btn btn-link text-white">
             Sign Up
           </Link>
         </div>

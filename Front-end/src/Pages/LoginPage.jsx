@@ -1,52 +1,64 @@
 import React, { useState, useEffect } from "react";
-import { Link, useNavigate, useLocation } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import loginBg from "../assets/images/LoginBGimage.jpg";
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 const LoginPage = () => {
+  const navigate = useNavigate();
+
+  // states
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const [loading, setLoading] = useState(false);
 
-  const navigate = useNavigate();
-  const location = useLocation();
-
-  // ✅ If already logged in, redirect to dashboard
+  // ✅ If already logged in → redirect to dashboard
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (token) {
       navigate("/dashboard", { replace: true });
     }
-  }, []);
+  }, [navigate]);
 
+  // LOGIN FUNCTION
   const handleLogin = async () => {
+    if (!email || !password) {
+      alert("Please enter email and password");
+      return;
+    }
+
+    setLoading(true);
+
     try {
       const res = await axios.post(
-        `${API_BASE_URL}/api/login`,
-        { email, password }
+        `${API_BASE_URL}/users/login`, // ✅ CORRECT ROUTE
+        {
+          email: email.trim().toLowerCase(),
+          password: password.trim(),
+        }
       );
 
+      // save JWT token
       localStorage.setItem("token", res.data.token);
 
       alert("✅ Login successful!");
-
-      // ✅ Always go to dashboard after login
       navigate("/dashboard", { replace: true });
-
     } catch (err) {
       console.error("Login error:", err);
 
       let msg = "Login failed";
 
-      if (err.response?.data?.error) {
-        msg = err.response.data.error;
-      } else if (!err.response) {
-        msg = "❌ Cannot reach server (Backend down?)";
+      if (!err.response) {
+        msg = "❌ Cannot reach server (backend sleeping?)";
+      } else if (err.response?.data?.message) {
+        msg = err.response.data.message;
       }
 
       alert(msg);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -60,7 +72,6 @@ const LoginPage = () => {
         backgroundImage: `url(${loginBg})`,
         backgroundSize: "cover",
         backgroundPosition: "center",
-        backgroundRepeat: "no-repeat",
       }}
     >
       <div
@@ -71,50 +82,56 @@ const LoginPage = () => {
           backgroundColor: "transparent",
         }}
       >
-        <div className="card-body text-white row">
-          <h4 className="mb-2">Welcome to The GameStore</h4>
+        <div className="card-body text-white">
+          <h4 className="text-center mb-3">
+            Welcome to <b>The GameStore</b>
+          </h4>
 
-          <div className="col-12 mb-4">
-            <label>Email address</label>
+          {/* EMAIL */}
+          <div className="mb-3">
+            <label>Email Address</label>
             <input
               type="email"
               className="form-control"
+              placeholder="Enter your email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
             />
           </div>
 
-          <div className="col-12 mb-4">
+          {/* PASSWORD */}
+          <div className="mb-3">
             <label>Password</label>
             <div className="input-group">
               <input
                 type={showPassword ? "text" : "password"}
                 className="form-control"
+                placeholder="Enter your password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
               />
               <button
                 type="button"
                 className="btn btn-outline-light"
-                onClick={() => setShowPassword((p) => !p)}
+                onClick={() => setShowPassword((prev) => !prev)}
               >
                 {showPassword ? "Hide" : "Show"}
               </button>
             </div>
           </div>
 
-          <div className="d-flex justify-content-center">
-            <button
-              onClick={handleLogin}
-              className="btn btn-outline-danger"
-              style={{ width: "120px" }}
-            >
-              Login
-            </button>
-          </div>
+          {/* LOGIN BUTTON */}
+          <button
+            className="btn btn-outline-danger w-100"
+            onClick={handleLogin}
+            disabled={loading}
+          >
+            {loading ? "Logging in..." : "Login"}
+          </button>
 
-          <p className="mt-3 text-center">Don't have an account?</p>
-          <Link to="/signup" className="btn btn-link text-white">
+          {/* SIGNUP LINK */}
+          <p className="text-center mt-3">Don't have an account?</p>
+          <Link to="/signup" className="btn btn-link text-white w-100">
             Sign Up
           </Link>
         </div>

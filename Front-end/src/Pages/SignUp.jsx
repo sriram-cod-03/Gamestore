@@ -1,13 +1,13 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import signupBg from "../assets/images/SignUpBGimage.jpg";
 
-// ✅ Read backend URL from .env
-// .env file: VITE_API_BASE_URL=https://gamestore-backend-paqz.onrender.com
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
-
 const SignUp = () => {
-  // form data state
+  const navigate = useNavigate();
+
+  // form state
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
@@ -17,64 +17,69 @@ const SignUp = () => {
   });
 
   const [showPassword, setShowPassword] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
   const [successMsg, setSuccessMsg] = useState("");
 
-  // update state on input change
+  // input handler
   const handleChange = (e) => {
     setErrorMsg("");
     setSuccessMsg("");
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  // submit form
+  // signup submit
   const handleSubmit = async (e) => {
-    e.preventDefault(); // prevent page refresh
+    e.preventDefault();
+
+    if (
+      !formData.firstName ||
+      !formData.lastName ||
+      !formData.email ||
+      !formData.password ||
+      !formData.mobile
+    ) {
+      setErrorMsg("All fields are required");
+      return;
+    }
+
+    setLoading(true);
 
     try {
-      // ✅ use Render backend instead of localhost
       const res = await axios.post(
-        `${API_BASE_URL}/api/signup`,
-        formData
+        `${API_BASE_URL}/api/auth/signup`, // ✅ correct API
+        {
+          name: `${formData.firstName} ${formData.lastName}`,
+          email: formData.email.trim().toLowerCase(),
+          password: formData.password.trim(),
+          mobile: formData.mobile.trim(),
+        }
       );
 
       setSuccessMsg(res.data.message || "Signup successful!");
       setErrorMsg("");
 
-      // optional: clear form
-      // setFormData({ firstName: "", lastName: "", email: "", password: "", mobile: "" });
+      // redirect to login after short delay
+      setTimeout(() => {
+        navigate("/login");
+      }, 1500);
     } catch (err) {
       console.error("Signup error:", err);
 
-      let backendMsg = "";
-      if (err.response?.data) {
-        if (typeof err.response.data === "string") {
-          backendMsg = err.response.data;
-        } else {
-          backendMsg =
-            err.response.data.message ||
-            err.response.data.error ||
-            "";
-        }
-      }
+      let msg = "Signup failed";
 
       if (!err.response) {
-        setErrorMsg("Cannot reach server. Is backend running?");
-      } else if (
-        err.response.status === 409 ||
-        backendMsg.toLowerCase().includes("already") ||
-        backendMsg.toLowerCase().includes("exist")
-      ) {
-        setErrorMsg(
-          backendMsg || "User already exists. Please login instead."
-        );
-      } else if (backendMsg) {
-        setErrorMsg(backendMsg);
-      } else {
-        setErrorMsg("❌ Signup failed. Try again!");
+        msg = "❌ Cannot reach server. Backend may be sleeping.";
+      } else if (err.response?.data?.message) {
+        msg = err.response.data.message;
+      } else if (err.response?.status === 409) {
+        msg = "User already exists. Please login.";
       }
 
+      setErrorMsg(msg);
       setSuccessMsg("");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -82,52 +87,44 @@ const SignUp = () => {
     <div
       className="d-flex justify-content-center align-items-center"
       style={{
-        height: "120vh",
-        display: "flex",
+        minHeight: "100vh",
         backgroundImage: `url(${signupBg})`,
         backgroundSize: "cover",
         backgroundPosition: "center",
-        backgroundRepeat: "no-repeat",
       }}
     >
       <div
-        className="card mt-4 mb-4"
+        className="card shadow-lg"
         style={{
           width: "500px",
-          height: "580px",
+          borderRadius: "15px",
           backgroundColor: "transparent",
           color: "white",
-          borderRadius: "15px",
         }}
       >
         <div className="card-body">
           <form onSubmit={handleSubmit}>
-            <h4 className="text-center">Welcome To The Gamestore</h4>
-            <h6 className="text-center">Sign Up your GameStore Account</h6>
+            <h4 className="text-center mb-2">
+              Welcome to <b>The GameStore</b>
+            </h4>
+            <h6 className="text-center mb-3">
+              Create your GameStore account
+            </h6>
 
+            {/* ERROR / SUCCESS */}
             {errorMsg && (
-              <p
-                className="text-danger text-center mt-2"
-                style={{ fontSize: "14px" }}
-              >
-                {errorMsg}
-              </p>
+              <p className="text-danger text-center">{errorMsg}</p>
             )}
             {successMsg && (
-              <p
-                className="text-success text-center mt-2"
-                style={{ fontSize: "14px" }}
-              >
-                {successMsg}
-              </p>
+              <p className="text-success text-center">{successMsg}</p>
             )}
 
-            <div className="mt-2">
-              <h5>First Name</h5>
+            {/* FIRST NAME */}
+            <div className="mb-2">
+              <label>First Name</label>
               <input
                 type="text"
                 className="form-control"
-                placeholder="Enter Your First name"
                 name="firstName"
                 value={formData.firstName}
                 onChange={handleChange}
@@ -135,12 +132,12 @@ const SignUp = () => {
               />
             </div>
 
-            <div className="mt-2">
-              <h5>Last Name</h5>
+            {/* LAST NAME */}
+            <div className="mb-2">
+              <label>Last Name</label>
               <input
                 type="text"
                 className="form-control"
-                placeholder="Enter Your Last name"
                 name="lastName"
                 value={formData.lastName}
                 onChange={handleChange}
@@ -148,12 +145,12 @@ const SignUp = () => {
               />
             </div>
 
-            <div className="mt-2">
-              <h5>Email Address</h5>
+            {/* EMAIL */}
+            <div className="mb-2">
+              <label>Email</label>
               <input
                 type="email"
                 className="form-control"
-                placeholder="Enter Your Email ID"
                 name="email"
                 value={formData.email}
                 onChange={handleChange}
@@ -161,13 +158,13 @@ const SignUp = () => {
               />
             </div>
 
-            <div className="mt-2">
-              <h5>Password</h5>
+            {/* PASSWORD */}
+            <div className="mb-2">
+              <label>Password</label>
               <div className="input-group">
                 <input
                   type={showPassword ? "text" : "password"}
                   className="form-control"
-                  placeholder="Enter Your Password"
                   name="password"
                   value={formData.password}
                   onChange={handleChange}
@@ -176,19 +173,19 @@ const SignUp = () => {
                 <button
                   type="button"
                   className="btn btn-outline-light"
-                  onClick={() => setShowPassword((prev) => !prev)}
+                  onClick={() => setShowPassword((p) => !p)}
                 >
                   {showPassword ? "Hide" : "Show"}
                 </button>
               </div>
             </div>
 
-            <div className="mt-2">
-              <h5>Mobile Number</h5>
+            {/* MOBILE */}
+            <div className="mb-3">
+              <label>Mobile Number</label>
               <input
                 type="text"
                 className="form-control"
-                placeholder="Enter Your Mobile Number"
                 name="mobile"
                 value={formData.mobile}
                 onChange={handleChange}
@@ -196,15 +193,22 @@ const SignUp = () => {
               />
             </div>
 
-            <div className="d-flex justify-content-center">
-              <button
-                type="submit"
-                className="btn btn-outline-dark mt-4"
-                style={{ width: "200px" }}
-              >
-                SignUp
-              </button>
-            </div>
+            {/* SUBMIT */}
+            <button
+              type="submit"
+              className="btn btn-outline-dark w-100"
+              disabled={loading}
+            >
+              {loading ? "Creating account..." : "Sign Up"}
+            </button>
+
+            {/* LOGIN LINK */}
+            <p className="text-center mt-3">
+              Already have an account?{" "}
+              <Link to="/login" className="text-white">
+                Login
+              </Link>
+            </p>
           </form>
         </div>
       </div>

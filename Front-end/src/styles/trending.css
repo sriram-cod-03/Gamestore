@@ -1,121 +1,176 @@
+/* CONTAINER */
 .trending-container {
-  margin-top: 40px;
+  margin-top: 50px;
+  padding: 0 20px;
 }
 
-/* HEADER */
+/* HEADER WITH PURPLE GRADIENT */
 .trending-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 16px;
+  margin-bottom: 25px;
 }
 
 .trending-header h4 {
-  color: #fff;
+  /* Vibrant Purple to Pink Gradient for the Title */
+  background: linear-gradient(135deg, #7928ca, #ff0080);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  
+  font-size: 26px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
 }
 
-/* NAV */
-.nav-buttons button {
-  background: rgba(255, 255, 255, 0.15);
-  border: none;
+/* NAV BUTTONS (Next/Prev) */
+.trending-header .nav-buttons button {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.15);
   color: #fff;
-  margin-left: 8px;
-  padding: 6px 10px;
-  border-radius: 8px;
+  margin-left: 10px;
+  padding: 8px 14px;
+  border-radius: 10px;
   cursor: pointer;
+  transition: all 0.3s ease;
 }
 
-.nav-buttons button:disabled {
-  opacity: 0.4;
+.trending-header .nav-buttons button:hover:not(:disabled) {
+  background: rgba(121, 40, 202, 0.2); /* Subtle purple glow */
+  border-color: #ff0080;
+}
+
+.trending-header .nav-buttons button:disabled {
+  opacity: 0.3;
   cursor: not-allowed;
 }
 
-/* GRID */
+/* GRID LAYOUT - Responsive 4 -> 2 -> 1 */
 .trending-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 20px;
+  gap: 24px;
 }
 
-/* CARD */
+/* CARD STYLE */
 .trending-card {
   position: relative;
-  height: 320px;
-  border-radius: 18px;
+  height: 350px;
+  border-radius: 20px;
   overflow: hidden;
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.7);
-  transition: transform 0.3s ease;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.6);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  cursor: pointer;
 }
 
 .trending-card:hover {
-  transform: translateY(-6px) scale(1.02);
+  transform: translateY(-10px) scale(1.02);
+  box-shadow: 0 0 25px rgba(121, 40, 202, 0.4);
 }
 
-/* BACKGROUND */
+/* BACKGROUND IMAGE */
 .trending-bg {
   position: absolute;
   inset: 0;
   background-size: cover;
   background-position: center;
-  filter: brightness(0.6);
+  filter: brightness(0.7);
+  transition: filter 0.3s ease;
 }
 
-/* OVERLAY */
+.trending-card:hover .trending-bg {
+  filter: brightness(0.5);
+}
+
+/* TRENDING BADGE */
+.trending-badge {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  background: linear-gradient(135deg, #7928ca, #ff0080);
+  color: #fff;
+  font-size: 11px;
+  font-weight: 800;
+  padding: 5px 12px;
+  border-radius: 8px;
+  z-index: 2;
+  text-transform: uppercase;
+}
+
+/* OVERLAY CONTENT */
 .trending-overlay {
   position: absolute;
   inset: 0;
-  padding: 16px;
+  padding: 20px;
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
-
   background: linear-gradient(
     to top,
-    rgba(0, 0, 0, 0.9),
-    rgba(0, 0, 0, 0.25)
+    rgba(0, 0, 0, 0.95) 10%,
+    rgba(0, 0, 0, 0.3) 50%,
+    transparent 100%
   );
-
   color: #fff;
 }
 
 .trending-overlay h5 {
-  margin-bottom: 6px;
+  font-size: 18px;
+  margin-bottom: 8px;
+  font-weight: 700;
 }
 
-.trending-overlay p {
-  margin: 2px 0;
+.trending-info {
+  display: flex;
+  align-items: center;
+  gap: 15px;
   font-size: 13px;
+  opacity: 0.8;
+  margin-bottom: 12px;
 }
 
-.genres {
-  opacity: 0.85;
-}
-
-/* BUTTON */
+/* SHOW MORE BUTTON */
 .trending-overlay button {
-  margin-top: 10px;
   align-self: flex-start;
-  padding: 6px 14px;
-  border-radius: 8px;
+  padding: 10px 20px;
+  border-radius: 10px;
   border: none;
-  background: linear-gradient(135deg, #ff9800, #ff5722);
-  font-weight: 600;
+  background: linear-gradient(135deg, #7928ca, #ff0080);
+  color: #fff;
+  font-weight: 700;
+  font-size: 14px;
   cursor: pointer;
+  transition: box-shadow 0.3s ease;
 }
 
 .trending-overlay button:hover {
-  box-shadow: 0 0 15px rgba(255, 152, 0, 0.6);
+  box-shadow: 0 0 15px rgba(255, 0, 128, 0.7);
 }
 
-/* RESPONSIVE */
+/* --- RESPONSIVE BREAKPOINTS --- */
+
+/* Laptop/Tablet (1200px and below) */
+@media (max-width: 1200px) {
+  .trending-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+/* Tablet (992px and below) */
 @media (max-width: 992px) {
   .trending-grid {
     grid-template-columns: repeat(2, 1fr);
   }
+  .trending-header h4 { font-size: 22px; }
 }
 
+/* Mobile (576px and below) */
 @media (max-width: 576px) {
   .trending-grid {
     grid-template-columns: 1fr;
   }
+  .trending-card { height: 300px; }
+  .trending-header { flex-direction: column; align-items: flex-start; gap: 10px; }
+  .trending-header .nav-buttons { margin-left: -10px; }
 }

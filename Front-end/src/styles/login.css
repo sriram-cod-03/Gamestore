@@ -1,6 +1,5 @@
-/* RESET */
-html,
-body {
+/* RESET & LAYOUT */
+html, body {
   width: 100%;
   height: 100%;
   margin: 0;
@@ -8,15 +7,13 @@ body {
 
 .login-screen {
   position: fixed;
-  inset: 0; /* top:0 right:0 bottom:0 left:0 */
-  background: url("../assets/images/LoginBGimage.jpg") center center / cover
-    no-repeat;
+  inset: 0;
+  background: url("../assets/images/LoginBGimage.jpg") center center / cover no-repeat;
   display: flex;
   align-items: center;
   justify-content: center;
   overflow: hidden;
 }
-
 
 .login-bg-overlay {
   position: absolute;
@@ -25,27 +22,24 @@ body {
   backdrop-filter: blur(3px);
 }
 
-
+/* GLASS CARD */
 .login-glass-card {
   position: relative;
   z-index: 2;
   width: 380px;
+  max-width: 90%; /* Safety for mobile */
   padding: 32px;
   border-radius: 20px;
-  /* GLASS EFFECT */
   background: rgba(255, 255, 255, 0.12);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
   border: 1px solid rgba(255, 255, 255, 0.2);
   box-shadow: 0 25px 60px rgba(0, 0, 0, 0.6);
   color: #fff;
+  animation: slideFade 0.5s ease forwards;
 }
 
-
-.login-glass-card h2 {
-  text-align: center;
-}
-
+.login-glass-card h2 { text-align: center; margin-bottom: 8px; }
 .login-subtitle {
   text-align: center;
   font-size: 14px;
@@ -53,7 +47,7 @@ body {
   margin-bottom: 25px;
 }
 
-/* FORM */
+/* FORM ELEMENTS */
 .login-glass-card label {
   font-size: 13px;
   margin-bottom: 6px;
@@ -64,56 +58,28 @@ body {
   width: 100%;
   padding: 12px;
   border-radius: 10px;
-
   background: rgba(255, 255, 255, 0.18);
   border: 1px solid rgba(255, 255, 255, 0.25);
-
   color: #fff;
   outline: none;
+  box-sizing: border-box; /* Crucial for padding */
+  margin-bottom: 15px;
 }
 
-.login-glass-card input::placeholder {
-  color: rgba(255, 255, 255, 0.75);
-}
+.login-glass-card input::placeholder { color: #ccc; }
+.login-glass-card input:focus { border-color: #00ff88; }
 
-.login-glass-card input:focus {
-  border-color: #00ff88;
-}
-
-
-.login-glass-card input::placeholder {
-  color: #ccc;
-}
-
-.login-glass-card input:focus {
-  border-color: #00ff88;
-}
-
-/* PASSWORD FIELD */
-.password-wrapper {
-  position: relative;
-}
-
-.password-wrapper input {
-  width: 100%;
-  padding-right: 60px; /* space for Show/Hide */
-}
-
-/* SHOW / HIDE TEXT */
+/* PASSWORD */
+.password-wrapper { position: relative; }
 .toggle-password {
   position: absolute;
   right: 14px;
-  top: 50%;
-  transform: translateY(-50%);
+  top: 15px; /* Adjusted for centering */
   font-size: 13px;
   color: #00ff88;
   cursor: pointer;
   font-weight: 600;
   user-select: none;
-}
-
-.toggle-password:hover {
-  color: #00c9ff;
 }
 
 /* BUTTON */
@@ -128,51 +94,17 @@ body {
   font-weight: 600;
   font-size: 15px;
   cursor: pointer;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  transition: all 0.2s ease;
 }
 
-.login-btn:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 0 20px rgba(0, 255, 136, 0.6);
-}
-
-
-.login-btn:hover {
+.login-btn:hover:not(:disabled) {
   transform: translateY(-2px);
   box-shadow: 0 0 18px rgba(0, 255, 136, 0.6);
 }
 
-/* FOOTER */
-.login-footer {
-  margin-top: 18px;
-  text-align: center;
-  font-size: 13px;
-}
+.login-btn:disabled { opacity: 0.7; cursor: not-allowed; }
 
-.login-footer a {
-  color: #00ff88;
-  text-decoration: none;
-}
-
-/* ANIMATION */
-@keyframes slideFade {
-  from {
-    opacity: 0;
-    transform: translateY(30px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-/* MOBILE */
-@media (max-width: 480px) {
-  .login-glass-card {
-    width: 90%;
-  }
-}
-
+/* FOOTER & LINKS */
 .signup-text {
   margin-top: 18px;
   text-align: center;
@@ -184,38 +116,16 @@ body {
   color: #00ff88;
   cursor: pointer;
   font-weight: 600;
-  transition: color 0.2s ease;
 }
 
-.signup-text span:hover {
-  color: #00c9ff;
+/* ANIMATIONS */
+@keyframes slideFade {
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
-/* BUTTON LOADING */
-.login-btn:disabled {
-  cursor: not-allowed;
-  opacity: 0.8;
-}
-
-.btn-loader {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 10px;
-}
-
-/* Small spinner inside button */
-.btn-loader .spinner {
-  width: 18px;
-  height: 18px;
-  border: 3px solid rgba(0, 0, 0, 0.2);
-  border-top: 3px solid #000;
-  border-radius: 50%;
-  animation: spin 0.8s linear infinite;
-}
-
-@keyframes spin {
-  to {
-    transform: rotate(360deg);
-  }
+/* MOBILE ADJUSTMENTS */
+@media (max-width: 480px) {
+  .login-glass-card { padding: 24px; }
+  .login-glass-card h2 { font-size: 1.5rem; }
 }

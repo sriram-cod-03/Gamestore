@@ -1,51 +1,65 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { Link } from "react-router-dom";
+import { FaInstagram, FaGithub, FaLinkedin, FaTwitter, FaChevronUp } from "react-icons/fa";
 import "../styles/footer.css";
 
 const Footer = () => {
-  const [showFooter, setShowFooter] = useState(true);
-  const [lastScrollY, setLastScrollY] = useState(0);
-
-  useEffect(() => {
-    const handleScroll = () => {
-      const currentScrollY = window.scrollY;
-
-      // scroll down → hide footer
-      if (currentScrollY > lastScrollY && currentScrollY > 100) {
-        setShowFooter(false);
-      }
-      // scroll up → show footer
-      else {
-        setShowFooter(true);
-      }
-
-      setLastScrollY(currentScrollY);
-    };
-
-    window.addEventListener("scroll", handleScroll);
-
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, [lastScrollY]);
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
 
   return (
-    <footer className={`app-footer ${showFooter ? "show" : "hide"}`}>
-      <div className="footer-card">
-        <h5 className="footer-heading">Games</h5>
+    <footer className="app-footer">
+      <div className="footer-container">
+        
+        {/* TOP SECTION */}
+        <div className="footer-header">
+          <div className="footer-brand-section">
+            <h2 className="footer-brand">gamestore</h2>
+            <p className="footer-description">
+              Your ultimate destination for the latest games, digital content, 
+              and exclusive deals. Built for gamers.
+            </p>
+            <div className="footer-socials">
+              <a href="#" aria-label="Instagram"><FaInstagram /></a>
+              <a href="#" aria-label="Github"><FaGithub /></a>
+              <a href="#" aria-label="Linkedin"><FaLinkedin /></a>
+              <a href="#" aria-label="Twitter"><FaTwitter /></a>
+            </div>
+          </div>
 
-        <ul className="footer-links">
-          <li>
-            <Link to="/games/playstation">PlayStation</Link>
-          </li>
-          <li>
-            <Link to="/games/xbox">Xbox</Link>
-          </li>
-          <li>
-            <Link to="/games/nintendo">Nintendo</Link>
-          </li>
-          <li>
-            <Link to="/games/digital">Digital</Link>
-          </li>
-        </ul>
+          <div className="footer-grid">
+            <div className="footer-column">
+              <h6 className="column-title">Explore</h6>
+              <ul className="column-list">
+                <li><Link to="/">Dashboard</Link></li>
+                <li><Link to="/games/new">New Releases</Link></li>
+                <li><Link to="/profile">My Profile</Link></li>
+              </ul>
+            </div>
+
+            <div className="footer-column">
+              <h6 className="column-title">Support</h6>
+              <ul className="column-list">
+                <li><Link to="/help">Help Center</Link></li>
+                <li><Link to="/privacy">Privacy Policy</Link></li>
+                <li><Link to="/terms">Terms of Use</Link></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <div className="footer-divider"></div>
+
+        {/* BOTTOM SECTION */}
+        <div className="footer-bottom">
+          <p className="legal-notice">
+            © 2026 <strong>Sriram R.</strong> All rights reserved.
+          </p>
+          <button className="back-to-top" onClick={scrollToTop}>
+            Back to top <FaChevronUp />
+          </button>
+        </div>
       </div>
     </footer>
   );

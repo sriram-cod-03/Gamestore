@@ -1,3 +1,4 @@
+/* BASE STYLES */
 .game-details-page {
   background: #000;
   color: #fff;
@@ -39,6 +40,8 @@
   backdrop-filter: blur(10px);
   border-radius: 16px;
   padding: 30px;
+  position: relative;
+  z-index: 10;
 }
 
 .info-grid {
@@ -76,7 +79,7 @@
   transform: scale(1.05);
 }
 
-/* BUY */
+/* BUY SECTION */
 .buy-section {
   text-align: center;
   margin: 40px 0 60px;
@@ -98,10 +101,23 @@
   transform: scale(1.05);
 }
 
-/* STATES */
-.details-loader,
-.details-error {
-  text-align: center;
-  padding: 80px;
-  font-size: 1.2rem;
+/* RESPONSIVE QUERIES */
+@media (max-width: 992px) {
+  .hero-overlay h1 { font-size: 2.2rem; }
+  .game-info-card { 
+    margin: -40px 20px 40px; 
+    padding: 20px; 
+  }
+}
+
+@media (max-width: 576px) {
+  .game-hero { height: 40vh; }
+  .hero-overlay { padding: 20px; }
+  .hero-overlay h1 { font-size: 1.8rem; }
+  .info-grid { 
+    grid-template-columns: 1fr 1fr; /* Two columns for stats on mobile */
+    font-size: 14px;
+  }
+  .screenshots-grid { grid-template-columns: 1fr; }
+  .buy-section button { width: 90%; }
 }

@@ -92,13 +92,15 @@
   right: 16px;
 }
 
-/* RESPONSIVE */
-@media (max-width: 768px) {
-  .hero-carousel {
-    height: 50vh;
-  }
+/* gameCarousel.css refinements */
+@media (max-width: 992px) {
+  .hero-carousel { height: 55vh; }
+  .hero-content { left: 5%; bottom: 10%; max-width: 80%; }
+  .hero-content h1 { font-size: 28px; }
+}
 
-  .hero-content h1 {
-    font-size: 26px;
-  }
+@media (max-width: 576px) {
+  .hero-carousel { height: 45vh; border-radius: 0; } /* Edge-to-edge on mobile */
+  .hero-content h1 { font-size: 22px; }
+  .hero-arrow { display: none; } /* Hide arrows on small touch screens for cleaner look */
 }

@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { requireAuthAndNavigate } from "../utils/auth";
+import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 import "../styles/recommended.css";
 
-// 🔥 MODULE LEVEL CACHE
+// MODULE LEVEL CACHE to prevent re-fetching when switching pages
 let recommendedCache = null;
 
 const ITEMS_PER_PAGE = 4;
@@ -42,10 +43,7 @@ const RecommendedGameCards = () => {
         );
 
         const responses = await Promise.all(requests);
-
-        const finalGames = responses
-          .map((r) => r.results?.[0])
-          .filter(Boolean);
+        const finalGames = responses.map((r) => r.results?.[0]).filter(Boolean);
 
         recommendedCache = finalGames;
         setGames(finalGames);
@@ -75,37 +73,31 @@ const RecommendedGameCards = () => {
     }
   };
 
-  // ✅ IMPORTANT PART (THIS SOLVES YOUR PROBLEM)
-  // Hide EVERYTHING while loading
-  if (loading) {
-    return null; // nothing shown
-  }
-
-  // Optional safety check
-  if (games.length === 0) {
-    return null;
+  // Hide everything while loading
+  if (loading || games.length === 0) {
+    return null; 
   }
 
   return (
     <div className="recommended-container">
-      {/* ✅ TITLE SHOWN ONLY AFTER LOADING */}
       <div className="recommended-header">
         <h4>Recommended Games</h4>
 
         <div className="nav-buttons">
+          {/* ✅ FIXED: Changed startIndex to currentIndex */}
           <button onClick={handlePrev} disabled={currentIndex === 0}>
-            ⬅
+            <FaChevronLeft />
           </button>
-          <button
-            onClick={handleNext}
+          {/* ✅ FIXED: Changed startIndex to currentIndex and totalGames to games.length */}
+          <button 
+            onClick={handleNext} 
             disabled={currentIndex + ITEMS_PER_PAGE >= games.length}
           >
-            ➡
+            <FaChevronRight />
           </button>
         </div>
       </div>
 
-      {/* ✅ GAME CARDS */}
       <div className="recommended-grid">
         {games
           .slice(currentIndex, currentIndex + ITEMS_PER_PAGE)
@@ -123,7 +115,11 @@ const RecommendedGameCards = () => {
                 <p>⭐ {game.rating || "N/A"}</p>
                 <p>📅 {game.released || "Unknown"}</p>
                 <p className="genres">
-                  🎮 {game.genres?.map((g) => g.name).slice(0, 2).join(", ")}
+                  🎮{" "}
+                  {game.genres
+                    ?.map((g) => g.name)
+                    .slice(0, 2)
+                    .join(", ")}
                 </p>
 
                 <button onClick={() => handleShowMore(game.id)}>

@@ -4,7 +4,6 @@ import "../styles/signup.css";
 
 const SignUp = () => {
   const navigate = useNavigate();
-
   const [showPassword, setShowPassword] = useState(false);
   const [form, setForm] = useState({
     firstName: "",
@@ -20,14 +19,12 @@ const SignUp = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    console.log("Form Data:", form);
 
-    // 👉 later connect backend here
-    console.log(form);
-
-    // simulate signup success
+    // Simulate signup success
     setTimeout(() => {
       navigate("/login");
-    }, 1000);
+    }, 1500);
   };
 
   return (
@@ -39,23 +36,28 @@ const SignUp = () => {
         <p className="subtitle">Create your GameStore account</p>
 
         <form onSubmit={handleSubmit}>
-          <label>First Name</label>
-          <input
-            type="text"
-            name="firstName"
-            placeholder="Enter first name"
-            onChange={handleChange}
-            required
-          />
-
-          <label>Last Name</label>
-          <input
-            type="text"
-            name="lastName"
-            placeholder="Enter last name"
-            onChange={handleChange}
-            required
-          />
+          <div className="form-row">
+            <div className="input-group">
+              <label>First Name</label>
+              <input
+                type="text"
+                name="firstName"
+                placeholder="First name"
+                onChange={handleChange}
+                required
+              />
+            </div>
+            <div className="input-group">
+              <label>Last Name</label>
+              <input
+                type="text"
+                name="lastName"
+                placeholder="Last name"
+                onChange={handleChange}
+                required
+              />
+            </div>
+          </div>
 
           <label>Email</label>
           <input
@@ -75,7 +77,7 @@ const SignUp = () => {
               onChange={handleChange}
               required
             />
-            <span onClick={() => setShowPassword(!showPassword)}>
+            <span className="toggle-text" onClick={() => setShowPassword(!showPassword)}>
               {showPassword ? "Hide" : "Show"}
             </span>
           </div>
@@ -89,12 +91,12 @@ const SignUp = () => {
             required
           />
 
-          <button className="signup-btn">Sign Up</button>
+          <button type="submit" className="signup-btn">Sign Up</button>
         </form>
 
         <p className="login-text">
           Already have an account?{" "}
-          <span onClick={() => navigate("/login")}>Login</span>
+          <span className="link-text" onClick={() => navigate("/login")}>Login</span>
         </p>
       </div>
     </div>

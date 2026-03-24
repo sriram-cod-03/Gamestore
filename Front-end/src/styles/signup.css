@@ -13,6 +13,7 @@ html, body {
   align-items: center;
   justify-content: center;
   font-family: "Segoe UI", sans-serif;
+  overflow: hidden;
 }
 
 .signup-overlay {
@@ -67,16 +68,34 @@ html, body {
 .signup-glass-card input::placeholder { color: rgba(255, 255, 255, 0.7); }
 .signup-glass-card input:focus { border-color: #00ff88; }
 
-/* PASSWORD BOX */
-.password-box { position: relative; }
+/* PASSWORD BOX - THE CENTERING FIX */
+.password-box { 
+  position: relative; 
+  width: 100%;
+}
+
+.password-box input {
+  padding-right: 65px; /* Space for the "Show" text */
+}
+
 .password-box span {
   position: absolute;
-  right: 14px;
-  top: 14px;
-  font-size: 12px;
+  right: 15px;
+  /* PERFECT VERTICAL CENTER */
+  top: calc(50% - 7px); /* Centers against the 14px margin-bottom */
+  transform: translateY(-50%);
+  
+  font-size: 13px;
   color: #00ff88;
   cursor: pointer;
-  font-weight: 600;
+  font-weight: 700;
+  user-select: none;
+  z-index: 10;
+  text-transform: uppercase;
+}
+
+.password-box span:hover {
+  filter: brightness(1.2);
 }
 
 /* ACTION BUTTON */
@@ -88,7 +107,7 @@ html, body {
   border-radius: 12px;
   background: linear-gradient(135deg, #00ff88, #00c9ff);
   color: #000;
-  font-weight: 600;
+  font-weight: 800;
   cursor: pointer;
   transition: all 0.2s ease;
 }
@@ -111,7 +130,12 @@ html, body {
   font-weight: 600;
 }
 
-/* RESPONSIVE */
+/* BROWSER COMPATIBILITY */
+input::-ms-reveal,
+input::-ms-clear {
+  display: none;
+}
+
 @media (max-width: 480px) {
   .signup-glass-card {
     padding: 24px;

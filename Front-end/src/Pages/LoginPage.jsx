@@ -12,14 +12,15 @@ const LoginPage = () => {
 
   const handleLogin = (e) => {
     e.preventDefault();
-
     if (!email || !password) return;
 
     setBtnLoading(true);
 
+    // Simulate login success
     setTimeout(() => {
       localStorage.setItem("token", "dummy-token");
-      navigate("/dashboard");
+      setBtnLoading(false);
+      navigate("/home");
     }, 2000);
   };
 
@@ -41,7 +42,6 @@ const LoginPage = () => {
             required
           />
 
-          {/* 🔥 PASSWORD WITH SHOW / HIDE */}
           <label>Password</label>
           <div className="password-wrapper">
             <input
@@ -59,7 +59,6 @@ const LoginPage = () => {
             </span>
           </div>
 
-          {/* LOGIN BUTTON */}
           <button type="submit" className="login-btn" disabled={btnLoading}>
             {btnLoading ? "Logging in..." : "Login"}
           </button>
@@ -67,7 +66,7 @@ const LoginPage = () => {
 
         <p className="signup-text">
           Don’t have an account?{" "}
-          <span onClick={() => navigate("/signup")}>Sign Up</span>
+          <span className="link-text" onClick={() => navigate("/signup")}>Sign Up</span>
         </p>
       </div>
     </div>

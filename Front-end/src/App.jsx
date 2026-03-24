@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Routes, Route, useLocation } from "react-router-dom";
 
 // Components
@@ -7,6 +7,7 @@ import Footer from "./Components/Footer";
 import PageNotFound from "./Components/PageNotFound";
 import PaymentPage from "./Components/PaymentPage";
 import GamesCategory from "./Components/GamesCategory";
+import Preloader from "./Components/Preloader"; // ✅ Import Preloader
 
 // Pages
 import Home from "./Pages/Home";
@@ -15,50 +16,53 @@ import SignUp from "./Pages/SignUp";
 import SearchResults from "./Pages/SearchResults";
 import GameDetails from "./Pages/GameDetails";
 
+import "./App.css"; // Ensure your layout styles are here
+
 function App() {
+  const [isLoading, setIsLoading] = useState(true);
   const location = useLocation();
 
-  // 🔥 Pages where Navbar & Footer should NOT appear (Login and Signup)
+  useEffect(() => {
+    // Simulate a 2.5 second loading time
+    // In a real app, you can stop loading once your game data fetch is finished
+    const timer = setTimeout(() => {
+      setIsLoading(false);
+    }, 2500);
+
+    return () => clearTimeout(timer);
+  }, []);
+
+  // Pages where Navbar & Footer should NOT appear
   const hideLayout =
     location.pathname === "/login" || location.pathname === "/signup";
 
+  // ✅ 1. Show only the Preloader while loading
+  if (isLoading) {
+    return <Preloader />;
+  }
+
+  // ✅ 2. Show the main App once loading is finished
   return (
-    <div className="app-wrapper">
-      {/* ✅ Navbar: hidden on login & signup */}
+    <div className="app-wrapper fade-in">
       {!hideLayout && <Navbar />}
 
-      {/* The <main> tag is the "Stable" container. 
-          It pushes the footer to the bottom even if the page is empty. 
-      */}
       <main className="main-content">
         <Routes>
-          {/* HOME ROUTES */}
           <Route path="/" element={<Home />} />
-          <Route path="/home" element={<Home />} />
+          // Inside your App.jsx Routes:
+          <Route path="/" element={<Home setAppLoading={setIsLoading} />} />
+          <Route path="/home" element={<Home setAppLoading={setIsLoading} />} />
           <Route path="/dashboard" element={<Home />} />
-
-          {/* AUTH ROUTES */}
           <Route path="/login" element={<LoginPage />} />
           <Route path="/signup" element={<SignUp />} />
-
-          {/* SEARCH ROUTES */}
           <Route path="/search/:query" element={<SearchResults />} />
-
-          {/* GAME DETAILS */}
           <Route path="/game/:id" element={<GameDetails />} />
-
-          {/* PAYMENT */}
           <Route path="/payment/:id" element={<PaymentPage />} />
-
-          {/* CATEGORY ROUTES (e.g., /games/playstation) */}
           <Route path="/games/:category" element={<GamesCategory />} />
-
-          {/* 404 CATCH-ALL */}
           <Route path="*" element={<PageNotFound />} />
         </Routes>
       </main>
 
-      {/* ✅ Footer: hidden on login & signup */}
       {!hideLayout && <Footer />}
     </div>
   );

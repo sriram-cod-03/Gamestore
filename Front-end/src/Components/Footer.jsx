@@ -20,12 +20,6 @@ const Footer = () => {
               Your ultimate destination for the latest games, digital content, 
               and exclusive deals. Built for gamers.
             </p>
-            <div className="footer-socials">
-              <a href="#" aria-label="Instagram"><FaInstagram /></a>
-              <a href="#" aria-label="Github"><FaGithub /></a>
-              <a href="#" aria-label="Linkedin"><FaLinkedin /></a>
-              <a href="#" aria-label="Twitter"><FaTwitter /></a>
-            </div>
           </div>
 
           <div className="footer-grid">

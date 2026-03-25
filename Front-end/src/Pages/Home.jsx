@@ -11,25 +11,28 @@ const Home = ({ setAppLoading }) => {
 
     const fetchAllHomeData = async () => {
       try {
-        // We trigger a small fetch for each section to "warm up" the API/Cache
-        // This ensures that when the Home page shows, the data is already there.
         const sections = [
-          "https://api.rawg.io/api/games?page_size=1&key=" + apiKey, // Recommended warmup
-          "https://api.rawg.io/api/games?page_size=1&ordering=-rating&key=" + apiKey, // Trending warmup
-          "https://api.rawg.io/api/games?page_size=1&tags=free-to-play&key=" + apiKey // Free warmup
+          `https://api.rawg.io/api/games?page_size=1&key=${apiKey}`,
+          `https://api.rawg.io/api/games?page_size=1&ordering=-rating&key=${apiKey}`,
+          `https://api.rawg.io/api/games?page_size=1&tags=free-to-play&key=${apiKey}`
         ];
 
-        // ✅ Wait for all API handshakes to finish
+        // Wait for all API handshakes
         await Promise.all(sections.map(url => fetch(url)));
 
-        // Give a tiny 500ms extra buffer for the images to start rendering
+        // Give a tiny buffer for images
         setTimeout(() => {
-          setAppLoading(false); 
+          // ✅ Safety Check: only call if function exists
+          if (typeof setAppLoading === "function") {
+            setAppLoading(false);
+          }
         }, 500);
 
       } catch (error) {
         console.error("API Error:", error);
-        setAppLoading(false); // Hide loader anyway so the user isn't stuck
+        if (typeof setAppLoading === "function") {
+          setAppLoading(false);
+        }
       }
     };
 

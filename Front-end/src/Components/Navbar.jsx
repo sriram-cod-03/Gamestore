@@ -38,7 +38,7 @@ const Navbar = () => {
         {/* NAVIGATION LINKS */}
         <nav className="gs-links">
           <Link to="/" className="gs-link">Home</Link>
-          <Link to="/games/all" className="gs-link">Browse</Link>
+          <Link to="/browse" className="gs-link">Browse</Link>
 
           {!isLoggedIn ? (
             <Link to="/login" className="gs-link login-link">Login</Link>

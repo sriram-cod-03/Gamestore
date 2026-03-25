@@ -7,7 +7,7 @@ import Footer from "./Components/Footer";
 import PageNotFound from "./Components/PageNotFound";
 import PaymentPage from "./Components/PaymentPage";
 import GamesCategory from "./Components/GamesCategory";
-import Preloader from "./Components/Preloader"; // ✅ Import Preloader
+import Preloader from "./Components/Preloader";
 
 // Pages
 import Home from "./Pages/Home";
@@ -15,8 +15,10 @@ import LoginPage from "./Pages/LoginPage";
 import SignUp from "./Pages/SignUp";
 import SearchResults from "./Pages/SearchResults";
 import GameDetails from "./Pages/GameDetails";
+import BrowsePage from "./Pages/Browse";
 
 import "./App.css"; // Ensure your layout styles are here
+
 
 function App() {
   const [isLoading, setIsLoading] = useState(true);
@@ -60,6 +62,7 @@ function App() {
           <Route path="/payment/:id" element={<PaymentPage />} />
           <Route path="/games/:category" element={<GamesCategory />} />
           <Route path="*" element={<PageNotFound />} />
+          <Route path="/browse" element={<BrowsePage/>}/>
         </Routes>
       </main>
 

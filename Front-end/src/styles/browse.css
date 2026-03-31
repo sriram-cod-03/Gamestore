@@ -110,3 +110,50 @@
 }
 
 .browse-loader { text-align: center; margin-top: 100px; font-size: 20px; color: #00ff88; }
+
+/* --- PLATFORM FILTERS --- */
+.new-releases-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 40px;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.section-title {
+  color: #fff;
+  font-weight: 900;
+  text-transform: uppercase;
+  font-size: 32px;
+  letter-spacing: 2px;
+}
+
+.platform-filters {
+  display: flex;
+  gap: 12px;
+}
+
+.filter-btn {
+  background: #111;
+  color: #fff;
+  border: 1px solid #333;
+  padding: 10px 24px;
+  border-radius: 30px; /* Rounded pill style */
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+  font-size: 13px;
+}
+
+.filter-btn:hover {
+  border-color: #ffffff;
+}
+
+/* ACTIVE STATE - WHITE BUTTON BLACK TEXT */
+.filter-btn.active {
+  background: #ffffff;
+  color: #000000;
+  border-color: #ffffff;
+}

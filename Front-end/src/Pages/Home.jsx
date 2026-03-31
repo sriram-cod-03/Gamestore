@@ -1,4 +1,12 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
+// Import all your custom CSS files
+import "../styles/recommended.css";
+import "../styles/trending.css";
+import "../styles/freeGames.css";
+import "../styles/horror.css";
+import "../styles/gameCarousel.css";
+
+// Import your Components
 import GameCarouselCard from "../Components/GameCarouselCard";
 import RecommendedGameCards from "../Components/RecommendedCard";
 import TrendingGameCard from "../Components/TrendingCard";
@@ -6,65 +14,74 @@ import FreeGameCard from "../Components/Freecard";
 import HorrorCard from "../Components/HorrorCard";
 
 const Home = ({ setAppLoading }) => {
+  const [userName, setUserName] = useState("Player");
+
   useEffect(() => {
-    const apiKey = "10339595c43349fe932bbf361059223a";
-
-    const fetchAllHomeData = async () => {
+    // 1. Get Logged-in User Data
+    const storedUser = localStorage.getItem("user");
+    if (storedUser) {
       try {
-        const sections = [
-          `https://api.rawg.io/api/games?page_size=1&key=${apiKey}`,
-          `https://api.rawg.io/api/games?page_size=1&ordering=-rating&key=${apiKey}`,
-          `https://api.rawg.io/api/games?page_size=1&tags=free-to-play&key=${apiKey}`
-        ];
-
-        // Wait for all API handshakes
-        await Promise.all(sections.map(url => fetch(url)));
-
-        // Give a tiny buffer for images
-        setTimeout(() => {
-          // ✅ Safety Check: only call if function exists
-          if (typeof setAppLoading === "function") {
-            setAppLoading(false);
-          }
-        }, 500);
-
-      } catch (error) {
-        console.error("API Error:", error);
-        if (typeof setAppLoading === "function") {
-          setAppLoading(false);
-        }
+        const userData = JSON.parse(storedUser);
+        const nameToDisplay = userData.firstName || userData.name || "Player";
+        setUserName(nameToDisplay.split(" ")[0]);
+      } catch (err) {
+        setUserName("Player");
       }
-    };
+    }
 
-    fetchAllHomeData();
+    // 2. Hide loading screen
+    if (typeof setAppLoading === "function") {
+      setTimeout(() => setAppLoading(false), 800);
+    }
   }, [setAppLoading]);
 
   return (
-    <div className="container mt-3">
-      {/* 1. Main Feature Carousel */}
-      <GameCarouselCard />
+    <div className="home-main-wrapper" style={{ backgroundColor: "#000" }}>
+      
+      {/* --- PERSONALIZED WELCOME --- */}
+      <div className="container pt-4 mb-4">
+        <h1 style={{ 
+          fontSize: "32px", 
+          fontWeight: "800", 
+          color: "#fff", 
+          textTransform: "uppercase",
+          letterSpacing: "1px" 
+        }}>
+          Welcome back, <span style={{ color: "#00ff88" }}>{userName}</span>
+        </h1>
+      </div>
 
-      {/* 2. Recommended Section */}
-      <div className="mt-5">
+      {/* 1. HERO CAROUSEL (Uses gameCarousel.css) */}
+      <div className="container">
+        <GameCarouselCard />
+      </div>
+
+      {/* 2. RECOMMENDED SECTION (Uses recommended.css classes) */}
+      <section className="recommended-container container">
+        <div className="recommended-header">
+        </div>
         <RecommendedGameCards />
-      </div>
+      </section>
 
-      {/* 3. Trending Section */}
-      <div className="mt-5">
+      {/* 3. TRENDING SECTION (Uses trending.css classes) */}
+      <section className="trending-container container">
+        <div className="trending-header">
+        </div>
         <TrendingGameCard />
-      </div>
+      </section>
 
-      {/* 4. Free to Play Section */}
-      <div className="mt-5">
+      {/* 4. FREE-TO-PLAY SECTION (Uses freeGames.css classes) */}
+      <section className="free-container container">
+        <div className="free-header">
+        </div>
         <FreeGameCard />
-      </div>
+      </section>
 
-      {/* 5. Horror Section */}
-      <div className="mt-5">
+      {/* 5. HORROR SECTION (Uses horror.css classes) */}
+      <section className="horror-container container">
         <HorrorCard />
-      </div>
+      </section>
 
-      {/* Bottom Padding for Footer spacing */}
       <div className="pb-5"></div>
     </div>
   );

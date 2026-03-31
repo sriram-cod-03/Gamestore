@@ -1,11 +1,11 @@
-/* --- FREE-TO-PLAY GAMES SECTION --- */
+/* --- FREE-TO-PLAY GAMES SECTION (DEFAULT) --- */
 .free-container {
   margin-top: 50px;
   padding: 0 20px;
   position: relative;
 }
 
-/* HEADER - STANDARDIZED SIZE & GRADIENT */
+/* HEADER - CLEAN WHITE TEXT */
 .free-header {
   display: flex;
   justify-content: space-between;
@@ -14,48 +14,11 @@
 }
 
 .free-header h4 {
-  /* Electric Blue to Cyan Gradient */
-  background: linear-gradient(135deg, #00c9ff, #4da6ff);
-  -webkit-background-clip: text;
-  background-clip: text; /* Standard property for cross-browser support */
-  -webkit-text-fill-color: transparent;
-  
-  /* Standardized Typography */
-  font-size: 26px; 
-  font-weight: 800;
+  color: #ffffff; /* Solid white */
+  font-size: 24px; 
+  font-weight: 700;
   text-transform: uppercase;
-  letter-spacing: 1.5px;
-}
-
-/* CIRCULAR NAVIGATION BUTTONS */
-.nav-buttons {
-  display: flex;
-  gap: 10px;
-}
-
-.nav-buttons button {
-  width: 36px;
-  height: 36px;
-  border-radius: 50%; /* Perfect Circle */
-  background: #2a2a2a;
-  border: none;
-  color: #ffffff;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  transition: background 0.3s ease, transform 0.2s ease;
-  padding: 0;
-}
-
-.nav-buttons button:hover:not(:disabled) {
-  background: #444444;
-  transform: scale(1.1);
-}
-
-.nav-buttons button:disabled {
-  opacity: 0.3;
-  cursor: not-allowed;
+  letter-spacing: 1px;
 }
 
 /* RESPONSIVE GRID */
@@ -69,48 +32,43 @@
 .free-card {
   position: relative;
   height: 320px;
-  border-radius: 18px;
+  border-radius: 12px; /* Standardized corners */
   overflow: hidden;
-  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.1); /* Standard border */
   transition: transform 0.3s ease;
   cursor: pointer;
 }
 
 .free-card:hover {
-  transform: translateY(-10px);
+  transform: translateY(-5px);
+  border-color: #ffffff;
 }
 
-/* BACKGROUND IMAGE */
 .free-bg {
   position: absolute;
   inset: 0;
   background-size: cover;
   background-position: center;
-  filter: brightness(0.7);
-  z-index: 1; /* Stays behind content */
-  transition: filter 0.3s ease;
+  filter: brightness(0.6);
+  z-index: 1;
 }
 
-.free-card:hover .free-bg {
-  filter: brightness(0.5);
-}
-
-/* FREE BADGE - TOP LEFT */
+/* FREE BADGE - SOLID WHITE */
 .free-badge {
   position: absolute;
   top: 15px;
   left: 15px;
-  background: linear-gradient(135deg, #00ff88, #00c9ff);
+  background: #ffffff; /* Clean white badge */
   color: #000;
-  font-size: 11px;
+  font-size: 10px;
   font-weight: 800;
-  padding: 5px 12px;
-  border-radius: 6px;
+  padding: 4px 10px;
+  border-radius: 4px;
   z-index: 2;
   text-transform: uppercase;
 }
 
-/* CONTENT OVERLAY (Visible on Hover) */
+/* CONTENT OVERLAY */
 .free-overlay {
   position: absolute;
   inset: 0;
@@ -118,15 +76,15 @@
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
-  background: linear-gradient(to top, rgba(0, 0, 0, 0.95), transparent);
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.9), transparent);
   color: #fff;
-  z-index: 5; /* Ensures buttons are clickable and on top */
-  opacity: 0; /* Hidden initially */
+  z-index: 5;
+  opacity: 0;
   transition: opacity 0.3s ease;
 }
 
 .free-card:hover .free-overlay {
-  opacity: 1; /* Fade in on hover */
+  opacity: 1;
 }
 
 .free-overlay h5 {
@@ -135,50 +93,23 @@
   font-weight: 700;
 }
 
-.free-overlay p {
-  font-size: 13px;
-  margin: 2px 0;
-  opacity: 0.9;
-}
-
-/* STANDARDIZED PURPLE GRADIENT BUTTON */
+/* STANDARDIZED WHITE BUTTON */
 .free-overlay button {
   margin-top: 15px;
   align-self: flex-start;
-  padding: 10px 24px; /* Standardized Size */
-  border-radius: 12px; /* Smooth Corners */
+  padding: 10px 24px;
+  border-radius: 8px;
   border: none;
-  background: linear-gradient(135deg,#00c9ff, #4da6ff); 
-  color: #fff;
+  background: #ffffff; /* Solid white */
+  color: #000;
   font-weight: 700;
-  font-size: 15px;
+  font-size: 14px;
   cursor: pointer;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
-.free-overlay button:hover {
-  transform: scale(1.05);
-  box-shadow: 0 0 15px rgba(255, 0, 128, 0.5);
-}
-
-/* --- RESPONSIVE BREAKPOINTS --- */
-
-/* Tablets/Laptops */
-@media (max-width: 1024px) {
-  .free-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
-
-/* Mobile Devices */
+/* RESPONSIVE BREAKPOINTS */
+@media (max-width: 1024px) { .free-grid { grid-template-columns: repeat(2, 1fr); } }
 @media (max-width: 576px) {
-  .free-grid {
-    grid-template-columns: 1fr;
-  }
-  .free-card {
-    height: 280px;
-  }
-  .free-header h4 {
-    font-size: 22px; /* Slightly smaller for mobile screens */
-  }
+  .free-grid { grid-template-columns: 1fr; }
+  .free-card { height: 280px; }
 }

@@ -1,11 +1,11 @@
-/* --- TRENDING GAMES SECTION --- */
+/* --- TRENDING GAMES SECTION (DEFAULT) --- */
 .trending-container {
   margin-top: 50px;
   padding: 0 20px;
   position: relative;
 }
 
-/* HEADER - STANDARDIZED SIZE & PURPLE GRADIENT */
+/* HEADER - CLEAN WHITE TYPOGRAPHY */
 .trending-header {
   display: flex;
   justify-content: space-between;
@@ -14,51 +14,14 @@
 }
 
 .trending-header h4 {
-  /* Vibrant Purple to Pink Gradient */
-  background: linear-gradient(135deg, #7928ca, #ff0080);
-  -webkit-background-clip: text;
-  background-clip: text; /* Compatibility fix */
-  -webkit-text-fill-color: transparent;
-  
-  /* Standardized Typography */
-  font-size: 26px; 
-  font-weight: 800;
-  text-transform: uppercase;
-  letter-spacing: 1.5px;
-}
-
-/* CIRCULAR NAVIGATION BUTTONS */
-.nav-buttons {
-  display: flex;
-  gap: 10px;
-}
-
-.nav-buttons button {
-  width: 36px;
-  height: 36px;
-  border-radius: 50%; /* Perfect Circle */
-  background: #2a2a2a;
-  border: none;
   color: #ffffff;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  transition: background 0.3s ease, transform 0.2s ease;
-  padding: 0;
+  font-size: 24px; 
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
 }
 
-.nav-buttons button:hover:not(:disabled) {
-  background: #444444;
-  transform: scale(1.1);
-}
-
-.nav-buttons button:disabled {
-  opacity: 0.3;
-  cursor: not-allowed;
-}
-
-/* RESPONSIVE GRID (4 -> 2 -> 1) */
+/* RESPONSIVE GRID */
 .trending-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
@@ -69,49 +32,48 @@
 .trending-card {
   position: relative;
   height: 350px;
-  border-radius: 20px;
+  border-radius: 12px;
   overflow: hidden;
-  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.6);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  transition: transform 0.3s ease, border-color 0.3s ease;
   cursor: pointer;
 }
 
 .trending-card:hover {
-  transform: translateY(-10px);
-  box-shadow: 0 0 25px rgba(121, 40, 202, 0.4);
+  transform: translateY(-5px);
+  border-color: #ffffff;
 }
 
-/* BACKGROUND IMAGE */
 .trending-bg {
   position: absolute;
   inset: 0;
   background-size: cover;
   background-position: center;
-  filter: brightness(0.7);
+  filter: brightness(0.6);
   z-index: 1;
   transition: filter 0.3s ease;
 }
 
 .trending-card:hover .trending-bg {
-  filter: brightness(0.5);
+  filter: brightness(0.45);
 }
 
-/* TRENDING BADGE - TOP RIGHT */
+/* TRENDING BADGE - SOLID DARK GREY */
 .trending-badge {
   position: absolute;
   top: 15px;
   right: 15px;
-  background: linear-gradient(135deg, #7928ca, #ff0080);
+  background: #333333; 
   color: #fff;
   font-size: 11px;
-  font-weight: 800;
+  font-weight: 700;
   padding: 5px 12px;
-  border-radius: 8px;
+  border-radius: 4px;
   z-index: 2;
   text-transform: uppercase;
 }
 
-/* CONTENT OVERLAY (Visible on Hover) */
+/* CONTENT OVERLAY */
 .trending-overlay {
   position: absolute;
   inset: 0;
@@ -119,74 +81,42 @@
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
-  background: linear-gradient(to top, rgba(0, 0, 0, 0.95) 20%, transparent 100%);
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.9) 15%, transparent 100%);
   color: #fff;
   z-index: 5;
-  opacity: 0; /* Hidden initially */
+  opacity: 0;
   transition: opacity 0.3s ease;
 }
 
 .trending-card:hover .trending-overlay {
-  opacity: 1; /* Fade in on hover */
+  opacity: 1;
 }
 
-.trending-overlay h5 {
-  font-size: 18px;
-  margin-bottom: 8px;
-  font-weight: 700;
-}
-
-.trending-info {
-  display: flex;
-  align-items: center;
-  gap: 15px;
-  font-size: 13px;
-  opacity: 0.8;
-  margin-bottom: 12px;
-}
-
-/* STANDARDIZED PURPLE GRADIENT BUTTON */
+/* STANDARDIZED WHITE BUTTON */
 .trending-overlay button {
   align-self: flex-start;
-  padding: 10px 24px; /* Standardized Size */
-  border-radius: 12px; /* Smooth Corners */
+  padding: 10px 24px;
+  border-radius: 8px;
   border: none;
-  background: linear-gradient(135deg, #7928ca, #ff0080); /* Purple to Pink */
-  color: #fff;
+  background: #ffffff;
+  color: #000;
   font-weight: 700;
-  font-size: 15px;
+  font-size: 14px;
   cursor: pointer;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  transition: transform 0.2s ease;
 }
 
 .trending-overlay button:hover {
-  box-shadow: 0 0 15px rgba(255, 0, 128, 0.7);
   transform: scale(1.05);
 }
 
-/* --- RESPONSIVE BREAKPOINTS --- */
-
-/* Tablets/Laptops */
+/* RESPONSIVE BREAKPOINTS */
 @media (max-width: 992px) {
-  .trending-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
+  .trending-grid { grid-template-columns: repeat(2, 1fr); }
 }
 
-/* Mobile Devices */
 @media (max-width: 576px) {
-  .trending-grid {
-    grid-template-columns: 1fr;
-  }
-  .trending-card {
-    height: 300px;
-  }
-  .trending-header {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 10px;
-  }
-  .trending-header h4 {
-    font-size: 22px;
-  }
+  .trending-grid { grid-template-columns: 1fr; }
+  .trending-card { height: 300px; }
+  .trending-header h4 { font-size: 20px; }
 }

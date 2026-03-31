@@ -1,4 +1,4 @@
-/* RESET & LAYOUT */
+/* --- FULL RESET & LAYOUT --- */
 html, body {
   width: 100%;
   height: 100%;
@@ -14,146 +14,129 @@ html, body {
   align-items: center;
   justify-content: center;
   overflow: hidden;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
 }
 
 .login-bg-overlay {
   position: absolute;
   inset: 0;
-  background: rgba(0, 0, 0, 0.55);
-  backdrop-filter: blur(3px);
+  background: rgba(0, 0, 0, 0.6); /* Darkens the background image */
+  backdrop-filter: blur(4px); /* Blurs the background image */
 }
 
-/* GLASS CARD */
+/* GLASS CARD - MATCHES SCREENSHOT */
 .login-glass-card {
   position: relative;
   z-index: 2;
   width: 380px;
   max-width: 90%;
-  padding: 32px;
-  border-radius: 20px;
-  background: rgba(255, 255, 255, 0.12);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.6);
+  padding: 40px 35px;
+  border-radius: 24px;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
   color: #fff;
-  animation: slideFade 0.5s ease forwards;
+  animation: slideFade 0.6s ease-out forwards;
 }
 
-.login-glass-card h2 { text-align: center; margin-bottom: 8px; }
+.brand-title { text-align: center; margin-bottom: 8px; font-weight: 700; font-size: 24px; }
 .login-subtitle {
   text-align: center;
-  font-size: 14px;
-  color: #bbb;
-  margin-bottom: 25px;
-}
-
-/* FORM ELEMENTS */
-.login-glass-card label {
   font-size: 13px;
-  margin-bottom: 6px;
-  display: block;
+  color: rgba(255, 255, 255, 0.6);
+  margin-bottom: 30px;
 }
 
-.login-glass-card input {
+/* FORM ELEMENTS - GREEN LABELS */
+.input-group { margin-bottom: 20px; text-align: left; }
+
+.input-label {
+  font-size: 13px;
+  margin-bottom: 10px;
+  display: block;
+  font-weight: 600;
+  color: #00ff88; /* Vibrant Green from screenshot */
+}
+
+.glass-input {
   width: 100%;
-  padding: 12px;
-  border-radius: 10px;
-  background: rgba(255, 255, 255, 0.18);
-  border: 1px solid rgba(255, 255, 255, 0.25);
+  padding: 14px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.2);
   color: #fff;
   outline: none;
-  box-sizing: border-box; 
-  margin-bottom: 15px;
   font-size: 15px;
+  transition: 0.3s;
 }
 
-.login-glass-card input::placeholder { color: #ccc; }
-.login-glass-card input:focus { border-color: #00ff88; }
-
-/* PASSWORD WRAPPER - THE CENTERING FIX */
-.password-wrapper {
-  position: relative;
-  width: 100%;
-  display: block; /* Ensure it behaves as a container */
+.glass-input:focus {
+  border-color: #00ff88;
+  background: rgba(255, 255, 255, 0.12);
 }
 
-.password-wrapper input {
-  padding-right: 65px; /* Space for the "Show" text */
-  margin-bottom: 15px;  /* Maintain spacing */
-}
-
-/* CUSTOM TOGGLE BUTTON */
+/* PASSWORD WRAPPER - "SHOW" ALIGNMENT */
+.password-wrapper { position: relative; }
 .toggle-password {
   position: absolute;
   right: 15px;
-  /* PERFECT VERTICAL CENTER */
-  top: calc(50% - 7.5px); /* Adjusted for the input margin-bottom */
+  top: 50%;
   transform: translateY(-50%);
-  
-  color: #00ff88;
-  font-size: 13px;
-  font-weight: 700;
+  color: #00ff88; /* Bold Green text */
+  font-size: 12px;
+  font-weight: 800;
   cursor: pointer;
-  user-select: none;
-  z-index: 10;
-  text-transform: uppercase;
+  letter-spacing: 1px;
 }
 
-.toggle-password:hover {
-  filter: brightness(1.2);
-  text-shadow: 0 0 8px rgba(0, 255, 136, 0.4);
-}
-
-/* BUTTON */
+/* LOGIN BUTTON - GRADIENT */
 .login-btn {
   width: 100%;
-  padding: 14px;
-  margin-top: 12px;
+  padding: 15px;
   border: none;
-  border-radius: 12px;
-  background: linear-gradient(135deg, #00ff88, #00c9ff);
-  color: #000;
+  border-radius: 14px;
+  background: linear-gradient(135deg, #00ff88 0%, #00bdff 100%);
+  color: #001a11;
   font-weight: 800;
-  font-size: 15px;
+  font-size: 16px;
   cursor: pointer;
-  transition: all 0.2s ease;
+  margin-top: 10px;
+  transition: 0.3s;
 }
 
 .login-btn:hover:not(:disabled) {
   transform: translateY(-2px);
-  box-shadow: 0 0 18px rgba(0, 255, 136, 0.6);
+  box-shadow: 0 8px 20px rgba(0, 255, 136, 0.4);
 }
 
-.login-btn:disabled { opacity: 0.7; cursor: not-allowed; }
+/* FORGOT PASSWORD & SIGNUP */
+.forgot-container-center {
+  margin-top: 15px;
+  text-align: left; /* Aligned left as per screenshot */
+}
 
-/* FOOTER & LINKS */
+.forgot-link {
+  color: #fff;
+  font-size: 14px;
+  cursor: pointer;
+}
+
 .signup-text {
-  margin-top: 18px;
+  margin-top: 35px;
   text-align: center;
   font-size: 14px;
-  color: #ddd;
+  color: #aaaaaa;
 }
 
-.signup-text span {
-  color: #00ff88;
+.create-account-link {
+  color: #00ff88; /* Green "Create Account" text */
   cursor: pointer;
-  font-weight: 600;
-}
-
-/* BROWSER COMPATIBILITY */
-input::-ms-reveal,
-input::-ms-clear {
-  display: none;
+  font-weight: 700;
 }
 
 @keyframes slideFade {
-  from { opacity: 0; transform: translateY(30px); }
+  from { opacity: 0; transform: translateY(20px); }
   to { opacity: 1; transform: translateY(0); }
-}
-
-@media (max-width: 480px) {
-  .login-glass-card { padding: 24px; }
-  .login-glass-card h2 { font-size: 1.5rem; }
 }

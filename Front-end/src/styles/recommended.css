@@ -1,10 +1,11 @@
+/* --- RECOMMENDED GAMES SECTION (DEFAULT) --- */
 .recommended-container {
   margin-top: 30px;
   position: relative;
   padding: 0 10px;
 }
 
-/* HEADER WITH GRADIENT TITLE */
+/* HEADER - CLEAN WHITE TEXT */
 .recommended-header {
   display: flex;
   justify-content: space-between;
@@ -13,14 +14,11 @@
 }
 
 .recommended-header h4 {
-  background: linear-gradient(135deg, #00ff88, #00c9ff);
-  -webkit-background-clip: text;
-  background-clip: text; /* Standard property for compatibility */
-  -webkit-text-fill-color: transparent;
-  font-size: 26px;
-  font-weight: 800;
+  color: #ffffff; /* Clean solid white */
+  font-size: 24px;
+  font-weight: 700;
   text-transform: uppercase;
-  letter-spacing: 1.5px;
+  letter-spacing: 1px;
 }
 
 /* CIRCULAR NAVIGATION BUTTONS */
@@ -33,28 +31,22 @@
   width: 36px;
   height: 36px;
   border-radius: 50%;
-  background: #2a2a2a;
-  border: none;
+  background: #222; /* Darker neutral background */
+  border: 1px solid rgba(255, 255, 255, 0.1);
   color: #ffffff;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  transition: background 0.3s ease, transform 0.2s ease;
-  padding: 0;
+  transition: all 0.3s ease;
 }
 
 .nav-buttons button:hover:not(:disabled) {
-  background: #444444;
+  background: #333;
   transform: scale(1.05);
 }
 
-.nav-buttons button:disabled {
-  opacity: 0.3;
-  cursor: not-allowed;
-}
-
-/* GRID & CARDS */
+/* GRID & CARDS - NO GLOW */
 .recommended-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
@@ -64,13 +56,16 @@
 .game-card {
   position: relative;
   height: 340px;
-  border-radius: 18px;
+  border-radius: 12px; /* Standardized corners */
   overflow: hidden;
-  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
-  transition: transform 0.3s ease;
+  border: 1px solid rgba(255, 255, 255, 0.1); /* Thin grey border */
+  transition: transform 0.3s ease, border-color 0.3s ease;
 }
 
-.game-card:hover { transform: translateY(-8px); }
+.game-card:hover { 
+  transform: translateY(-5px); 
+  border-color: #ffffff; /* Highlight border on hover */
+}
 
 .game-bg {
   position: absolute;
@@ -88,7 +83,7 @@
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
-  background: linear-gradient(to top, rgba(0,0,0,0.95), transparent);
+  background: linear-gradient(to top, rgba(0,0,0,0.9) 10%, transparent 100%);
   color: #fff;
   z-index: 5;
   opacity: 0;
@@ -99,24 +94,71 @@
   opacity: 1;
 }
 
-/* STANDARDIZED PURPLE SHOW MORE BUTTON */
+/* STANDARDIZED WHITE BUTTON */
 .game-overlay button {
   margin-top: 12px;
   align-self: flex-start;
   padding: 10px 24px;
-  border-radius: 12px;
+  border-radius: 8px;
   border: none;
-  background: linear-gradient(135deg, #00ff88, #00c9ff);
-  color: #fff;
+  background: #ffffff; /* Solid white */
+  color: #000000; /* Black text for contrast */
   font-weight: 700;
-  font-size: 15px;
+  font-size: 14px;
   cursor: pointer;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
-.game-overlay button:hover {
-  transform: scale(1.05);
-  box-shadow: 0 0 15px rgba(255, 0, 128, 0.4);
+/* --- UNIVERSAL animated green-yellow snake border (Demo Look) --- */
+
+/* Standardized classes for your components */
+.animated-game-card, .animated-user-card {
+  position: relative;
+  background: rgba(20, 20, 20, 0.8); /* Dark base for glow contrast */
+  border-radius: 12px;
+  overflow: hidden; /* Important for snake effect */
+  transition: transform 0.3s ease;
+  cursor: pointer;
+}
+
+/* Hover effect on parent card */
+.animated-game-card:hover, .animated-user-card:hover {
+  transform: translateY(-5px);
+}
+
+/* --- THE MOTION LAYER: The ::before pseudo-element --- */
+.animated-game-card::before, .animated-user-card::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  /* GREEN and YELLOW MIX Gradient */
+  background: conic-gradient(
+    transparent,
+    #00ff88, /* Vibrant Green */
+    #ffee00, /* Vibrant Yellow */
+    transparent 30%
+  );
+  animation: snake-border-spin 4s linear infinite; /* Spin effect */
+  z-index: 1;
+}
+
+/* THE CONTENT MASK: The inner part of the card */
+.card-content-overlay {
+  position: absolute;
+  inset: 5px; /* Adjust to control border thickness */
+  background: #000; /* Dark inner background */
+  border-radius: 10px;
+  z-index: 5;
+  padding: 20px;
+}
+
+/* The Spinning Animation Keyframes */
+@keyframes snake-border-spin {
+  100% {
+    transform: rotate(360deg);
+  }
 }
 
 /* RESPONSIVE */

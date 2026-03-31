@@ -1,12 +1,13 @@
-/* STABLE FOOTER BASE */
+/* --- STABLE FOOTER BASE --- */
 .app-footer {
-  position: relative; /* Stays at the bottom of the page content */
   width: 100%;
   background-color: #000000; /* Solid black theme */
   color: #ffffff;
   font-family: 'Segoe UI', Roboto, sans-serif;
   border-top: 1px solid #1a1a1a;
-  margin-top: 50px; /* Space between content and footer */
+  /* margin-top: auto; This is the magic line for Flexbox footers */
+  margin-top: auto; 
+  padding-top: 20px;
 }
 
 .footer-container {
@@ -15,7 +16,7 @@
   padding: 60px 40px 30px;
 }
 
-/* HEADER LAYOUT */
+/* --- HEADER LAYOUT --- */
 .footer-header {
   display: flex;
   justify-content: space-between;
@@ -49,7 +50,7 @@
 }
 
 .footer-socials a {
-  color: #4da6ff; /* Blue icons like your screenshot */
+  color: #4da6ff;
   font-size: 22px;
   transition: color 0.2s ease;
 }
@@ -58,7 +59,7 @@
   color: #ffffff;
 }
 
-/* GRID SYSTEM */
+/* --- GRID SYSTEM --- */
 .footer-grid {
   display: flex;
   gap: 80px;
@@ -72,7 +73,6 @@
   margin-bottom: 20px;
 }
 
-/* REMOVES BULLETS AND BLUE COLOR */
 .column-list {
   list-style: none !important;
   padding: 0 !important;
@@ -94,14 +94,14 @@
   opacity: 0.6;
 }
 
-/* DIVIDER */
+/* --- DIVIDER --- */
 .footer-divider {
   height: 1px;
   background-color: #1a1a1a;
   margin: 40px 0 20px;
 }
 
-/* BOTTOM SECTION */
+/* --- BOTTOM SECTION --- */
 .footer-bottom {
   display: flex;
   justify-content: space-between;
@@ -130,7 +130,6 @@
 }
 
 /* --- RESPONSIVE DESIGN --- */
-
 @media (max-width: 992px) {
   .footer-header { flex-direction: column; }
   .footer-grid { gap: 40px; width: 100%; justify-content: space-between; }

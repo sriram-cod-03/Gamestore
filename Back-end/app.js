@@ -1,44 +1,44 @@
-// app.js
-var express = require('express');
-var path = require('path');
-var cookieParser = require('cookie-parser');
-var logger = require('morgan');
-var cors = require('cors');
-var mongoose = require('mongoose');
-require('dotenv').config();  // load .env
+const express = require('express');
+const path = require('path');
+const cors = require('cors');
+const mongoose = require('mongoose');
+require('dotenv').config(); 
 
-var indexRouter = require('./routes/index.js');
-var usersRouter = require('./routes/users.js');
-var paymentRouter = require('./routes/payment.js'); // ✅ payment routes
+// --- ROUTE IMPORTS ---
+const usersRouter = require('./routes/users.js'); 
 
-var app = express();
+const app = express();
 
-// CORS – for now allow all; later restrict to Netlify domain
-app.use(
-  cors({
-    origin: '*',
-    credentials: true,
-  })
-);
-
-// MongoDB connection
-const mongoURI =
-  process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/gamestoreDB';
-
-mongoose
-  .connect(mongoURI)
+// --- DB CONNECTION ---
+// Make sure your .env file has MONGODB_URI=mongodb://localhost:27017/gamestore
+mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/gamestore')
   .then(() => console.log('✅ MongoDB Connected'))
-  .catch((err) => console.log('❌ DB Error:', err));
+  .catch((err) => console.error('❌ DB Error:', err.message));
 
-app.use(logger('dev'));
-app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
-app.use(cookieParser());
+// --- MIDDLEWARES ---
+app.use(cors({ 
+  origin: 'http://localhost:5173', // Your React Frontend Port
+  credentials: true 
+}));
+app.use(express.json()); // Essential to read data from your Login Page
 app.use(express.static(path.join(__dirname, 'public')));
 
-// Routes
-app.use('/', indexRouter);
-app.use('/api',usersRouter);          // /api/signup, /api/login, /api/test
-app.use('/api/payment', paymentRouter); // /api/payment/checkout, /test
+// --- ROUTES ---
+// This prefix means all routes in users.js start with /api/users
+app.use('/api/users', usersRouter); 
+
+// --- 404 HANDLER ---
+// If the URL doesn't match any route above, this catches it
+app.use((req, res) => {
+  console.log(`404 Error: ${req.method} ${req.url} not found`);
+  res.status(404).json({ message: "Address Not Found on Server" });
+});
+
+// --- START SERVER ---
+const PORT = process.env.PORT || 5000;
+app.listen(PORT, () => {
+  console.log(`🚀 Server is running on http://localhost:${PORT}`);
+  console.log(`📡 Ready for Quick Access at http://localhost:${PORT}/api/users/quick-access`);
+});
 
 module.exports = app;

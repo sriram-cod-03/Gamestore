@@ -1,41 +1,34 @@
 const express = require('express');
-const path = require('path');
 const cors = require('cors');
 const mongoose = require('mongoose');
 require('dotenv').config(); 
 
-// Import your routes
-const usersRouter = require('./routes/users.js'); 
+const userRoutes = require('./routes/users.js');
 
 const app = express();
 
 // --- MIDDLEWARES ---
-// In production, you might want to allow your specific frontend URL
-app.use(cors({ 
-  origin: process.env.FRONTEND_URL || 'http://localhost:5173', 
-  credentials: true 
-}));
+app.use(cors({ origin: 'http://localhost:5173', credentials: true }));
 app.use(express.json());
-app.use(express.static(path.join(__dirname, 'public')));
 
 // --- ROUTES ---
-app.use('/api/users', usersRouter); 
+app.use('/api/users', userRoutes);
 
 // --- DB CONNECTION ---
-mongoose.connect(process.env.MONGODB_URI)
-  .then(() => console.log('✅ MongoDB Connected'))
+const dbURI = process.env.MONGODB_URI || 'mongodb://localhost:27017/gamestore';
+
+mongoose.connect(dbURI)
+  .then(() => {
+    // ✅ THIS LOG CONFIRMS THE DATABASE NAME
+    const dbName = mongoose.connection.name;
+    console.log(`✅ MongoDB Connected to database: ${dbName}`);
+  })
   .catch((err) => console.error('❌ DB Error:', err.message));
 
-// --- 404 CATCHER ---
-app.use((req, res) => res.status(404).json({ message: "Route Not Found" }));
-
 // --- START SERVER ---
-// ✅ THE FIX: Use Render's port first, then 5000 as a backup for your laptop
-const PORT = process.env.PORT || 5000; 
-
+const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
-  console.log(`🚀 Server is running on port ${PORT}`);
-  console.log(`📡 Ready for Quick Access`);
+  console.log(`🚀 Server running on port ${PORT}`);
 });
 
 module.exports = app;

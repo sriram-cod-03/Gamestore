@@ -24,8 +24,7 @@ const LoginPage = () => {
       : "http://localhost:5000/api/users/login";
 
     // Prepare the data to send to the Backend
-    // Standard Login sends identifier + password
-    // Recovery Mode sends only identifier
+    // Both modes now send 'identifier' so the backend can use the $or search logic
     const payload = isRecoveryMode 
       ? { identifier } 
       : { identifier, password }; 
@@ -63,12 +62,12 @@ const LoginPage = () => {
           {/* IDENTIFIER INPUT (Email, Username, or Mobile) */}
           <div className="input-group">
             <label className="input-label">
-              {isRecoveryMode ? "Email / Username / Mobile" : "Email Address / Username"}
+              {isRecoveryMode ? "Email / Username / Mobile" : "Email Address / Username / Mobile"}
             </label>
             <input 
               type="text" 
               className="glass-input"
-              placeholder={isRecoveryMode ? "Enter any ID..." : "Ex: praveen0372"} 
+              placeholder={isRecoveryMode ? "Enter any ID..." : "Ex: praveen0372 or 9876543210"} 
               value={identifier} 
               onChange={(e) => setIdentifier(e.target.value)} 
               required

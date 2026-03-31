@@ -1,118 +1,190 @@
-import React, { useState, useEffect } from "react";
-import { FaCamera, FaSave, FaUserEdit } from "react-icons/fa";
+import React, { useState, useEffect, useRef } from "react";
+import axios from "axios";
 import "../styles/profile.css";
 
 const Profile = () => {
-  // 1. STATE: Check if profile data already exists in localStorage
-  const [isSubmitted, setIsSubmitted] = useState(false);
-  const [profile, setProfile] = useState({
-    name: "",
+  // --- 1. STATE & REFERENCES ---
+  const [user, setUser] = useState({});
+  const [isEditing, setIsEditing] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const fileInputRef = useRef(null); // Reference for the hidden file selector
+
+  // Form State for editing text fields
+  const [formData, setFormData] = useState({
     username: "",
     bio: "",
-    gender: "",
-    avatar: null
+    gender: ""
   });
 
-  // 2. LOAD DATA: On refresh, check if we have saved data
+  // --- 2. LOAD DATA ON START ---
   useEffect(() => {
-    const savedData = localStorage.getItem("userProfile");
-    if (savedData) {
-      setProfile(JSON.parse(savedData));
-      setIsSubmitted(true); // If data exists, show the "Display" view
+    const savedUser = JSON.parse(localStorage.getItem("user"));
+    if (savedUser) {
+      setUser(savedUser);
+      setFormData({
+        username: savedUser.username || "",
+        bio: savedUser.bio || "Gaming is not a hobby, it's life Style",
+        gender: savedUser.gender || "Male"
+      });
     }
   }, []);
 
-  const handleChange = (e) => {
-    setProfile({ ...profile, [e.target.name]: e.target.value });
+  // --- 3. PHOTO UPLOAD LOGIC ---
+  const handleAvatarClick = () => {
+    fileInputRef.current.click(); // Triggers the hidden input[type="file"]
   };
 
-  const handleImageChange = (e) => {
+  const handleFileChange = (e) => {
     const file = e.target.files[0];
-    if (file) {
-      setProfile({ ...profile, avatar: URL.createObjectURL(file) });
-    }
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onloadend = async () => {
+      const base64Image = reader.result;
+      
+      // Instant Preview on UI
+      setUser((prev) => ({ ...prev, profilePic: base64Image }));
+
+      // Save Photo to Database immediately
+      try {
+        const response = await axios.put("http://localhost:5000/api/users/update-profile", {
+          userId: user._id,
+          profilePic: base64Image
+        });
+
+        if (response.data.success) {
+          localStorage.setItem("user", JSON.stringify(response.data.user));
+          console.log("Photo synced to MongoDB ✅");
+        }
+      } catch (err) {
+        alert("Photo upload failed. Check server connection.");
+      }
+    };
+    reader.readAsDataURL(file);
   };
 
-  // 3. SAVE DATA: Save to local storage and switch view
-  const handleSave = (e) => {
-    e.preventDefault();
-    if (!profile.name || !profile.username) {
-      alert("Please enter at least your Name and Username!");
-      return;
+  // --- 4. TEXT UPDATE LOGIC ---
+  const handleInputChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const handleSaveProfile = async () => {
+    setLoading(true);
+    try {
+      const response = await axios.put("http://localhost:5000/api/users/update-profile", {
+        userId: user._id,
+        username: formData.username,
+        bio: formData.bio,
+        gender: formData.gender
+      });
+
+      if (response.data.success) {
+        localStorage.setItem("user", JSON.stringify(response.data.user));
+        setUser(response.data.user);
+        setIsEditing(false);
+        alert("Profile Updated Successfully! 🚀");
+      }
+    } catch (err) {
+      alert(err.response?.data?.message || "Failed to save data.");
+    } finally {
+      setLoading(false);
     }
-    localStorage.setItem("userProfile", JSON.stringify(profile));
-    setIsSubmitted(true);
   };
 
   return (
-    <div className="profile-wrapper container">
-      {!isSubmitted ? (
-        /* --- VIEW 1: THE INPUT FORM (Shows when empty) --- */
-        <div className="profile-glass-card">
-          <h2 className="setup-title">Setup Your Profile</h2>
-          <form className="profile-form" onSubmit={handleSave}>
-            <div className="avatar-upload">
-              <label className="avatar-frame">
-                {profile.avatar ? <img src={profile.avatar} alt="Preview" /> : <span>+</span>}
-                <input type="file" onChange={handleImageChange} hidden />
-              </label>
-              <p>Upload Avatar</p>
-            </div>
-
-            <div className="form-group">
-              <label>Full Name</label>
-              <input type="text" name="name" placeholder="Ex: Sriram R" onChange={handleChange} required />
-            </div>
-
-            <div className="form-group">
-              <label>Username</label>
-              <input type="text" name="username" placeholder="Ex: srx._03" onChange={handleChange} required />
-            </div>
-
-            <div className="form-group">
-              <label>Bio</label>
-              <textarea name="bio" placeholder="Tell us about your gaming life..." onChange={handleChange} rows="3" />
-            </div>
-
-            <div className="form-group">
-              <label>Gender</label>
-              <select name="gender" onChange={handleChange} required>
-                <option value="">Select Gender</option>
-                <option value="Male">Male</option>
-                <option value="Female">Female</option>
-                <option value="Other">Other</option>
-              </select>
-            </div>
-
-            <button type="submit" className="btn-save"><FaSave /> Save Profile</button>
-          </form>
-        </div>
-      ) : (
-        /* --- VIEW 2: THE DISPLAY CARD (Shows after saving) --- */
-        <div className="profile-glass-card">
-          <div className="avatar-container">
-            <div className="avatar-frame">
-              {profile.avatar ? (
-                <img src={profile.avatar} alt="User" className="user-avatar" />
-              ) : (
-                <div className="avatar-placeholder">{profile.name.charAt(0)}</div>
-              )}
-            </div>
+    <div className="profile-container">
+      <div className="profile-glass-card">
+        
+        {/* --- AVATAR SECTION --- */}
+        <div className="profile-header">
+          <div className="avatar-wrapper" onClick={handleAvatarClick} title="Click to change photo">
+            {user.profilePic ? (
+              <img src={user.profilePic} alt="Avatar" className="avatar-img" />
+            ) : (
+              <div className="avatar-placeholder">USER</div>
+            )}
+            <div className="avatar-overlay">EDIT</div>
           </div>
+          
+          {/* HIDDEN FILE INPUT */}
+          <input 
+            type="file" 
+            ref={fileInputRef} 
+            onChange={handleFileChange} 
+            accept="image/*" 
+            style={{ display: "none" }} 
+          />
 
-          <div className="display-info">
-            <h2 className="display-name">{profile.name}</h2>
-            <p className="display-username">@{profile.username}</p>
-            <div className="divider"></div>
-            <p className="display-bio">"{profile.bio}"</p>
-            <p className="display-gender"><strong>GENDER:</strong> {profile.gender}</p>
-          </div>
-
-          <button className="btn-edit" onClick={() => setIsSubmitted(false)}>
-            <FaUserEdit /> Edit Profile
-          </button>
+          <h1 className="profile-display-name">{user.firstName} {user.lastName}</h1>
+          <p className="profile-display-handle">@{user.username || "new_player"}</p>
         </div>
-      )}
+
+        {/* --- BODY SECTION --- */}
+        <div className="profile-content">
+          {isEditing ? (
+            <div className="edit-mode-form">
+              <div className="form-group">
+                <label>Username</label>
+                <input 
+                  type="text" 
+                  name="username" 
+                  className="glass-field" 
+                  value={formData.username} 
+                  onChange={handleInputChange} 
+                />
+              </div>
+              <div className="form-group">
+                <label>Bio</label>
+                <textarea 
+                  name="bio" 
+                  className="glass-field bio-area" 
+                  value={formData.bio} 
+                  onChange={handleInputChange} 
+                />
+              </div>
+              <div className="form-group">
+                <label>Gender</label>
+                <select 
+                  name="gender" 
+                  className="glass-field" 
+                  value={formData.gender} 
+                  onChange={handleInputChange}
+                >
+                  <option value="Male">Male</option>
+                  <option value="Female">Female</option>
+                  <option value="Secret">Secret</option>
+                </select>
+              </div>
+              <div className="action-row">
+                <button className="save-btn" onClick={handleSaveProfile} disabled={loading}>
+                  {loading ? "SAVING..." : "SAVE CHANGES"}
+                </button>
+                <button className="cancel-btn" onClick={() => setIsEditing(false)}>CANCEL</button>
+              </div>
+            </div>
+          ) : (
+            <div className="view-mode-details">
+              <div className="detail-block">
+                <h4>BIO</h4>
+                <p>"{user.bio || "No bio available."}"</p>
+              </div>
+              <div className="stats-grid">
+                <div className="stat-box">
+                  <small>GENDER</small>
+                  <span>{user.gender || "Male"}</span>
+                </div>
+                <div className="stat-box">
+                  <small>EMAIL</small>
+                  <span>{user.email}</span>
+                </div>
+              </div>
+              <button className="enter-edit-btn" onClick={() => setIsEditing(true)}>
+                EDIT PROFILE
+              </button>
+            </div>
+          )}
+        </div>
+      </div>
     </div>
   );
 };

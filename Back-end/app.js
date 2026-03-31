@@ -4,41 +4,38 @@ const cors = require('cors');
 const mongoose = require('mongoose');
 require('dotenv').config(); 
 
-// --- ROUTE IMPORTS ---
+// Import your routes
 const usersRouter = require('./routes/users.js'); 
 
 const app = express();
 
-// --- DB CONNECTION ---
-// Make sure your .env file has MONGODB_URI=mongodb://localhost:27017/gamestore
-mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/gamestore')
-  .then(() => console.log('✅ MongoDB Connected'))
-  .catch((err) => console.error('❌ DB Error:', err.message));
-
 // --- MIDDLEWARES ---
+// In production, you might want to allow your specific frontend URL
 app.use(cors({ 
-  origin: 'http://localhost:5173', // Your React Frontend Port
+  origin: process.env.FRONTEND_URL || 'http://localhost:5173', 
   credentials: true 
 }));
-app.use(express.json()); // Essential to read data from your Login Page
+app.use(express.json());
 app.use(express.static(path.join(__dirname, 'public')));
 
 // --- ROUTES ---
-// This prefix means all routes in users.js start with /api/users
 app.use('/api/users', usersRouter); 
 
-// --- 404 HANDLER ---
-// If the URL doesn't match any route above, this catches it
-app.use((req, res) => {
-  console.log(`404 Error: ${req.method} ${req.url} not found`);
-  res.status(404).json({ message: "Address Not Found on Server" });
-});
+// --- DB CONNECTION ---
+mongoose.connect(process.env.MONGODB_URI)
+  .then(() => console.log('✅ MongoDB Connected'))
+  .catch((err) => console.error('❌ DB Error:', err.message));
+
+// --- 404 CATCHER ---
+app.use((req, res) => res.status(404).json({ message: "Route Not Found" }));
 
 // --- START SERVER ---
-const PORT = process.env.PORT || 5000;
+// ✅ THE FIX: Use Render's port first, then 5000 as a backup for your laptop
+const PORT = process.env.PORT || 5000; 
+
 app.listen(PORT, () => {
-  console.log(`🚀 Server is running on http://localhost:${PORT}`);
-  console.log(`📡 Ready for Quick Access at http://localhost:${PORT}/api/users/quick-access`);
+  console.log(`🚀 Server is running on port ${PORT}`);
+  console.log(`📡 Ready for Quick Access`);
 });
 
 module.exports = app;

@@ -2,10 +2,10 @@
   "name": "gamestore-backend",
   "version": "1.0.0",
   "private": true,
-  "main": "bin/www",
+  "main": "app.js",
   "scripts": {
-    "start": "node --max-old-space-size=4096 ./bin/www",
-    "dev": "nodemon --max-old-space-size=4096 ./bin/www"
+    "start": "node app.js",
+    "dev": "nodemon app.js"
   },
   "dependencies": {
     "axios": "^1.13.6",
@@ -17,8 +17,7 @@
     "jsonwebtoken": "^9.0.3",
     "mongodb": "^7.1.1",
     "mongoose": "^8.23.0",
-    "morgan": "~1.9.1",
-    "xxxxx": "^1.0.3"
+    "morgan": "~1.9.1"
   },
   "devDependencies": {
     "nodemon": "^3.1.1"

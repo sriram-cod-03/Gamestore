@@ -37,9 +37,9 @@ const FreeGameCard = () => {
         const requests = freeGameNames.map((name) =>
           fetch(
             `https://api.rawg.io/api/games?search=${encodeURIComponent(
-              name
-            )}&key=${apiKey}`
-          ).then((res) => res.json())
+              name,
+            )}&key=${apiKey}`,
+          ).then((res) => res.json()),
         );
 
         const responses = await Promise.all(requests);
@@ -82,17 +82,19 @@ const FreeGameCard = () => {
     <div className="free-container">
       {/* HEADER SECTION */}
       <div className="free-header">
-        <h4>Free-to-Play Games</h4>
-
+        {/* ✅ CLICKABLE WHITE TITLE */}
+        <h4
+          className="clickable-free-title"
+          onClick={() => navigate("/all-free")}
+        >
+          Free-to-Play Games
+        </h4>
         <div className="nav-buttons">
-          {/* ✅ FIXED: Changed startIndex to currentIndex */}
           <button onClick={handlePrev} disabled={currentIndex === 0}>
             <FaChevronLeft />
           </button>
-          
-          {/* ✅ FIXED: Changed startIndex to currentIndex and totalGames to games.length */}
-          <button 
-            onClick={handleNext} 
+          <button
+            onClick={handleNext}
             disabled={currentIndex + ITEMS_PER_PAGE >= games.length}
           >
             <FaChevronRight />

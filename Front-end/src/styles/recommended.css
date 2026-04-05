@@ -1,38 +1,48 @@
-/* --- RECOMMENDED GAMES SECTION (DEFAULT) --- */
+/* --- RECOMMENDED GAMES SECTION --- */
 .recommended-container {
   margin-top: 30px;
   position: relative;
   padding: 0 10px;
 }
 
-/* HEADER - CLEAN WHITE TEXT */
+/* --- ✅ HEADER FIX: Title and Buttons on the SAME LINE --- */
 .recommended-header {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 20px;
+  justify-content: space-between; /* Pushes Title to left, Buttons to right */
+  align-items: center;           /* Vertically centers them */
+  margin-bottom: 25px;
+  width: 100%;
 }
 
-.recommended-header h4 {
-  color: #ffffff; /* Clean solid white */
+/* ✅ CLEAN WHITE CLICKABLE TITLE (NO COLOURS) */
+.clickable-title {
+  color: #ffffff; /* Pure Solid White */
   font-size: 24px;
   font-weight: 700;
   text-transform: uppercase;
-  letter-spacing: 1px;
+  letter-spacing: 1.2px;
+  cursor: pointer; /* Makes it look like a link 👆 */
+  transition: opacity 0.3s ease;
+  margin: 0;
 }
 
-/* CIRCULAR NAVIGATION BUTTONS */
+.clickable-title:hover {
+  opacity: 0.7; /* Dims slightly on hover to show it's clickable */
+  text-decoration: underline; /* Standard link behavior */
+}
+
+/* --- NAVIGATION BUTTONS (ARROWS) --- */
 .nav-buttons {
   display: flex;
-  gap: 10px;
+  gap: 12px;
 }
 
 .nav-buttons button {
-  width: 36px;
-  height: 36px;
+  width: 40px;
+  height: 40px;
   border-radius: 50%;
-  background: #222; /* Darker neutral background */
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
   color: #ffffff;
   display: flex;
   align-items: center;
@@ -42,50 +52,94 @@
 }
 
 .nav-buttons button:hover:not(:disabled) {
-  background: #333;
-  transform: scale(1.05);
+  background: rgba(255, 255, 255, 0.2);
+  transform: scale(1.1);
 }
 
-/* GRID & CARDS - NO GLOW */
+.nav-buttons button:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+/* --- GRID LAYOUT --- */
 .recommended-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 20px;
+  gap: 25px;
 }
 
+/* --- THE ANIMATED GAME CARD (SNAKE BORDER) --- */
 .game-card {
   position: relative;
-  height: 340px;
-  border-radius: 12px; /* Standardized corners */
-  overflow: hidden;
-  border: 1px solid rgba(255, 255, 255, 0.1); /* Thin grey border */
-  transition: transform 0.3s ease, border-color 0.3s ease;
+  height: 380px;
+  background: #111; /* Dark base for glow contrast */
+  border-radius: 15px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden; /* Clips the rotating colors */
+  transition: transform 0.3s ease;
+  cursor: pointer;
 }
 
-.game-card:hover { 
-  transform: translateY(-5px); 
-  border-color: #ffffff; /* Highlight border on hover */
+.game-card:hover {
+  transform: translateY(-10px);
 }
 
-.game-bg {
+/* THE MOTION LAYER: The Red & Yellow Rotating Snake */
+.game-card:hover::before {
+  content: '';
   position: absolute;
-  inset: 0;
-  background-size: cover;
-  background-position: center;
-  filter: brightness(0.7);
+  width: 150%;
+  height: 150%;
+  /* RED and YELLOW Gradient */
+  background: conic-gradient(
+    transparent,
+    #ff0000, /* Vibrant Red */
+    #ffee00, /* Vibrant Yellow */
+    transparent 40%
+  );
+  animation: recommended-snake-spin 3s linear infinite;
   z-index: 1;
 }
 
+/* THE MASK: Creates the thin border line effect */
+.game-card::after {
+  content: '';
+  position: absolute;
+  inset: 4px; /* Thickness of the border */
+  background: #000;
+  border-radius: 12px;
+  z-index: 2;
+}
+
+/* IMAGE LAYER */
+.game-bg {
+  position: absolute;
+  inset: 5px;
+  background-size: cover;
+  background-position: center;
+  border-radius: 10px;
+  filter: brightness(0.8);
+  z-index: 3;
+  transition: filter 0.3s ease;
+}
+
+.game-card:hover .game-bg {
+  filter: brightness(0.5);
+}
+
+/* --- CONTENT OVERLAY --- */
 .game-overlay {
   position: absolute;
-  inset: 0;
+  inset: 5px;
   padding: 20px;
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
-  background: linear-gradient(to top, rgba(0,0,0,0.9) 10%, transparent 100%);
+  background: linear-gradient(to top, rgba(0,0,0,0.95) 20%, transparent 100%);
   color: #fff;
-  z-index: 5;
+  z-index: 10;
   opacity: 0;
   transition: opacity 0.3s ease;
 }
@@ -94,73 +148,56 @@
   opacity: 1;
 }
 
-/* STANDARDIZED WHITE BUTTON */
-.game-overlay button {
-  margin-top: 12px;
+.card-title {
+  font-size: 1.1rem;
+  font-weight: 800;
+  margin-bottom: 8px;
+}
+
+.game-info-row {
+  display: flex;
+  gap: 15px;
+  font-size: 0.9rem;
+  margin-bottom: 15px;
+  font-weight: 600;
+}
+
+/* --- THE "SHOW MORE" BUTTON (YELLOW GLOW) --- */
+.card-btn {
+  margin-top: 5px;
   align-self: flex-start;
-  padding: 10px 24px;
+  padding: 12px 24px;
   border-radius: 8px;
   border: none;
-  background: #ffffff; /* Solid white */
-  color: #000000; /* Black text for contrast */
-  font-weight: 700;
-  font-size: 14px;
+  background: #ffffff; /* Default: White */
+  color: #000;
+  font-weight: 900;
+  text-transform: uppercase;
   cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* --- UNIVERSAL animated green-yellow snake border (Demo Look) --- */
-
-/* Standardized classes for your components */
-.animated-game-card, .animated-user-card {
-  position: relative;
-  background: rgba(20, 20, 20, 0.8); /* Dark base for glow contrast */
-  border-radius: 12px;
-  overflow: hidden; /* Important for snake effect */
-  transition: transform 0.3s ease;
-  cursor: pointer;
+.card-btn:hover {
+  background-color: #ffee00 !important; /* Force Yellow background */
+  color: #000 !important;
+  box-shadow: 0 0 20px rgba(255, 238, 0, 0.8); /* Neon Yellow Glow */
+  transform: scale(1.05);
 }
 
-/* Hover effect on parent card */
-.animated-game-card:hover, .animated-user-card:hover {
-  transform: translateY(-5px);
-}
-
-/* --- THE MOTION LAYER: The ::before pseudo-element --- */
-.animated-game-card::before, .animated-user-card::before {
-  content: '';
-  position: absolute;
-  top: -50%;
-  left: -50%;
-  width: 200%;
-  height: 200%;
-  /* GREEN and YELLOW MIX Gradient */
-  background: conic-gradient(
-    transparent,
-    #00ff88, /* Vibrant Green */
-    #ffee00, /* Vibrant Yellow */
-    transparent 30%
-  );
-  animation: snake-border-spin 4s linear infinite; /* Spin effect */
-  z-index: 1;
-}
-
-/* THE CONTENT MASK: The inner part of the card */
-.card-content-overlay {
-  position: absolute;
-  inset: 5px; /* Adjust to control border thickness */
-  background: #000; /* Dark inner background */
-  border-radius: 10px;
-  z-index: 5;
-  padding: 20px;
-}
-
-/* The Spinning Animation Keyframes */
-@keyframes snake-border-spin {
+/* --- SPINNING ANIMATION KEYFRAMES --- */
+@keyframes recommended-snake-spin {
   100% {
     transform: rotate(360deg);
   }
 }
 
-/* RESPONSIVE */
-@media (max-width: 1024px) { .recommended-grid { grid-template-columns: repeat(2, 1fr); } }
-@media (max-width: 576px) { .recommended-grid { grid-template-columns: 1fr; } }
+/* --- RESPONSIVE --- */
+@media (max-width: 1024px) {
+  .recommended-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 576px) {
+  .recommended-grid { grid-template-columns: 1fr; }
+  .clickable-title { font-size: 20px; }
+  .game-card { height: 320px; }
+}

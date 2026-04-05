@@ -1,0 +1,146 @@
+/* --- FULL PAGE WRAPPER --- */
+.all-free-page {
+  background: #000;
+  min-height: 100vh;
+  padding: 40px 0;
+  color: #fff;
+}
+
+.free-page-header {
+  display: flex;
+  align-items: center;
+  gap: 30px;
+  margin-bottom: 50px;
+}
+
+/* BACK BUTTON */
+.back-btn {
+  background: rgba(0, 210, 255, 0.1);
+  border: 1px solid #00d2ff;
+  color: white;
+  padding: 10px 20px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 700;
+  transition: 0.3s;
+}
+
+.back-btn:hover { 
+  background: #00d2ff; 
+  color: #000; 
+}
+
+/* ✅ FIXED: CYAN GRADIENT TITLE WITH COMPATIBILITY */
+.cyan-free-title {
+  font-size: 36px;
+  font-weight: 900;
+  text-transform: uppercase;
+  background: linear-gradient(to right, #00d2ff, #3a7bd5);
+  
+  /* The Fix: Always define both for full browser support */
+  -webkit-background-clip: text; 
+  background-clip: text;         /* 👈 Added this standard property */
+  
+  -webkit-text-fill-color: transparent;
+  filter: drop-shadow(0 0 10px rgba(0, 210, 255, 0.4));
+}
+
+/* CLICKABLE TITLE IN HOME CARDS */
+.clickable-free-title {
+  color: #fff;
+  cursor: pointer;
+  transition: 0.3s ease;
+}
+
+.clickable-free-title:hover {
+  opacity: 0.7;
+  text-decoration: underline;
+}
+
+/* FULL GRID SYSTEM */
+.free-full-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 30px;
+}
+
+/* CARDS DESIGN */
+.free-full-card {
+  background: #0a0a0a;
+  border-radius: 15px;
+  overflow: hidden;
+  border: 1px solid rgba(0, 210, 255, 0.1);
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.free-full-card:hover {
+  transform: translateY(-10px);
+  border-color: #00d2ff;
+  box-shadow: 0 10px 30px rgba(0, 210, 255, 0.2);
+}
+
+.free-media {
+  height: 190px;
+  position: relative;
+}
+
+.free-media img {
+  width: 100%; 
+  height: 100%;
+  object-fit: cover;
+}
+
+.free-tag {
+  position: absolute;
+  top: 15px; 
+  right: 15px;
+  background: #00d2ff;
+  color: #000;
+  font-size: 10px;
+  font-weight: 900;
+  padding: 4px 10px;
+  border-radius: 4px;
+}
+
+.free-info { 
+  padding: 20px; 
+}
+
+.free-meta {
+  display: flex; 
+  gap: 20px;
+  color: #888;
+  font-weight: 700;
+  margin: 10px 0 20px;
+}
+
+/* DOWNLOAD BUTTON */
+.download-btn {
+  width: 100%; 
+  padding: 12px;
+  background: transparent;
+  border: 1px solid #00d2ff;
+  color: #00d2ff;
+  font-weight: 800;
+  border-radius: 8px;
+  transition: 0.3s;
+  text-transform: uppercase;
+}
+
+.free-full-card:hover .download-btn {
+  background: #00d2ff;
+  color: #000;
+}
+
+/* LOADING SCREEN */
+.free-loader {
+  height: 100vh;
+  display: flex; 
+  justify-content: center; 
+  align-items: center;
+  background: #000; 
+  color: #00d2ff;
+  font-weight: 900; 
+  letter-spacing: 5px;
+}

@@ -14,8 +14,13 @@ import SignUp from "./Pages/SignUp";
 import SearchResults from "./Pages/SearchResults";
 import GameDetails from "./Pages/GameDetails";
 import BrowsePage from "./Pages/Browse";
-import NewReleases from "./Pages/NewReleases"; // ✅ IMPORTED THIS
+import NewReleases from "./Pages/NewReleases";
 import Profile from "./Pages/Profile";
+// ✅ IMPORT THE NEW PAGE
+import AllRecommended from "./Pages/AllRecommended";
+import AllTrending from "./Pages/AllTrending";
+import AllFree from "./Pages/AllFree";
+import AllHorror from "./Pages/AllHorror";
 
 import "./App.css";
 
@@ -49,6 +54,7 @@ function App() {
       {/* Main content with flex grow to push footer down */}
       <main className="main-content">
         <Routes>
+          {/* Dashboard Routes */}
           <Route
             path="/"
             element={
@@ -104,7 +110,44 @@ function App() {
             }
           />
 
-          {/* ✅ FIXED: Specific route for New Releases */}
+          {/*Route for the Clickable Title */}
+          <Route
+            path="/all-recommended"
+            element={
+              <ProtectedRoute>
+                <AllRecommended />
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/all-trending"
+            element={
+              <ProtectedRoute>
+                <AllTrending />
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/all-free"
+            element={
+              <ProtectedRoute>
+                <AllFree />
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/all-horror"
+            element={
+              <ProtectedRoute>
+                <AllHorror />
+              </ProtectedRoute>
+            }
+          />
+
+          {/* Specific route for New Releases */}
           <Route
             path="/games/new"
             element={
@@ -129,6 +172,8 @@ function App() {
               </ProtectedRoute>
             }
           />
+
+          {/* Fallback */}
           <Route path="*" element={<PageNotFound />} />
         </Routes>
       </main>

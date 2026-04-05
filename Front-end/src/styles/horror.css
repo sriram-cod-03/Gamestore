@@ -1,4 +1,4 @@
-/* --- HORROR GAMES SECTION (DEFAULT) --- */
+/* --- HORROR GAMES SECTION --- */
 .horror-container {
   margin-top: 50px;
   padding: 0 20px;
@@ -23,62 +23,93 @@
   gap: 22px;
 }
 
-/* CARD STYLING */
+/* --- THE ANIMATED HORROR CARD (RED SNAKE) --- */
 .horror-card {
   position: relative;
-  height: 330px;
-  border-radius: 12px;
-  overflow: hidden;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  transition: transform 0.3s ease, border-color 0.3s ease;
+  height: 380px; /* Increased height to fit icons better */
+  background: #111;
+  border-radius: 15px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden; /* Clips the rotating snake */
+  transition: transform 0.3s ease;
   cursor: pointer;
 }
 
 .horror-card:hover {
-  transform: translateY(-5px);
-  border-color: #ff4d4d; /* Subtle red hint only on hover */
+  transform: translateY(-10px);
 }
 
+/* THE MOTION LAYER: Red Snake Border */
+.horror-card:hover::before {
+  content: '';
+  position: absolute;
+  width: 150%;
+  height: 150%;
+  /* BLOOD RED and DARK CRIMSON Gradient */
+  background: conic-gradient(
+    transparent,
+    #ff0000, /* Bright Red */
+    #8b0000, /* Dark Blood Red */
+    transparent 40%
+  );
+  animation: horror-snake-spin 3s linear infinite;
+  z-index: 1;
+}
+
+/* THE MASK: Creates the border thickness */
+.horror-card::after {
+  content: '';
+  position: absolute;
+  inset: 4px; /* Gap thickness */
+  background: #000;
+  border-radius: 12px;
+  z-index: 2;
+}
+
+/* IMAGE LAYER */
 .horror-bg {
   position: absolute;
-  inset: 0;
+  inset: 5px;
   background-size: cover;
   background-position: center;
-  filter: brightness(0.5) grayscale(20%); /* Desaturated for a darker mood */
-  z-index: 1;
+  border-radius: 10px;
+  filter: brightness(0.5);
+  z-index: 3;
   transition: filter 0.3s ease;
 }
 
 .horror-card:hover .horror-bg {
-  filter: brightness(0.4) grayscale(0%);
+  filter: brightness(0.4);
 }
 
-/* HORROR BADGE - SOLID DARK RED */
+/* HORROR BADGE */
 .horror-badge {
   position: absolute;
-  top: 12px;
-  left: 12px;
+  top: 15px;
+  left: 15px;
   background: #8b0000; 
   color: #fff;
   font-size: 10px;
   font-weight: 700;
   padding: 4px 10px;
   border-radius: 4px;
-  z-index: 2;
+  z-index: 15; /* Top layer */
   text-transform: uppercase;
 }
 
 /* CONTENT OVERLAY */
 .horror-overlay {
   position: absolute;
-  inset: 0;
+  inset: 5px;
   padding: 20px;
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
-  background: linear-gradient(to top, rgba(0, 0, 0, 0.95) 10%, transparent 100%);
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.95) 20%, transparent 100%);
   color: #fff;
-  z-index: 5;
+  z-index: 10;
   opacity: 0;
   transition: opacity 0.3s ease;
 }
@@ -89,36 +120,65 @@
 
 .horror-overlay h5 {
   font-size: 18px;
-  margin-bottom: 6px;
-  font-weight: 700;
+  margin-bottom: 8px;
+  font-weight: 800;
 }
 
-/* STANDARDIZED WHITE BUTTON */
+.horror-overlay p {
+  font-size: 14px;
+  margin: 2px 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* ✅ THE RED HOVER BUTTON FIX */
 .horror-overlay button {
-  margin-top: 12px;
+  margin-top: 15px;
   align-self: flex-start;
-  padding: 10px 24px;
+  padding: 12px 24px;
   border-radius: 8px;
   border: none;
-  background: #ffffff;
+  background: #ffffff; /* Default: White */
   color: #000;
-  font-weight: 700;
+  font-weight: 900;
   font-size: 14px;
+  text-transform: uppercase;
   cursor: pointer;
-  transition: transform 0.2s ease;
+  transition: all 0.3s ease;
 }
 
 .horror-overlay button:hover {
+  background: #ff0000 !important; /* Turns Red on Hover */
+  color: #ffffff !important;      /* Text turns White */
+  box-shadow: 0 0 20px rgba(255, 0, 0, 0.8); /* Red Neon Glow */
   transform: scale(1.05);
 }
 
-/* RESPONSIVE BREAKPOINTS */
-@media (max-width: 992px) {
-  .horror-grid { grid-template-columns: repeat(2, 1fr); }
+.clickable-horror-title {
+  color: #ffffff; /* Clean Solid White */
+  font-size: 24px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  cursor: pointer; /* Makes it look clickable 👆 */
+  transition: all 0.3s ease;
+  margin-bottom: 25px;
+  display: inline-block;
 }
 
-@media (max-width: 576px) {
-  .horror-grid { grid-template-columns: 1fr; }
-  .horror-card { height: 300px; }
-  .horror-title { font-size: 20px; }
+.clickable-horror-title:hover {
+  opacity: 0.7;
+  text-decoration: underline; /* Standard link behavior */
+  color: #ff0000; /* Optional: Slight red tint on hover for horror feel */
 }
+
+/* ANIMATION */
+@keyframes horror-snake-spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* RESPONSIVE */
+@media (max-width: 992px) { .horror-grid { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 576px) { .horror-grid { grid-template-columns: 1fr; } }

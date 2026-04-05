@@ -1,0 +1,121 @@
+.all-trending-page {
+  background: #000;
+  min-height: 100vh;
+  padding: 40px 0;
+  color: #fff;
+}
+
+.trending-page-header {
+  display: flex;
+  align-items: center;
+  gap: 30px;
+  margin-bottom: 50px;
+}
+
+/* BACK BUTTON */
+.back-btn {
+  background: rgba(138, 43, 226, 0.2);
+  border: 1px solid #8a2be2;
+  color: white;
+  padding: 10px 20px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 700;
+}
+
+.back-btn:hover { background: #8a2be2; }
+
+/* NEON TITLE */
+.neon-trending-title {
+  font-size: 36px;
+  font-weight: 900;
+  text-transform: uppercase;
+  background: linear-gradient(to right, #8a2be2, #ff1493);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  filter: drop-shadow(0 0 10px rgba(138, 43, 226, 0.5));
+}
+
+/* CLICKABLE TITLE IN CARDS */
+.clickable-trending-title {
+  cursor: pointer;
+  transition: 0.3s ease;
+}
+.clickable-trending-title:hover {
+  opacity: 0.7;
+  text-decoration: underline;
+}
+
+/* GRID */
+.trending-full-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 30px;
+}
+
+/* CARDS */
+.trending-full-card {
+  background: #0a0a0a;
+  border-radius: 15px;
+  overflow: hidden;
+  border: 1px solid rgba(255, 20, 147, 0.1);
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.trending-full-card:hover {
+  transform: translateY(-10px);
+  border-color: #ff1493;
+  box-shadow: 0 10px 30px rgba(138, 43, 226, 0.2);
+}
+
+.card-media {
+  height: 200px;
+  position: relative;
+}
+
+.card-media img {
+  width: 100%; height: 100%;
+  object-fit: cover;
+}
+
+.trending-rank-badge {
+  position: absolute;
+  top: 15px; right: 15px;
+  background: #ff1493;
+  font-size: 10px;
+  font-weight: 900;
+  padding: 4px 10px;
+  border-radius: 4px;
+}
+
+.card-info { padding: 20px; }
+
+.card-stats {
+  display: flex; gap: 20px;
+  color: #888;
+  font-weight: 700;
+  margin: 10px 0 20px;
+}
+
+.intel-btn {
+  width: 100%; padding: 12px;
+  background: transparent;
+  border: 1px solid #8a2be2;
+  color: #8a2be2;
+  font-weight: 800;
+  border-radius: 8px;
+  transition: 0.3s;
+}
+
+.trending-full-card:hover .intel-btn {
+  background: #8a2be2;
+  color: #fff;
+}
+
+.trending-loader {
+  height: 100vh;
+  display: flex; justify-content: center; align-items: center;
+  background: #000; color: #ff1493;
+  font-weight: 900; letter-spacing: 5px;
+}

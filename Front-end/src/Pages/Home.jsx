@@ -17,67 +17,72 @@ const Home = ({ setAppLoading }) => {
   const [userName, setUserName] = useState("Player");
 
   useEffect(() => {
-    // 1. Get Logged-in User Data
+    // --- 1. SMART USER DATA RETRIEVAL ---
     const storedUser = localStorage.getItem("user");
+    
     if (storedUser) {
       try {
         const userData = JSON.parse(storedUser);
-        const nameToDisplay = userData.firstName || userData.name || "Player";
+        
+        // Priority: 1. firstName -> 2. username -> 3. email prefix -> 4. "Player"
+        const nameToDisplay = 
+          userData.firstName || 
+          userData.username || 
+          (userData.email ? userData.email.split("@")[0] : "Player");
+
+        // Set the name and ensure it's just the first word
         setUserName(nameToDisplay.split(" ")[0]);
       } catch (err) {
+        console.error("Error parsing user data", err);
         setUserName("Player");
       }
     }
 
-    // 2. Hide loading screen
+    // --- 2. HIDE LOADING SCREEN ---
     if (typeof setAppLoading === "function") {
       setTimeout(() => setAppLoading(false), 800);
     }
   }, [setAppLoading]);
 
   return (
-    <div className="home-main-wrapper" style={{ backgroundColor: "#000" }}>
+    <div className="home-main-wrapper" style={{ backgroundColor: "#000", minHeight: "100vh" }}>
       
       {/* --- PERSONALIZED WELCOME --- */}
       <div className="container pt-4 mb-4">
         <h1 style={{ 
           fontSize: "32px", 
-          fontWeight: "800", 
+          fontWeight: "900", 
           color: "#fff", 
           textTransform: "uppercase",
-          letterSpacing: "1px" 
+          letterSpacing: "2px" 
         }}>
-          Welcome back, <span style={{ color: "#00ff88" }}>{userName}</span>
+          Welcome back, <span style={{ color: "#00ff88", textShadow: "0 0 10px rgba(0, 255, 136, 0.3)" }}>
+            {userName}
+          </span>
         </h1>
       </div>
 
-      {/* 1. HERO CAROUSEL (Uses gameCarousel.css) */}
+      {/* 1. HERO CAROUSEL */}
       <div className="container">
         <GameCarouselCard />
       </div>
 
-      {/* 2. RECOMMENDED SECTION (Uses recommended.css classes) */}
+      {/* 2. RECOMMENDED SECTION */}
       <section className="recommended-container container">
-        <div className="recommended-header">
-        </div>
         <RecommendedGameCards />
       </section>
 
-      {/* 3. TRENDING SECTION (Uses trending.css classes) */}
+      {/* 3. TRENDING SECTION */}
       <section className="trending-container container">
-        <div className="trending-header">
-        </div>
         <TrendingGameCard />
       </section>
 
-      {/* 4. FREE-TO-PLAY SECTION (Uses freeGames.css classes) */}
+      {/* 4. FREE-TO-PLAY SECTION */}
       <section className="free-container container">
-        <div className="free-header">
-        </div>
         <FreeGameCard />
       </section>
 
-      {/* 5. HORROR SECTION (Uses horror.css classes) */}
+      {/* 5. HORROR SECTION */}
       <section className="horror-container container">
         <HorrorCard />
       </section>

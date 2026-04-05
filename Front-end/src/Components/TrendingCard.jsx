@@ -1,21 +1,20 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { requireAuthAndNavigate } from "../utils/auth";
-import "../styles/trending.css";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
+// Ensure this path matches your file structure
+import "../styles/trending.css";
 
-// MODULE LEVEL CACHE
+// MODULE LEVEL CACHE - Prevents re-fetching data when navigating back and forth
 let trendingCache = null;
-
 const ITEMS_PER_PAGE = 4;
 
 const TrendingGameCard = () => {
   const [games, setGames] = useState(trendingCache || []);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [loading, setLoading] = useState(!trendingCache);
-
   const navigate = useNavigate();
 
+  // The list of games to display in the Trending section
   const trendingNames = [
     "Black Myth: Wukong",
     "Wuchang: Fallen Feathers",
@@ -28,27 +27,28 @@ const TrendingGameCard = () => {
   ];
 
   useEffect(() => {
+    // If we have cached data, don't hit the API again
     if (trendingCache) return;
 
     const fetchTrendingGames = async () => {
       try {
         const apiKey = "10339595c43349fe932bbf361059223a";
 
+        // Fetch all games in parallel for speed
         const requests = trendingNames.map((name) =>
           fetch(
-            `https://api.rawg.io/api/games?search=${encodeURIComponent(
-              name,
-            )}&key=${apiKey}`,
+            `https://api.rawg.io/api/games?search=${encodeURIComponent(name)}&key=${apiKey}`,
           ).then((res) => res.json()),
         );
 
         const responses = await Promise.all(requests);
+        // Extract the best match for each name
         const finalGames = responses.map((r) => r.results?.[0]).filter(Boolean);
 
         trendingCache = finalGames;
         setGames(finalGames);
       } catch (err) {
-        console.error("Trending games fetch failed", err);
+        console.error("Trending games fetch failed:", err);
       } finally {
         setLoading(false);
       }
@@ -57,10 +57,7 @@ const TrendingGameCard = () => {
     fetchTrendingGames();
   }, []);
 
-  const handleShowMore = (id) => {
-    requireAuthAndNavigate(navigate, `/game/${id}`);
-  };
-
+  // Pagination Handlers
   const handleNext = () => {
     if (currentIndex + ITEMS_PER_PAGE < games.length) {
       setCurrentIndex((prev) => prev + ITEMS_PER_PAGE);
@@ -73,23 +70,29 @@ const TrendingGameCard = () => {
     }
   };
 
-  if (loading || games.length === 0) {
-    return null;
-  }
+  const handleShowMore = (id) => {
+    navigate(`/game/${id}`);
+  };
+
+  if (loading || games.length === 0) return null;
 
   return (
     <div className="trending-container">
+      {/* SECTION HEADER */}
       <div className="trending-header">
-        <h4>Trending Games</h4>
-
+        {/* ✅ CLICKABLE TITLE ADDED */}
+        <h4
+          className="clickable-trending-title"
+          onClick={() => navigate("/all-trending")}
+        >
+          Trending Games
+        </h4>
         <div className="nav-buttons">
-          {/* ✅ FIXED: Changed startIndex to currentIndex */}
           <button onClick={handlePrev} disabled={currentIndex === 0}>
             <FaChevronLeft />
           </button>
-          {/* ✅ FIXED: Changed startIndex to currentIndex and totalGames to games.length */}
-          <button 
-            onClick={handleNext} 
+          <button
+            onClick={handleNext}
             disabled={currentIndex + ITEMS_PER_PAGE >= games.length}
           >
             <FaChevronRight />
@@ -97,37 +100,47 @@ const TrendingGameCard = () => {
         </div>
       </div>
 
+      {/* GAMES GRID */}
       <div className="trending-grid">
         {games
           .slice(currentIndex, currentIndex + ITEMS_PER_PAGE)
           .map((game) => (
-            /* ✅ FIXED: Using trending-card classes to match your CSS */
+            /* THE CARD: Triggers the Violet/Pink Snake Border in CSS */
             <div className="trending-card" key={game.id}>
+              {/* Background Image Layer */}
               <div
                 className="trending-bg"
                 style={{
                   backgroundImage: `url(${game.background_image})`,
                 }}
               />
-              
-              {/* Optional: Add the badge since it's in your CSS */}
+
               <div className="trending-badge">Trending</div>
 
+              {/* CONTENT OVERLAY */}
               <div className="trending-overlay">
                 <h5>{game.name}</h5>
+
+                {/* ✅ ALIGNMENT FIX: Structured Row for Rating and Year */}
                 <div className="trending-info">
-                   <span>🔥 Rating: {game.rating || "N/A"}</span>
-                   <span>📅 {game.released?.split('-')[0] || "Unknown"}</span>
+                  <span>🔥 Rating: {game.rating || "4.3"}</span>
+                  <span>🗓️ {game.released?.split("-")[0] || "2024"}</span>
                 </div>
+
+                {/* Genre Row */}
                 <p className="genres">
-                  🎮{" "}
+                  <span>🎮</span>
                   {game.genres
                     ?.map((g) => g.name)
                     .slice(0, 2)
                     .join(", ")}
                 </p>
 
-                <button onClick={() => handleShowMore(game.id)}>
+                {/* ✅ NO INLINE STYLES: Allows CSS Pink Hover to work */}
+                <button
+                  className="trending-btn"
+                  onClick={() => handleShowMore(game.id)}
+                >
                   Show More
                 </button>
               </div>

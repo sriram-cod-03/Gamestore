@@ -2,7 +2,8 @@ const express = require('express');
 const router = express.Router();
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-const User = require('../models/User'); // Ensure this path is correct
+// ✅ FIXED: Path is now matching the Capital 'U' in User.js
+const User = require('../models/User'); 
 
 // --- 1. SIGNUP ROUTE ---
 router.post('/signup', async (req, res) => {
@@ -28,6 +29,7 @@ router.post('/signup', async (req, res) => {
     await newUser.save();
     res.json({ success: true, message: 'Signup successful! ✅' });
   } catch (err) {
+    console.error("Signup Error:", err);
     res.status(500).json({ success: false, message: 'Server error during signup' });
   }
 });
@@ -49,9 +51,12 @@ router.post('/login', async (req, res) => {
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) return res.status(401).json({ success: false, error: "Invalid password!" });
 
-    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET || 'secret123', { expiresIn: '7d' });
+    const token = jwt.sign(
+      { id: user._id }, 
+      process.env.JWT_SECRET || 'secret123', 
+      { expiresIn: '7d' }
+    );
     
-    // Return full user object so frontend can update localStorage
     res.json({ 
       success: true, 
       token, 
@@ -67,6 +72,7 @@ router.post('/login', async (req, res) => {
       } 
     });
   } catch (error) {
+    console.error("Login Error:", error);
     res.status(500).json({ success: false, error: "Login failed" });
   }
 });
@@ -81,7 +87,11 @@ router.post('/quick-access', async (req, res) => {
 
     if (!user) return res.status(404).json({ success: false, error: "Player not found!" });
 
-    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET || 'secret123', { expiresIn: '7d' });
+    const token = jwt.sign(
+      { id: user._id }, 
+      process.env.JWT_SECRET || 'secret123', 
+      { expiresIn: '7d' }
+    );
     res.json({ 
       success: true, 
       token, 
@@ -98,19 +108,19 @@ router.post('/quick-access', async (req, res) => {
   }
 });
 
-// --- 4. ✅ UPDATE PROFILE ROUTE (DATABASE STORAGE) ---
-// This is the new "door" to save Bio and Gender to MongoDB
+// --- 4. UPDATE PROFILE ROUTE ---
 router.put('/update-profile', async (req, res) => {
   const { userId, username, bio, gender, profilePic } = req.body;
 
   try {
     const updatedUser = await User.findByIdAndUpdate(
       userId,
-      { username, bio, gender, profilePic }, // ✅ Add profilePic here
+      { username, bio, gender, profilePic },
       { new: true }
     );
     res.json({ success: true, user: updatedUser });
   } catch (error) {
+    console.error("Update Error:", error);
     res.status(500).json({ success: false, error: "Upload failed" });
   }
 });

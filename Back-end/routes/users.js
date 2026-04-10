@@ -4,7 +4,7 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
 // ✅ CRITICAL: Match the case exactly for Render (Capital 'U')
-const User = require('../models/User'); 
+const User = require('../models/user.js'); 
 
 // --- 1. SIGNUP ROUTE ---
 router.post('/signup', async (req, res) => {

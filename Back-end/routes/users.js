@@ -2,7 +2,8 @@ const express = require('express');
 const router = express.Router();
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-// ✅ FIXED: Path is now matching the Capital 'U' in User.js
+
+// ✅ CRITICAL: Match the case exactly for Render (Capital 'U')
 const User = require('../models/User'); 
 
 // --- 1. SIGNUP ROUTE ---
@@ -21,7 +22,7 @@ router.post('/signup', async (req, res) => {
       firstName,
       lastName,
       email,
-      username: username || email.split('@')[0],
+      username: username || email.split('@')[0], // Default handle if not provided
       password: hashedPassword,
       mobile
     });
@@ -68,7 +69,8 @@ router.post('/login', async (req, res) => {
         username: user.username,
         mobile: user.mobile,
         bio: user.bio,
-        gender: user.gender
+        gender: user.gender,
+        profilePic: user.profilePic
       } 
     });
   } catch (error) {
@@ -77,7 +79,37 @@ router.post('/login', async (req, res) => {
   }
 });
 
-// --- 3. QUICK ACCESS (RECOVERY MODE) ---
+// --- 3. PROFILE UPDATE (Saves Bio, Gender, ProfilePic) ---
+router.put('/update-profile', async (req, res) => {
+  const { userId, username, bio, gender, profilePic } = req.body;
+
+  try {
+    const updatedUser = await User.findByIdAndUpdate(
+      userId,
+      { username, bio, gender, profilePic },
+      { new: true } // Returns the updated document
+    ).select('-password'); // Don't send the password back!
+
+    res.json({ success: true, user: updatedUser });
+  } catch (error) {
+    console.error("Update Error:", error);
+    res.status(500).json({ success: false, error: "Profile update failed" });
+  }
+});
+
+// --- 4. GET ALL PLAYERS (For your Users.jsx Page) ---
+router.get('/all-players', async (req, res) => {
+  try {
+    // Only fetching necessary public data
+    const players = await User.find().select('firstName username profilePic bio gender').sort({ createdAt: -1 });
+    res.json({ success: true, players });
+  } catch (error) {
+    console.error("Fetch Players Error:", error);
+    res.status(500).json({ success: false, message: "Failed to fetch players" });
+  }
+});
+
+// --- 5. QUICK ACCESS (RECOVERY/AUTO-LOGIN) ---
 router.post('/quick-access', async (req, res) => {
   const { identifier } = req.body;
   try {
@@ -87,41 +119,10 @@ router.post('/quick-access', async (req, res) => {
 
     if (!user) return res.status(404).json({ success: false, error: "Player not found!" });
 
-    const token = jwt.sign(
-      { id: user._id }, 
-      process.env.JWT_SECRET || 'secret123', 
-      { expiresIn: '7d' }
-    );
-    res.json({ 
-      success: true, 
-      token, 
-      user: { 
-        _id: user._id,
-        firstName: user.firstName, 
-        email: user.email,
-        bio: user.bio,
-        gender: user.gender
-      } 
-    });
+    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET || 'secret123', { expiresIn: '7d' });
+    res.json({ success: true, token, user });
   } catch (error) {
     res.status(500).json({ success: false, error: "Recovery failed" });
-  }
-});
-
-// --- 4. UPDATE PROFILE ROUTE ---
-router.put('/update-profile', async (req, res) => {
-  const { userId, username, bio, gender, profilePic } = req.body;
-
-  try {
-    const updatedUser = await User.findByIdAndUpdate(
-      userId,
-      { username, bio, gender, profilePic },
-      { new: true }
-    );
-    res.json({ success: true, user: updatedUser });
-  } catch (error) {
-    console.error("Update Error:", error);
-    res.status(500).json({ success: false, error: "Upload failed" });
   }
 });
 

@@ -75,3 +75,24 @@ npm start
 # Run Frontend (Terminal 2)
 npm run dev
 ```
+---
+
+## 👨‍💻 Developer Profile
+
+**Sriram** *Full-Stack Developer & Game Systems Designer* * **GitHub**: [@sriram-cod-03](https://github.com/sriram-cod-03)
+* **LinkedIn**: [Your LinkedIn Link Here]
+* **Education**: B.E Computer Science & Engineering, **Anna University**
+
+> "Building immersive digital experiences one commit at a time." 🚀
+
+---
+
+## 📜 License
+
+This project is licensed under the **MIT License**. 
+
+Copyright (c) 2026 **sriram-cod-03**
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files, to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software.
+
+*See the [LICENSE](LICENSE) file for the full legal text.*

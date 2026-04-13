@@ -37,5 +37,6 @@ To run this project locally, follow these steps:
 
 ### **1. Clone the Repository**
 ```bash
-git clone [https://github.com/your-username/gamestore.git](https://github.com/your-username/gamestore.git)
+git clone [https://github.com/sriram-cod-03/gamestore.git](https://github.com/sriram-cod-03/gamestore.git)
 cd gamestore
+### **2. Install Dependencies** 

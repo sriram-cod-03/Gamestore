@@ -39,4 +39,13 @@ To run this project locally, follow these steps:
 ```bash
 git clone [https://github.com/sriram-cod-03/gamestore.git](https://github.com/sriram-cod-03/gamestore.git)
 cd gamestore
-### **2. Install Dependencies** 
+```
+### **2. Install Dependencies**
+```bash
+# For Backend
+cd Back-end && npm install
+
+# For Frontend
+cd ../ && npm install
+```
+

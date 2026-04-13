@@ -80,7 +80,7 @@ npm run dev
 ## 👨‍💻 Developer Profile
 
 **Sriram** *Full-Stack Developer & Game Systems Designer* * **GitHub**: [@sriram-cod-03](https://github.com/sriram-cod-03)
-* **LinkedIn**: [Your LinkedIn Link Here]
+* **LinkedIn**: linkedin.com/in/sriram-r-6383ba2a9
 * **Education**: B.E Computer Science & Engineering, **Anna University**
 
 > "Building immersive digital experiences one commit at a time." 🚀

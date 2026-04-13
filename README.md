@@ -48,4 +48,30 @@ cd Back-end && npm install
 # For Frontend
 cd ../ && npm install
 ```
+### **3. Environment Variables:
+Create a .env file in the Back-end folder:**
+```bash
+# Database Connection (Railway/MongoDB Atlas)
+MONGODB_URI=mongodb+srv://GameStore:Gamestore123@cluster0.auaxrju.mongodb.net/GameStore?retryWrites=true&w=majority&appName=Cluster0
 
+# Frontend URL
+CLIENT_URL=http://localhost:5173
+
+# Secret Key for JWT Authentication
+JWT_SECRET=GameStore_Super_Secret_Key_2026
+
+# Environment Mode
+NODE_ENV=production
+
+# Server Port
+PORT=5000
+```
+
+### **4. lanunch the Gamestore**
+```bash
+# Run Backend (Terminal 1)
+npm start
+
+# Run Frontend (Terminal 2)
+npm run dev
+```

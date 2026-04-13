@@ -37,5 +37,19 @@ To run this project locally, follow these steps:
 
 ### **1. Clone the Repository**
 ```bash
-git clone [https://github.com/your-username/gamestore.git](https://github.com/your-username/gamestore.git)
+## ⚙️ Setup & Installation
+
+Follow these steps to get your local development environment running.
+
+### 1. Prerequisites
+Ensure you have the following installed on your machine:
+* **Node.js** (v18.0.0 or higher)
+* **npm** (Node Package Manager)
+* **MongoDB Atlas** account (or local MongoDB Compass)
+* **Git**
+
+### 2. Clone the Project
+Open your terminal and run:
+```bash
+git clone [https://github.com/sriram-cod-03/gamestore.git](https://github.com/sriram-cod-03/gamestore.git)
 cd gamestore

@@ -10,7 +10,7 @@ const app = express();
 
 // --- MIDDLEWARES ---
 // Updated CORS to support both Localhost and your future Render Frontend URL
-const allowedOrigins = ['http://localhost:5173', 'https://your-frontend-link.netlify.app']; 
+const allowedOrigins = ['http://localhost:5173', 'https://nextgengamehub.netlify.app/']; 
 app.use(cors({
   origin: function (origin, callback) {
     if (!origin || allowedOrigins.indexOf(origin) !== -1) {

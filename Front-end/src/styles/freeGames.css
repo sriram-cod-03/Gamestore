@@ -13,102 +13,114 @@
   margin-bottom: 25px;
 }
 
-.free-header h4 {
-  color: #ffffff; /* Pure white title */
+.clickable-free-title {
+  color: #ffffff;
   font-size: 24px; 
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 1px;
+  cursor: pointer;
+  transition: opacity 0.3s;
 }
 
-/* --- RESPONSIVE GRID --- */
-.free-grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
+.clickable-free-title:hover {
+  opacity: 0.7;
+  text-decoration: underline;
+}
+
+/* --- ✅ THE ROLLER COASTER WRAPPER --- */
+.free-scroll-wrapper {
+  display: flex;           /* Horizontal alignment */
   gap: 25px;
+  overflow-x: auto;        /* Enable scrolling */
+  scroll-behavior: smooth; /* Smooth animation */
+  padding: 20px 0;
+  
+  /* 🎡 SNAP LOGIC */
+  scroll-snap-type: x mandatory; 
+  
+  /* Hide Scrollbar */
+  scrollbar-width: none; 
+  -ms-overflow-style: none;
 }
 
-/* --- THE ANIMATED FREE CARD (GREEN & BLUE SNAKE) --- */
+.free-scroll-wrapper::-webkit-scrollbar {
+  display: none;
+}
+
+/* --- THE ANIMATED FREE CARD --- */
 .free-card {
   position: relative;
-  height: 340px;
-  background: #111; /* Dark background for the glow to pop */
+  height: 380px;           /* Match other sections height */
+  min-width: 300px;        /* Fix Card Width */
+  flex-shrink: 0;          /* Prevent Squeezing */
+  background: #111;
   border-radius: 15px;
   display: flex;
   justify-content: center;
   align-items: center;
-  overflow: hidden; /* Clips the rotating snake gradient */
-  transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  overflow: hidden;
+  transition: transform 0.3s ease;
   cursor: pointer;
+  
+  /* 🎡 SNAP ALIGNMENT */
+  scroll-snap-align: start; 
 }
 
 .free-card:hover {
   transform: translateY(-10px);
 }
 
-/* THE MOTION LAYER: The rotating gradient snake */
-/* Triggers only on hover for better performance */
+/* THE GREEN & BLUE SNAKE BORDER */
 .free-card:hover::before {
   content: '';
   position: absolute;
-  width: 160%;
-  height: 160%;
-  /* GREEN and BLUE MIX Gradient */
+  width: 160%; height: 160%;
   background: conic-gradient(
     transparent,
-    #00ff88, /* Matrix/Cyber Green */
-    #00d2ff, /* Electric/Neon Blue */
+    #00ff88, /* Green */
+    #00d2ff, /* Blue */
     transparent 40%
   );
   animation: free-snake-spin 3s linear infinite;
   z-index: 1;
 }
 
-/* THE MASK: This creates the "Line" effect by covering the center */
 .free-card::after {
   content: '';
   position: absolute;
-  inset: 4px; /* Adjust this (e.g., 2px or 5px) to change border thickness */
-  background: #000; /* Matches card inner background */
+  inset: 4px;
+  background: #000;
   border-radius: 12px;
   z-index: 2;
 }
 
-/* --- CONTENT LAYERS --- */
-
-/* THE BACKGROUND IMAGE */
+/* BACKGROUND IMAGE */
 .free-bg {
   position: absolute;
-  inset: 5px; /* Sits slightly inside the border mask */
+  inset: 5px;
   background-size: cover;
   background-position: center;
   border-radius: 10px;
   filter: brightness(0.6);
   z-index: 3;
-  transition: filter 0.3s ease;
-}
-
-.free-card:hover .free-bg {
-  filter: brightness(0.4);
 }
 
 /* FREE BADGE */
 .free-badge {
   position: absolute;
-  top: 15px;
-  left: 15px;
+  top: 15px; left: 15px;
   background: #ffffff; 
   color: #000;
   font-size: 10px;
   font-weight: 900;
   padding: 5px 12px;
   border-radius: 4px;
-  z-index: 15; /* Sits on the very top */
+  z-index: 15;
   text-transform: uppercase;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.5);
 }
 
-/* TEXT OVERLAY (Shows on Hover) */
+/* OVERLAY */
 .free-overlay {
   position: absolute;
   inset: 5px;
@@ -128,15 +140,22 @@
 }
 
 .free-overlay h5 {
-  font-size: 19px;
+  font-size: 1.1rem;
   margin-bottom: 8px;
   font-weight: 700;
-  text-shadow: 0 2px 4px rgba(0,0,0,0.5);
 }
 
-/* THE "KNOW MORE" BUTTON */
+.free-info-row {
+  display: flex;
+  gap: 15px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+
+/* BUTTON */
 .free-overlay button {
-  margin-top: 15px;
+  margin-top: 10px;
   align-self: flex-start;
   padding: 10px 24px;
   border-radius: 8px;
@@ -145,28 +164,24 @@
   color: #000;
   font-weight: 800;
   font-size: 14px;
+  text-transform: uppercase;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: 0.3s;
 }
 
 .free-overlay button:hover {
-  background: #00ff88; /* Glows green when you hover the button specifically */
+  background: #00ff88;
+  color: #000;
+  box-shadow: 0 0 15px #00ff88;
   transform: scale(1.05);
 }
 
-/* --- THE SPINNING ANIMATION --- */
 @keyframes free-snake-spin {
   from { transform: rotate(0deg); }
   to { transform: rotate(360deg); }
 }
 
-/* --- RESPONSIVE BREAKPOINTS --- */
-@media (max-width: 1100px) {
-  .free-grid { grid-template-columns: repeat(2, 1fr); }
-}
-
-@media (max-width: 600px) {
-  .free-grid { grid-template-columns: 1fr; }
-  .free-card { height: 300px; }
-  .free-header h4 { font-size: 20px; }
+@media (max-width: 576px) {
+  .free-card { min-width: 260px; height: 320px; }
+  .clickable-free-title { font-size: 20px; }
 }

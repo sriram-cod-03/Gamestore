@@ -5,30 +5,29 @@
   padding: 0 10px;
 }
 
-/* --- ✅ HEADER FIX: Title and Buttons on the SAME LINE --- */
+/* --- HEADER FIX: Title and Buttons on the SAME LINE --- */
 .recommended-header {
   display: flex;
-  justify-content: space-between; /* Pushes Title to left, Buttons to right */
-  align-items: center;           /* Vertically centers them */
+  justify-content: space-between;
+  align-items: center;
   margin-bottom: 25px;
   width: 100%;
 }
 
-/* ✅ CLEAN WHITE CLICKABLE TITLE (NO COLOURS) */
 .clickable-title {
-  color: #ffffff; /* Pure Solid White */
+  color: #ffffff;
   font-size: 24px;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 1.2px;
-  cursor: pointer; /* Makes it look like a link 👆 */
+  cursor: pointer;
   transition: opacity 0.3s ease;
   margin: 0;
 }
 
 .clickable-title:hover {
-  opacity: 0.7; /* Dims slightly on hover to show it's clickable */
-  text-decoration: underline; /* Standard link behavior */
+  opacity: 0.7;
+  text-decoration: underline;
 }
 
 /* --- NAVIGATION BUTTONS (ARROWS) --- */
@@ -61,23 +60,38 @@
   cursor: not-allowed;
 }
 
-/* --- GRID LAYOUT --- */
-.recommended-grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
+/* --- SCROLL WRAPPER --- */
+.recommended-scroll-wrapper {
+  display: flex;
   gap: 25px;
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  padding: 20px 0;
+  
+  /* ✅ 3. THE ROLLER COASTER SECRET: SNAP LOGIC */
+  scroll-snap-type: x mandatory; /* Forces snapping on horizontal axis */
+  
+  scrollbar-width: none;
+  -ms-overflow-style: none;
 }
 
-/* --- THE ANIMATED GAME CARD (SNAKE BORDER) --- */
+.recommended-scroll-wrapper::-webkit-scrollbar {
+  display: none;
+}
+
+/* --- THE GAME CARD --- */
 .game-card {
   position: relative;
   height: 380px;
-  background: #111; /* Dark base for glow contrast */
+  min-width: 300px; /* Card size fixed */
+  flex-shrink: 0;
+  background: #111;
   border-radius: 15px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  overflow: hidden; /* Clips the rotating colors */
+  
+  /* ✅ 4. SNAP ALIGNMENT */
+  scroll-snap-align: start; /* Card snaps to the start of the container */
+  
+  overflow: hidden;
   transition: transform 0.3s ease;
   cursor: pointer;
 }
@@ -92,22 +106,21 @@
   position: absolute;
   width: 150%;
   height: 150%;
-  /* RED and YELLOW Gradient */
   background: conic-gradient(
     transparent,
-    #ff0000, /* Vibrant Red */
-    #ffee00, /* Vibrant Yellow */
+    #ff0000, 
+    #ffee00, 
     transparent 40%
   );
   animation: recommended-snake-spin 3s linear infinite;
   z-index: 1;
 }
 
-/* THE MASK: Creates the thin border line effect */
+/* THE MASK */
 .game-card::after {
   content: '';
   position: absolute;
-  inset: 4px; /* Thickness of the border */
+  inset: 4px;
   background: #000;
   border-radius: 12px;
   z-index: 2;
@@ -162,14 +175,14 @@
   font-weight: 600;
 }
 
-/* --- THE "SHOW MORE" BUTTON (YELLOW GLOW) --- */
+/* THE "SHOW MORE" BUTTON */
 .card-btn {
   margin-top: 5px;
   align-self: flex-start;
   padding: 12px 24px;
   border-radius: 8px;
   border: none;
-  background: #ffffff; /* Default: White */
+  background: #ffffff;
   color: #000;
   font-weight: 900;
   text-transform: uppercase;
@@ -178,26 +191,24 @@
 }
 
 .card-btn:hover {
-  background-color: #ffee00 !important; /* Force Yellow background */
+  background-color: #ffee00 !important;
   color: #000 !important;
-  box-shadow: 0 0 20px rgba(255, 238, 0, 0.8); /* Neon Yellow Glow */
+  box-shadow: 0 0 20px rgba(255, 238, 0, 0.8);
   transform: scale(1.05);
 }
 
-/* --- SPINNING ANIMATION KEYFRAMES --- */
+/* SPINNING ANIMATION KEYFRAMES */
 @keyframes recommended-snake-spin {
   100% {
     transform: rotate(360deg);
   }
 }
 
-/* --- RESPONSIVE --- */
-@media (max-width: 1024px) {
-  .recommended-grid { grid-template-columns: repeat(2, 1fr); }
-}
-
+/* --- RESPONSIVE FIX --- */
 @media (max-width: 576px) {
-  .recommended-grid { grid-template-columns: 1fr; }
+  .game-card {
+    min-width: 250px; /* Slightly smaller for mobile */
+    height: 320px;
+  }
   .clickable-title { font-size: 20px; }
-  .game-card { height: 320px; }
 }

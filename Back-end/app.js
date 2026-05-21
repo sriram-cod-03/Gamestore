@@ -1,34 +1,39 @@
-const express = require('express');
-const cors = require('cors');
-const mongoose = require('mongoose');
-require('dotenv').config(); 
+const express = require("express");
+const cors = require("cors");
+const mongoose = require("mongoose");
+require("dotenv").config();
 
 // ✅ Ensure the filename case matches exactly: 'users.js'
-const userRoutes = require('./routes/users.js');
+const userRoutes = require("./routes/users.js");
 
 const app = express();
 
 // --- MIDDLEWARES ---
 // Updated CORS to support both Localhost and your future Render Frontend URL
-const allowedOrigins = ['http://localhost:5173', 'https://nextgengamehub.netlify.app/']; 
-app.use(cors({
-  origin: function (origin, callback) {
-    if (!origin || allowedOrigins.indexOf(origin) !== -1) {
-      callback(null, true);
-    } else {
-      callback(new Error('Not allowed by CORS'));
-    }
-  },
-  credentials: true
-}));
+const allowedOrigins = [
+  "http://localhost:5173",
+  "https://nextgengamehub.netlify.app",
+];
+app.use(
+  cors({
+    origin: function (origin, callback) {
+      if (!origin || allowedOrigins.indexOf(origin) !== -1) {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
+    credentials: true,
+  }),
+);
 
 app.use(express.json());
 
 // --- ROUTES ---
-app.use('/api/users', userRoutes);
+app.use("/api/users", userRoutes);
 
 // Root Route (Helps you check if backend is alive on Render)
-app.get('/', (req, res) => {
+app.get("/", (req, res) => {
   res.send("🚀 GameStore Backend is Running Live!");
 });
 
@@ -37,16 +42,19 @@ app.get('/', (req, res) => {
 const dbURI = process.env.MONGODB_URI;
 
 if (!dbURI) {
-  console.error("❌ ERROR: MONGODB_URI is not defined in Environment Variables!");
+  console.error(
+    "❌ ERROR: MONGODB_URI is not defined in Environment Variables!",
+  );
 }
 
-mongoose.connect(dbURI)
+mongoose
+  .connect(dbURI)
   .then(() => {
     const dbName = mongoose.connection.name;
     console.log(`✅ MongoDB Connected to database: ${dbName}`);
   })
   .catch((err) => {
-    console.error('❌ DB Connection Error:', err.message);
+    console.error("❌ DB Connection Error:", err.message);
   });
 
 // --- START SERVER ---

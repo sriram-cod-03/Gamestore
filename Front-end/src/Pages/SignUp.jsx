@@ -13,7 +13,7 @@ const SignUp = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await axios.post("http://localhost:5000/api/users/signup", form);
+      const res = await axios.post("https://gamestore-429l.onrender.com", form);
       if (res.data.success) {
         alert("Signup Success! Redirecting to Login...");
         navigate("/login");

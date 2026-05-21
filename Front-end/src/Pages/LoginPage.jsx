@@ -20,8 +20,8 @@ const LoginPage = () => {
     
     // Choose the API endpoint based on the current mode
     const endpoint = isRecoveryMode 
-      ? "http://localhost:5000/api/users/quick-access" 
-      : "http://localhost:5000/api/users/login";
+      ? "https://gamestore-429l.onrender.com" 
+      : "https://gamestore-429l.onrender.com";
 
     // Prepare the data to send to the Backend
     // Both modes now send 'identifier' so the backend can use the $or search logic

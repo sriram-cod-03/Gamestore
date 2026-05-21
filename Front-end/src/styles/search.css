@@ -1,0 +1,145 @@
+/* --- SEARCH RESULTS CONTAINER --- */
+.search-results-container {
+  margin-top: 40px;
+  padding: 0 40px;
+  min-height: 80vh;
+}
+
+.search-title {
+  color: #ffffff;
+  font-size: 26px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1.2px;
+  margin-bottom: 30px;
+}
+
+.search-title .text-warning {
+  color: #ffee00 !important;
+  text-shadow: 0 0 10px rgba(255, 238, 0, 0.4);
+}
+
+.no-results {
+  font-size: 1.1rem;
+  opacity: 0.6;
+}
+
+/* --- THE FLEX GRID SYSTEM SETUP --- */
+.search-results-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 30px;
+  padding-bottom: 50px;
+}
+
+/* --- THE CEL ANIMATED CARD ENGINE --- */
+.search-game-card {
+  position: relative;
+  height: 380px;
+  background: #111;
+  border-radius: 15px;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  transition: transform 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.search-game-card:hover {
+  transform: translateY(-10px);
+  border-color: rgba(255, 238, 0, 0.4);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7);
+}
+
+/* IMAGE COMPONENT LAYER */
+.search-game-bg {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+  transition: transform 0.5s ease, filter 0.3s ease;
+  filter: brightness(0.7);
+}
+
+.search-game-card:hover .search-game-bg {
+  transform: scale(1.08);
+  filter: brightness(0.4);
+}
+
+/* TEXT BOX GLOW OVERLAY */
+.search-game-overlay {
+  position: absolute;
+  inset: 0;
+  padding: 25px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  background: linear-gradient(to top, rgba(0,0,0,0.95) 40%, rgba(0,0,0,0.4) 100%);
+  z-index: 5;
+}
+
+.search-card-title {
+  color: #fff;
+  font-size: 1.2rem;
+  font-weight: 800;
+  margin-bottom: 10px;
+  line-height: 1.3;
+}
+
+.search-game-info-row {
+  display: flex;
+  gap: 15px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #eee;
+  margin-bottom: 8px;
+}
+
+.search-platforms-text {
+  font-size: 0.8rem;
+  color: #bbb;
+  margin-bottom: 15px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* PREMIUM ACTION BUTTON BUTTON */
+.search-card-btn {
+  align-self: flex-start;
+  padding: 10px 20px;
+  border-radius: 6px;
+  border: none;
+  background: #ffffff;
+  color: #000;
+  font-weight: 800;
+  font-size: 13px;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.search-game-card:hover .search-card-btn {
+  background: #ffee00;
+  box-shadow: 0 0 15px rgba(255, 238, 0, 0.6);
+  transform: scale(1.03);
+}
+
+/* LOADING UTILITY */
+.search-loading-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 50vh;
+  font-size: 1.2rem;
+  letter-spacing: 1px;
+}
+
+/* RESPONSIVE LAYOUT */
+@media (max-width: 576px) {
+  .search-results-container { padding: 0 20px; }
+  .search-results-grid { grid-template-columns: 1fr; gap: 20px; }
+  .search-game-card { height: 320px; }
+}

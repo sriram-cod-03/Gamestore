@@ -1,10 +1,12 @@
-import { useParams, Link } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
+import "../styles/search.css"; // Ensure you create or update this file
 
 const SearchResults = () => {
   const { query } = useParams();
   const [games, setGames] = useState([]);
   const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchGames = async () => {
@@ -25,67 +27,59 @@ const SearchResults = () => {
     fetchGames();
   }, [query]);
 
+  if (loading) {
+    return (
+      <div className="search-loading-container">
+        <p className="text-white">Loading Arena Data...</p>
+      </div>
+    );
+  }
+
   return (
-    <div className="container mt-4">
-      <h3 className="text-white mb-4">
-        Search results for{" "}
-        <span className="text-warning">"{query}"</span>
+    <div className="search-results-container">
+      <h3 className="search-title">
+        Search results for <span className="text-warning">"{query}"</span>
       </h3>
 
-      {loading && <p className="text-white">Loading...</p>}
-      {!loading && games.length === 0 && (
-        <p className="text-white">No games found.</p>
+      {games.length === 0 && (
+        <p className="text-white no-results">No games found inside the database archive.</p>
       )}
 
-      {/* ✅ VERTICAL LIST */}
-      <div className="d-flex flex-column gap-3">
+      {/* ✅ FLEX RESILIENT WRAPPER */}
+      <div className="search-results-grid">
         {games.map((game) => (
-          <div
-            key={game.id}
-            className="card bg-dark text-white border-secondary"
+          <div 
+            key={game.id} 
+            className="search-game-card"
+            onClick={() => navigate(`/game/${game.id}`)}
           >
-            {/* ✅ HORIZONTAL CARD */}
-            <div className="row g-0 align-items-center">
-              {/* IMAGE */}
-              <div className="col-md-4">
-                <img
-                  src={
-                    game.background_image ||
-                    "https://via.placeholder.com/400x220?text=No+Image"
-                  }
-                  className="img-fluid rounded-start"
-                  style={{ height: "180px", objectFit: "cover", width: "100%" }}
-                  alt={game.name}
-                />
+            {/* Background Image Layer */}
+            <div 
+              className="search-game-bg" 
+              style={{ 
+                backgroundImage: `url(${game.background_image || "https://via.placeholder.com/400x220?text=No+Image"})` 
+              }} 
+            />
+            
+            {/* Dark Gaming Overlay */}
+            <div className="search-game-overlay">
+              <h5 className="search-card-title">{game.name}</h5>
+              
+              <div className="search-game-info-row">
+                <p>🔥 Rating: {game.rating || "N/A"}</p>
+                <p>🗓️ {game.released?.split("-")[0] || "Unknown"}</p>
               </div>
 
-              {/* CONTENT */}
-              <div className="col-md-8">
-                <div className="card-body">
-                  <h5 className="card-title">{game.name}</h5>
-
-                  <p className="mb-1">⭐ Rating: {game.rating || "N/A"}</p>
-                  <p className="mb-1">
-                    📅 Released: {game.released || "Unknown"}
-                  </p>
-                  <p className="mb-2">
-                    🎮 Platforms:{" "}
-                    {game.platforms
-                      ? game.platforms
-                          .map((p) => p.platform.name)
-                          .slice(0, 5)
-                          .join(", ")
-                      : "N/A"}
-                  </p>
-
-                  <Link
-                    to={`/game/${game.id}`}
-                    className="btn btn-outline-light btn-sm"
-                  >
-                    Show More
-                  </Link>
-                </div>
-              </div>
+              <p className="search-platforms-text">
+                🎮 {game.platforms
+                  ? game.platforms
+                      .map((p) => p.platform.name)
+                      .slice(0, 3)
+                      .join(", ")
+                  : "N/A"}
+              </p>
+              
+              <button className="search-card-btn">Show More</button>
             </div>
           </div>
         ))}

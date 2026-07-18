@@ -1,0 +1,10 @@
+# ✅ FIXED: Valid Universal Search Engine Crawler Configuration
+User-agent: *
+Allow: /
+
+# Block sensitive platform infrastructure auth tokens configurations route elements control paths patterns
+Disallow: /api/
+Disallow: /config/
+
+# Sitemap location framework reference parameter context mappings (Optional for future scale parameters)
+Sitemap: https://nextgengamehub.netlify.app/sitemap.xml

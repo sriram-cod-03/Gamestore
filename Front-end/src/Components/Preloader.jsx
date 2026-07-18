@@ -1,5 +1,5 @@
 import React from "react";
-import logo from "../assets/images/favicon.png";
+import logo from "../assets/images/GameStoreicon.png";
 import "../styles/preloader.css";
 
 const Preloader = () => {

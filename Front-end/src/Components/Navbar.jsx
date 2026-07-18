@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-// Ensure this path matches your project structure
-import logo from "../assets/images/favicon.png"; 
+import logo from "../assets/images/GameStoreicon.png";
 import "../styles/navbar.css";
 
 const Navbar = () => {

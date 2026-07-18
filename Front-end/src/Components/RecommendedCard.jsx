@@ -39,19 +39,20 @@ const RecommendedCard = () => {
 
   // ✅ 2. Scroll Logic
  // ... inside RecommendedCard component
-
 const scroll = (direction) => {
   if (scrollRef.current) {
     const { current } = scrollRef;
-    // ✅ 1. Get the width of one card (including the gap)
-    const card = current.querySelector(".game-card");
-    if (!card) return;
-    const cardWidth = card.clientWidth + 25; // Card width + 25px gap
+    
+    // Check if the card exists in DOM; fallback immediately if reading layout triggers layout thrashing
+    const card = current.querySelector(".game-card") || current.querySelector(".trending-card") || current.querySelector(".free-card");
+    
+    // Direct configuration fallback avoids repetitive layout calculations during button spams
+    const scrollAmount = card ? card.getBoundingClientRect().width + 25 : 325; 
+
     if (direction === "left") {
-      // ✅ 2. Scroll by exactly one card width
-      current.scrollBy({ left: -cardWidth, behavior: "smooth" });
+      current.scrollBy({ left: -scrollAmount, behavior: "smooth" });
     } else {
-      current.scrollBy({ left: cardWidth, behavior: "smooth" });
+      current.scrollBy({ left: scrollAmount, behavior: "smooth" });
     }
   }
 };

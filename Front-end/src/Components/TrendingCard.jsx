@@ -38,22 +38,23 @@ const TrendingGameCard = () => {
   }, []);
 
   // ✅ 2. Roller Coaster (One-to-One Snap) Scroll Logic
-  const scroll = (direction) => {
-    if (scrollRef.current) {
-      const { current } = scrollRef;
-      const card = current.querySelector(".trending-card");
-      if (!card) return;
+const scroll = (direction) => {
+  if (scrollRef.current) {
+    const { current } = scrollRef;
+    
+    // Check if the card exists in DOM; fallback immediately if reading layout triggers layout thrashing
+    const card = current.querySelector(".game-card") || current.querySelector(".trending-card") || current.querySelector(".free-card");
+    
+    // Direct configuration fallback avoids repetitive layout calculations during button spams
+    const scrollAmount = card ? card.getBoundingClientRect().width + 25 : 325; 
 
-      // Card width + the gap (e.g., 25px)
-      const scrollAmount = card.clientWidth + 25; 
-
-      if (direction === "left") {
-        current.scrollBy({ left: -scrollAmount, behavior: "smooth" });
-      } else {
-        current.scrollBy({ left: scrollAmount, behavior: "smooth" });
-      }
+    if (direction === "left") {
+      current.scrollBy({ left: -scrollAmount, behavior: "smooth" });
+    } else {
+      current.scrollBy({ left: scrollAmount, behavior: "smooth" });
     }
-  };
+  }
+};
 
   if (loading || games.length === 0) return null;
 

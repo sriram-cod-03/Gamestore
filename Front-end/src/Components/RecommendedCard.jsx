@@ -48,26 +48,20 @@ const RecommendedCard = () => {
 
   // ✅ 2. Scroll Logic
   // ... inside RecommendedCard component
-  const scroll = (direction) => {
-    if (scrollRef.current) {
-      const { current } = scrollRef;
+const scroll = (direction) => {
+  if (scrollRef.current) {
+    const { current } = scrollRef;
+    
+    // ✅ Cached static fallback limits layout calculation cycles during button clicks
+    const scrollAmount = 325; 
 
-      // Check if the card exists in DOM; fallback immediately if reading layout triggers layout thrashing
-      const card =
-        current.querySelector(".game-card") ||
-        current.querySelector(".trending-card") ||
-        current.querySelector(".free-card");
-
-      // Direct configuration fallback avoids repetitive layout calculations during button spams
-      const scrollAmount = card ? card.getBoundingClientRect().width + 25 : 325;
-
-      if (direction === "left") {
-        current.scrollBy({ left: -scrollAmount, behavior: "smooth" });
-      } else {
-        current.scrollBy({ left: scrollAmount, behavior: "smooth" });
-      }
+    if (direction === "left") {
+      current.scrollBy({ left: -scrollAmount, behavior: "smooth" });
+    } else {
+      current.scrollBy({ left: scrollAmount, behavior: "smooth" });
     }
-  };
+  }
+};
 
   // ... (Rest of the component remains same)
 

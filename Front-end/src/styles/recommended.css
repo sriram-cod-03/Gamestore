@@ -128,6 +128,12 @@
 
 /* IMAGE LAYER */
 .game-bg {
+  top: 5px;
+  left: 5px;
+  width: calc(100% - 10px) !important;
+  height: calc(100% - 10px) !important;
+  object-fit: cover !important;
+  object-position: center top !important; /* Locks crop frame naturally */
   position: absolute;
   inset: 5px;
   background-size: cover;
@@ -135,7 +141,8 @@
   border-radius: 10px;
   filter: brightness(0.8);
   z-index: 3;
-  transition: filter 0.3s ease;
+  transition: filter 0.3s ease,transform 0.4s ease;
+  transform: scale(1) !important;
 }
 
 .game-card:hover .game-bg {

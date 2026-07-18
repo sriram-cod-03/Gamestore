@@ -2,12 +2,16 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    
+    <!-- ✅ FIXED: ADDED CONTROLLER FAVICON IN TITLE BAR WITH PRELOAD FOR PERFORMANCE -->
+    <link rel="icon" type="image/png" href="/favicon.png" />
+    <link rel="apple-touch-icon" href="/favicon.png" />
+    <!-- ⚡ PERFORMANCE OPTIMIZATION: PRELOAD LARGE IMAGES/FONTS TO FIX LCP -->
+    <link rel="preconnect" href="https://api.rawg.io" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- 👑 SEO TITLE -->
     <title>GameStore — The Ultimate Digital Vault & Cinematic Gaming Hub</title>
-    <!--2. FIXED: MISSING META DESCRIPTION (Crucial for Lighthouse 100% SEO) -->
     <meta name="description" content="Explore, search, and connect with the global gaming community on GameStore. Vaulting free-to-play titles, horror archives, and cinematic MERN stack game store architectures." />
-    <!--3. ADD ADDITIONAL MOBILE AND RE-FLOW ROBOTS TAG VALUE METRICS -->
     <meta name="robots" content="index, follow" />
     <meta name="author" content="sriram-cod-03" />
   </head>

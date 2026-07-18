@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 // Assuming you have this utility for authentication
-import { requireAuthAndNavigate } from "../utils/auth"; 
+import { requireAuthAndNavigate } from "../utils/auth";
 import "../styles/horror.css";
 
 // Cache to prevent multiple API calls
@@ -28,8 +28,8 @@ const HorrorCard = () => {
 
         const requests = horrorGameNames.map((name) =>
           fetch(
-            `https://api.rawg.io/api/games?search=${encodeURIComponent(name)}&key=${apiKey}`
-          ).then((res) => res.json())
+            `https://api.rawg.io/api/games?search=${encodeURIComponent(name)}&key=${apiKey}`,
+          ).then((res) => res.json()),
         );
 
         const responses = await Promise.all(requests);
@@ -62,42 +62,36 @@ const HorrorCard = () => {
   return (
     <div className="horror-container">
       {/* --- ✅ CLICKABLE WHITE TITLE --- */}
-      <h4 
-        className="clickable-horror-title" 
-        onClick={() => navigate('/all-horror')}
+      <h4
+        className="clickable-horror-title"
+        onClick={() => navigate("/all-horror")}
       >
         Horror Games
       </h4>
 
       <div className="horror-grid">
         {games.map((game) => (
-          <div className="horror-card" key={game.id}>
-            <div
-              className="horror-bg"
-              style={{
-                backgroundImage: `url(${game.background_image})`,
-              }}
+          <div
+            className="game-card"
+            key={game.id}
+            onClick={() => navigate(`/game/${game.id}`)}
+          >
+            {/* ✅ PASTE THE OPTIMIZED IMG TAG HERE */}
+            <img
+              src={game.background_image}
+              alt={game.name}
+              className="game-bg" /* Keeps your existing CSS styling */
+              loading="lazy" /* Boosts performance by loading images only when visible */
+              decoding="async" /* Prevents main thread blocking during dynamic content load */
             />
 
-            <span className="horror-badge">HORROR</span>
-
-            <div className="horror-overlay">
-              <h5>{game.name}</h5>
-              
-              <div className="horror-details">
-                <p>⭐ {game.rating || "4.4"}</p>
-                <p>📅 {game.released ? game.released.split("-")[0] : "2021"}</p>
-                <p className="genres">
-                  🎮 {game.genres?.map((g) => g.name).slice(0, 2).join(", ")}
-                </p>
+            <div className="game-overlay">
+              <h5 className="card-title">{game.name}</h5>
+              <div className="game-info-row">
+                <p>🔥 {game.rating || "4.5"}</p>
+                <p>🗓️ {game.released?.split("-")[0]}</p>
               </div>
-
-              <button 
-                className="horror-btn" 
-                onClick={() => handleShowMore(game.id)}
-              >
-                Show More
-              </button>
+              <button className="card-btn">Show More</button>
             </div>
           </div>
         ))}

@@ -1,0 +1,243 @@
+/* Container for stacking notifications */
+.liquid-toast-portal {
+  position: fixed;
+  top: 25px;
+  right: 25px;
+  z-index: 999999;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  pointer-events: none;
+}
+
+/* Thick 3D Frosted Glass Card */
+.liquid-glass-card {
+  pointer-events: auto;
+  position: relative;
+  width: 360px;
+  padding: 20px 22px;
+  border-radius: 26px;
+  overflow: hidden;
+
+  /* Frosted Blur Effect */
+  background: rgba(255, 255, 255, 0.58);
+  backdrop-filter: blur(28px) saturate(180%);
+  -webkit-backdrop-filter: blur(28px) saturate(180%);
+
+  /* Thick 3D Rounded Glass Edges */
+  border: 2px solid rgba(255, 255, 255, 0.85);
+  box-shadow: 
+    0 18px 45px rgba(0, 0, 0, 0.16),
+    inset 0 1px 2px rgba(255, 255, 255, 0.95),
+    inset 0 -2px 6px rgba(160, 160, 210, 0.35);
+
+  color: #111116;
+  font-family: inherit;
+  animation: liquid-entrance 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* Ambient bottom blur gradients */
+.ambient-orb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(34px);
+  z-index: -1;
+  opacity: 0.65;
+  pointer-events: none;
+}
+
+.orb-pink {
+  width: 130px;
+  height: 130px;
+  background: radial-gradient(circle, #ff6b9d 0%, #ff2d55 80%);
+  bottom: -45px;
+  right: -25px;
+}
+
+.orb-blue {
+  width: 120px;
+  height: 120px;
+  background: radial-gradient(circle, #007aff 0%, #5856d6 80%);
+  bottom: -45px;
+  right: 65px;
+}
+
+/* Header Area */
+.liquid-card-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.liquid-pill {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.85);
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  border-radius: 8px;
+  padding: 3px 7px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.04);
+}
+
+.pill-top {
+  font-size: 8px;
+  font-weight: 800;
+  letter-spacing: 0.8px;
+  color: #ff3b30;
+}
+
+.pill-bot {
+  font-size: 10.5px;
+  font-weight: 900;
+  color: #111;
+  line-height: 1;
+}
+
+.liquid-header-title {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.7px;
+  color: #44444d;
+  flex: 1;
+  text-transform: uppercase;
+}
+
+.liquid-close-btn {
+  background: transparent;
+  border: none;
+  color: #777;
+  font-size: 13px;
+  cursor: pointer;
+  padding: 4px;
+  transition: color 0.2s ease;
+}
+
+.liquid-close-btn:hover {
+  color: #000;
+}
+
+/* Card Separator */
+.liquid-divider {
+  width: 100%;
+  height: 1px;
+  background: rgba(0, 0, 0, 0.06);
+  margin: 12px 0 14px 0;
+}
+
+/* Card Body */
+.liquid-card-body {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+}
+
+.liquid-accent-bar {
+  width: 3.5px;
+  height: 44px;
+  border-radius: 4px;
+  flex-shrink: 0;
+}
+
+.accent-success {
+  background: #34c759;
+}
+
+.accent-error {
+  background: #ff3b30;
+}
+
+.accent-info {
+  background: #007aff;
+}
+
+.liquid-text-block {
+  flex: 1;
+}
+
+.liquid-title-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 3px;
+}
+
+.liquid-main-text {
+  font-size: 17px;
+  font-weight: 800;
+  color: #0d0d12;
+  margin: 0;
+  letter-spacing: -0.2px;
+}
+
+.liquid-timestamp {
+  font-size: 12px;
+  font-weight: 700;
+  color: #222;
+}
+
+.liquid-sub-message {
+  font-size: 12.5px;
+  color: #4a4a55;
+  line-height: 1.4;
+  margin: 0;
+}
+
+/* Footer Section */
+.liquid-footer {
+  margin-top: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.avatar-cluster {
+  display: flex;
+  align-items: center;
+}
+
+.avatar-chip {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: 2px solid #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  font-weight: 800;
+  margin-left: -7px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.avatar-chip:first-child {
+  margin-left: 0;
+}
+
+.user-chip {
+  background: #111;
+  color: #fff;
+}
+
+.accent-chip {
+  background: #ffd60a;
+}
+
+.network-tag {
+  font-size: 10.5px;
+  font-weight: 600;
+  color: #636366;
+}
+
+/* Entrance Animation */
+@keyframes liquid-entrance {
+  0% {
+    opacity: 0;
+    transform: translateY(-25px) scale(0.92);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}

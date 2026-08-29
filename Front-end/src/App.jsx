@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { Routes, Route, useLocation, Navigate } from "react-router-dom";
 
+// Context
+import { NotificationProvider } from "./context/NotificationContext";
+
 // Components & Pages
 import Navbar from "./Components/Navbar";
 import Footer from "./Components/Footer";
@@ -16,7 +19,8 @@ import GameDetails from "./Pages/GameDetails";
 import BrowsePage from "./Pages/Browse";
 import NewReleases from "./Pages/NewReleases";
 import Profile from "./Pages/Profile";
-// ✅ IMPORT THE NEW PAGE
+
+// Special Category Pages
 import AllRecommended from "./Pages/AllRecommended";
 import AllTrending from "./Pages/AllTrending";
 import AllFree from "./Pages/AllFree";
@@ -48,138 +52,137 @@ function App() {
   }
 
   return (
-    <div className="app-wrapper fade-in">
-      {!hideLayout && <Navbar />}
+    <NotificationProvider>
+      <div className="app-wrapper fade-in">
+        {!hideLayout && <Navbar />}
 
-      {/* Main content with flex grow to push footer down */}
-      <main className="main-content">
-        <Routes>
-          {/* Dashboard Routes */}
-          <Route
-            path="/"
-            element={
-              <ProtectedRoute>
-                <Home setAppLoading={setIsLoading} />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/home"
-            element={
-              <ProtectedRoute>
-                <Home setAppLoading={setIsLoading} />
-              </ProtectedRoute>
-            }
-          />
+        {/* Main content with flex grow to push footer down */}
+        <main className="main-content">
+          <Routes>
+            {/* Dashboard Routes */}
+            <Route
+              path="/"
+              element={
+                <ProtectedRoute>
+                  <Home setAppLoading={setIsLoading} />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/home"
+              element={
+                <ProtectedRoute>
+                  <Home setAppLoading={setIsLoading} />
+                </ProtectedRoute>
+              }
+            />
 
-          {/* Public Routes */}
-          <Route path="/login" element={<LoginPage />} />
-          <Route path="/signup" element={<SignUp />} />
+            {/* Public Routes */}
+            <Route path="/login" element={<LoginPage />} />
+            <Route path="/signup" element={<SignUp />} />
 
-          {/* Protected Store Routes */}
-          <Route
-            path="/browse"
-            element={
-              <ProtectedRoute>
-                <BrowsePage />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/game/:id"
-            element={
-              <ProtectedRoute>
-                <GameDetails />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/search/:query"
-            element={
-              <ProtectedRoute>
-                <SearchResults />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/payment/:id"
-            element={
-              <ProtectedRoute>
-                <PaymentPage />
-              </ProtectedRoute>
-            }
-          />
+            {/* Protected Store Routes */}
+            <Route
+              path="/browse"
+              element={
+                <ProtectedRoute>
+                  <BrowsePage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/game/:id"
+              element={
+                <ProtectedRoute>
+                  <GameDetails />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/search/:query"
+              element={
+                <ProtectedRoute>
+                  <SearchResults />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/payment/:id"
+              element={
+                <ProtectedRoute>
+                  <PaymentPage />
+                </ProtectedRoute>
+              }
+            />
 
-          {/*Route for the Clickable Title */}
-          <Route
-            path="/all-recommended"
-            element={
-              <ProtectedRoute>
-                <AllRecommended />
-              </ProtectedRoute>
-            }
-          />
+            {/* Category Pages */}
+            <Route
+              path="/all-recommended"
+              element={
+                <ProtectedRoute>
+                  <AllRecommended />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/all-trending"
+              element={
+                <ProtectedRoute>
+                  <AllTrending />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/all-free"
+              element={
+                <ProtectedRoute>
+                  <AllFree />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/all-horror"
+              element={
+                <ProtectedRoute>
+                  <AllHorror />
+                </ProtectedRoute>
+              }
+            />
 
-          <Route
-            path="/all-trending"
-            element={
-              <ProtectedRoute>
-                <AllTrending />
-              </ProtectedRoute>
-            }
-          />
+            {/* Specific route for New Releases */}
+            <Route
+              path="/games/new"
+              element={
+                <ProtectedRoute>
+                  <NewReleases />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/games/:category"
+              element={
+                <ProtectedRoute>
+                  <GamesCategory />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/profile"
+              element={
+                <ProtectedRoute>
+                  <Profile />
+                </ProtectedRoute>
+              }
+            />
 
-          <Route
-            path="/all-free"
-            element={
-              <ProtectedRoute>
-                <AllFree />
-              </ProtectedRoute>
-            }
-          />
+            {/* Fallback */}
+            <Route path="*" element={<PageNotFound />} />
+          </Routes>
+        </main>
 
-          <Route
-            path="/all-horror"
-            element={
-              <ProtectedRoute>
-                <AllHorror />
-              </ProtectedRoute>
-            }
-          />
-
-          {/* Specific route for New Releases */}
-          <Route
-            path="/games/new"
-            element={
-              <ProtectedRoute>
-                <NewReleases />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/games/:category"
-            element={
-              <ProtectedRoute>
-                <GamesCategory />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/profile"
-            element={
-              <ProtectedRoute>
-                <Profile />
-              </ProtectedRoute>
-            }
-          />
-
-          {/* Fallback */}
-          <Route path="*" element={<PageNotFound />} />
-        </Routes>
-      </main>
-
-      {!hideLayout && <Footer />}
-    </div>
+        {!hideLayout && <Footer />}
+      </div>
+    </NotificationProvider>
   );
 }
 

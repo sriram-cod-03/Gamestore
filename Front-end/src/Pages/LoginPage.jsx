@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import "../styles/login.css";
+import { useNotification } from "../context/NotificationContext";
 
 const LoginPage = () => {
   // --- 1. STATE MANAGEMENT ---
@@ -11,6 +12,7 @@ const LoginPage = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [isRecoveryMode, setIsRecoveryMode] = useState(false); // Toggles between Login and Forgot Password
 
+  const { showToast } = useNotification();
   const navigate = useNavigate();
 
   // --- 2. LOGIN / RECOVERY LOGIC ---
@@ -18,33 +20,39 @@ const LoginPage = () => {
     e.preventDefault();
     setBtnLoading(true);
 
-    // Choose the API endpoint based on the current mode
-
     const endpoint = isRecoveryMode
       ? "https://gamestore-429l.onrender.com/api/users/quick-access"
       : "https://gamestore-429l.onrender.com/api/users/login";
 
-    // Prepare the data to send to the Backend
-    // Both modes now send 'identifier' so the backend can use the $or search logic
     const payload = isRecoveryMode ? { identifier } : { identifier, password };
 
     try {
       const response = await axios.post(endpoint, payload);
 
       if (response.data.success) {
-        // Save the secure token and user details to the browser's storage
+        // Save the secure token and user details to browser storage
         localStorage.setItem("token", response.data.token);
         localStorage.setItem("user", JSON.stringify(response.data.user));
 
-        // Success! Move to the Home page
+        // Trigger custom liquid-glass toast notification
+        showToast(
+          isRecoveryMode
+            ? "Account recovered successfully!"
+            : `Welcome back, ${response.data.user?.firstName || "Player"}!`,
+          "success",
+          "ARENA ACCESS"
+        );
+
+        // Move to the Home page
         navigate("/home");
       }
     } catch (err) {
-      // If the server is offline or the ID is wrong, show the error
       const errorMsg =
         err.response?.data?.error ||
+        err.response?.data?.message ||
         "Access Denied. Please check your credentials.";
-      alert(errorMsg);
+
+      showToast(errorMsg, "error", "SECURITY ALERT");
     } finally {
       setBtnLoading(false);
     }

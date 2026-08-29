@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import "../styles/profile.css";
+import { useNotification } from "../context/NotificationContext";
 
 const Profile = () => {
   // --- 1. STATE & REFERENCES ---
@@ -8,6 +9,7 @@ const Profile = () => {
   const [isEditing, setIsEditing] = useState(false);
   const [loading, setLoading] = useState(false);
   const fileInputRef = useRef(null); // Reference for the hidden file selector
+  const { showToast } = useNotification();
 
   // Form State for editing text fields
   const [formData, setFormData] = useState({
@@ -41,23 +43,30 @@ const Profile = () => {
     const reader = new FileReader();
     reader.onloadend = async () => {
       const base64Image = reader.result;
-      
+
       // Instant Preview on UI
       setUser((prev) => ({ ...prev, profilePic: base64Image }));
 
       // Save Photo to Database immediately
       try {
-        const response = await axios.put("http://localhost:5000/api/users/update-profile", {
-          userId: user._id,
-          profilePic: base64Image
-        });
+        const response = await axios.put(
+          "https://gamestore-429l.onrender.com/api/users/update-profile",
+          {
+            userId: user._id,
+            profilePic: base64Image
+          }
+        );
 
         if (response.data.success) {
           localStorage.setItem("user", JSON.stringify(response.data.user));
-          console.log("Photo synced to MongoDB ✅");
+          showToast("Profile avatar updated successfully!", "success", "AVATAR SYNCED");
         }
       } catch (err) {
-        alert("Photo upload failed. Check server connection.");
+        const errorMsg =
+          err.response?.status === 413
+            ? "Image size is too large. Please select a smaller photo."
+            : "Photo upload failed. Check server connection.";
+        showToast(errorMsg, "error", "UPLOAD FAILED");
       }
     };
     reader.readAsDataURL(file);
@@ -71,21 +80,28 @@ const Profile = () => {
   const handleSaveProfile = async () => {
     setLoading(true);
     try {
-      const response = await axios.put("http://localhost:5000/api/users/update-profile", {
-        userId: user._id,
-        username: formData.username,
-        bio: formData.bio,
-        gender: formData.gender
-      });
+      const response = await axios.put(
+        "https://gamestore-429l.onrender.com/api/users/update-profile",
+        {
+          userId: user._id,
+          username: formData.username,
+          bio: formData.bio,
+          gender: formData.gender
+        }
+      );
 
       if (response.data.success) {
         localStorage.setItem("user", JSON.stringify(response.data.user));
         setUser(response.data.user);
         setIsEditing(false);
-        alert("Profile Updated Successfully! 🚀");
+        showToast("Profile details updated successfully!", "success", "VAULT SAVED");
       }
     } catch (err) {
-      alert(err.response?.data?.message || "Failed to save data.");
+      showToast(
+        err.response?.data?.message || "Failed to save profile changes.",
+        "error",
+        "UPDATE ERROR"
+      );
     } finally {
       setLoading(false);
     }
@@ -94,10 +110,13 @@ const Profile = () => {
   return (
     <div className="profile-container">
       <div className="profile-glass-card">
-        
         {/* --- AVATAR SECTION --- */}
         <div className="profile-header">
-          <div className="avatar-wrapper" onClick={handleAvatarClick} title="Click to change photo">
+          <div
+            className="avatar-wrapper"
+            onClick={handleAvatarClick}
+            title="Click to change photo"
+          >
             {user.profilePic ? (
               <img src={user.profilePic} alt="Avatar" className="avatar-img" />
             ) : (
@@ -105,17 +124,19 @@ const Profile = () => {
             )}
             <div className="avatar-overlay">EDIT</div>
           </div>
-          
+
           {/* HIDDEN FILE INPUT */}
-          <input 
-            type="file" 
-            ref={fileInputRef} 
-            onChange={handleFileChange} 
-            accept="image/*" 
-            style={{ display: "none" }} 
+          <input
+            type="file"
+            ref={fileInputRef}
+            onChange={handleFileChange}
+            accept="image/*"
+            style={{ display: "none" }}
           />
 
-          <h1 className="profile-display-name">{user.firstName} {user.lastName}</h1>
+          <h1 className="profile-display-name">
+            {user.firstName} {user.lastName}
+          </h1>
           <p className="profile-display-handle">@{user.username || "new_player"}</p>
         </div>
 
@@ -125,29 +146,29 @@ const Profile = () => {
             <div className="edit-mode-form">
               <div className="form-group">
                 <label>Username</label>
-                <input 
-                  type="text" 
-                  name="username" 
-                  className="glass-field" 
-                  value={formData.username} 
-                  onChange={handleInputChange} 
+                <input
+                  type="text"
+                  name="username"
+                  className="glass-field"
+                  value={formData.username}
+                  onChange={handleInputChange}
                 />
               </div>
               <div className="form-group">
                 <label>Bio</label>
-                <textarea 
-                  name="bio" 
-                  className="glass-field bio-area" 
-                  value={formData.bio} 
-                  onChange={handleInputChange} 
+                <textarea
+                  name="bio"
+                  className="glass-field bio-area"
+                  value={formData.bio}
+                  onChange={handleInputChange}
                 />
               </div>
               <div className="form-group">
                 <label>Gender</label>
-                <select 
-                  name="gender" 
-                  className="glass-field" 
-                  value={formData.gender} 
+                <select
+                  name="gender"
+                  className="glass-field"
+                  value={formData.gender}
                   onChange={handleInputChange}
                 >
                   <option value="Male">Male</option>
@@ -156,10 +177,19 @@ const Profile = () => {
                 </select>
               </div>
               <div className="action-row">
-                <button className="save-btn" onClick={handleSaveProfile} disabled={loading}>
+                <button
+                  className="save-btn"
+                  onClick={handleSaveProfile}
+                  disabled={loading}
+                >
                   {loading ? "SAVING..." : "SAVE CHANGES"}
                 </button>
-                <button className="cancel-btn" onClick={() => setIsEditing(false)}>CANCEL</button>
+                <button
+                  className="cancel-btn"
+                  onClick={() => setIsEditing(false)}
+                >
+                  CANCEL
+                </button>
               </div>
             </div>
           ) : (
@@ -178,7 +208,10 @@ const Profile = () => {
                   <span>{user.email}</span>
                 </div>
               </div>
-              <button className="enter-edit-btn" onClick={() => setIsEditing(true)}>
+              <button
+                className="enter-edit-btn"
+                onClick={() => setIsEditing(true)}
+              >
                 EDIT PROFILE
               </button>
             </div>

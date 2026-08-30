@@ -97,10 +97,6 @@ const GameDetails = () => {
               <span><strong>Released:</strong> {game.released || "Unknown"}</span>
             </div>
             <div className="info-item">
-              <FaHourglassHalf className="icon" />
-              <span><strong>Playtime:</strong> {game.playtime || 0} hrs</span>
-            </div>
-            <div className="info-item">
               <FaGamepad className="icon" />
               <span><strong>Platforms:</strong> {game.platforms?.map((p) => p.platform.name).join(", ")}</span>
             </div>

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { FaArrowLeft } from "react-icons/fa";
-import "../styles/all-free.css"; 
+import "../styles/all-free.css";
 
 const AllFree = () => {
   const [games, setGames] = useState([]);
@@ -14,7 +14,7 @@ const AllFree = () => {
         const apiKey = "10339595c43349fe932bbf361059223a";
         // Fetching games with the 'free-to-play' tag
         const response = await fetch(
-          `https://api.rawg.io/api/games?key=${apiKey}&tags=free-to-play&ordering=-added&page_size=12`
+          `https://api.rawg.io/api/games?key=${apiKey}&tags=free-to-play&ordering=-added&page_size=12`,
         );
         const data = await response.json();
         setGames(data.results);
@@ -27,7 +27,8 @@ const AllFree = () => {
     fetchFreeGames();
   }, []);
 
-  if (loading) return <div className="free-loader">UNBLOCKING FREE CONTENT...</div>;
+  if (loading)
+    return <div className="free-loader">UNBLOCKING FREE CONTENT...</div>;
 
   return (
     <div className="all-free-page">
@@ -39,20 +40,31 @@ const AllFree = () => {
           <h1 className="cyan-free-title">Zero-Cost Archive</h1>
         </header>
 
-        <div className="free-full-grid">
-          {games.map((game) => (
-            <div className="free-full-card" key={game.id} onClick={() => navigate(`/game/${game.id}`)}>
-              <div className="free-media">
-                <img src={game.background_image} alt={game.name} />
-                <div className="free-tag">FREE</div>
-              </div>
-              <div className="free-info">
-                <h3>{game.name}</h3>
-                <div className="free-meta">
-                  <span>💎 {game.rating || "4.0"}</span>
-                  <span>📦 {Math.floor(Math.random() * 50) + 10}GB</span>
+        <div className="free-scroll-wrapper" ref={scrollRef}>
+          {games.map((game, index) => (
+            <div
+              className="free-card"
+              key={game.id}
+              onClick={() => navigate(`/game/${game.id}`)}
+            >
+              {/* Replaced div background with optimized responsive <img> */}
+              <img
+                src={game.background_image}
+                alt={game.name}
+                className="free-bg"
+                width="300"
+                height="400"
+                loading={index < 3 ? "eager" : "lazy"}
+                decoding="async"
+              />
+
+              <div className="free-overlay">
+                <h5 className="card-title">{game.name}</h5>
+                <div className="game-info-row">
+                  <p>FREE</p>
+                  <p>⭐ {game.rating || "4.2"}</p>
                 </div>
-                <button className="download-btn">Claim Access</button>
+                <button className="card-btn">Claim Now</button>
               </div>
             </div>
           ))}

@@ -39,24 +39,35 @@ const AllTrending = () => {
           <h1 className="neon-trending-title">Trending Global Archive</h1>
         </header>
 
-        <div className="trending-full-grid">
-          {games.map((game) => (
-            <div className="trending-full-card" key={game.id} onClick={() => navigate(`/game/${game.id}`)}>
-              <div className="card-media">
-                <img src={game.background_image} alt={game.name} />
-                <div className="trending-rank-badge">TRENDING</div>
-              </div>
-              <div className="card-info">
-                <h3>{game.name}</h3>
-                <div className="card-stats">
-                  <span>🔥 {game.rating}</span>
-                  <span>🎮 {game.genres?.[0]?.name}</span>
-                </div>
-                <button className="intel-btn">View Intel</button>
-              </div>
-            </div>
-          ))}
+        <div className="trending-scroll-wrapper" ref={scrollRef}>
+  {games.map((game, index) => (
+    <div
+      className="trending-card"
+      key={game.id}
+      onClick={() => navigate(`/game/${game.id}`)}
+    >
+      {/* Replaced div background with optimized responsive <img> */}
+      <img
+        src={game.background_image}
+        alt={game.name}
+        className="trending-bg"
+        width="300"
+        height="400"
+        loading={index < 3 ? "eager" : "lazy"}
+        decoding="async"
+      />
+
+      <div className="trending-overlay">
+        <h5 className="card-title">{game.name}</h5>
+        <div className="game-info-row">
+          <p>🔥 {game.rating || "4.8"}</p>
+          <p>🗓️ {game.released?.split("-")[0]}</p>
         </div>
+        <button className="card-btn">Show More</button>
+      </div>
+    </div>
+  ))}
+</div>
       </div>
     </div>
   );

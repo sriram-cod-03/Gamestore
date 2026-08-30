@@ -46,9 +46,17 @@ const AllRecommended = () => {
         </header>
 
         <div className="all-rec-full-grid">
-          {games.map(game => (
+          {games.map((game, index) => (
             <div className="full-card" key={game.id} onClick={() => navigate(`/game/${game.id}`)}>
-              <div className="full-card-img" style={{ backgroundImage: `url(${game.background_image})` }} />
+              <img
+                src={game.background_image}
+                alt={game.name}
+                className="full-card-img"
+                width="300"
+                height="400"
+                loading={index < 4 ? "eager" : "lazy"}
+                decoding="async"
+              />
               <div className="full-card-info">
                 <h3>{game.name}</h3>
                 <div className="meta-row">

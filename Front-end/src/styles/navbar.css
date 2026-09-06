@@ -1,93 +1,71 @@
-/* NAVBAR CONTAINER */
+/* --- NAVBAR WRAPPER --- */
 .gs-navbar {
   position: sticky;
   top: 0;
   z-index: 1000;
-  background-color: #000; /* Solid black background */
-  border-bottom: 1px solid #1a1a1a;
+  background: rgba(0, 0, 0, 0.92);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
   padding: 12px 0;
+  width: 100%;
 }
 
 .gs-container {
+  width: 100%;
   max-width: 1400px;
   margin: 0 auto;
   padding: 0 20px;
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: 16px;
+  box-sizing: border-box;
 }
 
-/* LOGO SECTION */
+/* --- LOGO SECTION --- */
 .gs-logo {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 10px;
   text-decoration: none;
   color: #fff;
   font-weight: 800;
-  font-size: 1.4rem;
+  font-size: 1.25rem;
+  white-space: nowrap;
+  flex-shrink: 0;
 }
 
 .logo-img {
-  width: 35px;
-  height: auto;
-  /* Transforms a black icon into a crisp white logo */
+  width: 28px;
+  height: 28px;
+  object-fit: contain;
   filter: brightness(0) invert(1);
   transition: transform 0.3s ease, filter 0.3s ease;
 }
 
 .gs-logo:hover .logo-img {
-  transform: scale(1.1);
+  transform: scale(1.08);
   filter: brightness(0) invert(1) drop-shadow(0 0 8px #00ff88);
 }
 
-/* NAVIGATION LINKS */
-.gs-links {
-  display: flex;
-  align-items: center;
-  gap: 30px;
-}
-
-.gs-link {
-  color: #aaa;
-  text-decoration: none;
-  font-weight: 500;
-  transition: color 0.3s ease;
-}
-
-.gs-link:hover {
-  color: #fff;
-}
-
-.login-link {
-  color: #00ff88; /* Neon green for Login */
-  font-weight: 600;
-}
-
-/* LOGOUT BUTTON */
-.logout-btn {
-  background: transparent;
-  border: 1px solid #ff4d4d;
-  color: #ff4d4d;
-  padding: 6px 16px;
-  border-radius: 20px;
-  cursor: pointer;
-  font-weight: 600;
-  transition: all 0.3s ease;
-}
-
-.logout-btn:hover {
-  background: #ff4d4d;
-  color: #000;
-}
-
-/* SEARCH BAR */
+/* --- SEARCH BAR --- */
 .gs-search {
   display: flex;
-  background: #111;
-  border-radius: 25px;
-  padding: 4px;
-  border: 1px solid #222;
+  align-items: center;
+  background: #111116;
+  border-radius: 30px;
+  padding: 3px 4px 3px 14px;
+  border: 1px solid #25252d;
+  flex: 1;
+  max-width: 420px;
+  box-sizing: border-box;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.gs-search:focus-within {
+  border-color: #00ff88;
+  box-shadow: 0 0 10px rgba(0, 255, 136, 0.25);
 }
 
 .gs-search input {
@@ -95,36 +73,184 @@
   border: none;
   outline: none;
   color: #fff;
-  padding: 8px 15px;
-  width: 200px;
+  font-size: 0.88rem;
+  width: 100%;
+  min-width: 0; /* Prevents input from overflowing flex box */
+  padding: 6px 0;
+}
+
+.gs-search input::placeholder {
+  color: #666;
 }
 
 .gs-search button {
   background: linear-gradient(135deg, #00ff88, #00c9ff);
   border: none;
-  padding: 8px 20px;
+  padding: 7px 18px;
   border-radius: 20px;
   font-weight: 700;
+  font-size: 0.82rem;
   color: #000;
   cursor: pointer;
+  white-space: nowrap;
+  flex-shrink: 0;
+  transition: transform 0.2s ease, filter 0.2s ease;
 }
 
-/* --- RESPONSIVE DESIGN --- */
-
-/* For Tablets/Small Laptops */
-@media (max-width: 992px) {
-  .gs-search input { width: 140px; }
-  .gs-links { gap: 15px; }
+.gs-search button:hover {
+  filter: brightness(1.1);
 }
 
-/* For Mobile Phones */
-@media (max-width: 768px) {
+/* --- NAVIGATION LINKS --- */
+.gs-links {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  flex-shrink: 0;
+}
+
+.gs-link {
+  color: #aaa;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 0.9rem;
+  transition: color 0.2s ease;
+  white-space: nowrap;
+}
+
+.gs-link:hover {
+  color: #fff;
+}
+
+.login-link {
+  color: #00ff88;
+}
+
+.logout-btn {
+  background: transparent;
+  border: 1px solid #ff4d4d;
+  color: #ff4d4d;
+  padding: 5px 14px;
+  border-radius: 20px;
+  cursor: pointer;
+  font-weight: 700;
+  font-size: 0.82rem;
+  white-space: nowrap;
+  transition: all 0.25s ease;
+}
+
+.logout-btn:hover {
+  background: #ff4d4d;
+  color: #000;
+}
+
+/* ==========================================================================
+   RESPONSIVE BREAKPOINTS (Desktop -> Laptop -> Tablet -> Mobile 320px)
+   ========================================================================== */
+
+/* 1. Laptops / Small Desktops (<= 1024px) */
+@media (max-width: 1024px) {
   .gs-container {
-    flex-direction: column;
-    gap: 15px;
-    padding: 15px;
+    padding: 0 16px;
+    gap: 14px;
   }
-  .gs-search { width: 100%; }
-  .gs-search input { width: 100%; }
-  .gs-links { order: 3; } /* Moves links below the search on mobile */
+  .gs-search {
+    max-width: 300px;
+  }
+}
+
+/* 2. Tablets & Mobile Devices (<= 768px) -> Flex-wrap 2-Row Alignment */
+@media (max-width: 768px) {
+  .gs-navbar {
+    padding: 10px 0;
+  }
+
+  .gs-container {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    row-gap: 10px;
+    column-gap: 8px;
+    padding: 0 14px;
+  }
+
+  /* Row 1 Left: Brand Logo */
+  .gs-logo {
+    order: 1;
+    font-size: 1.15rem;
+    gap: 8px;
+  }
+
+  .logo-img {
+    width: 24px;
+    height: 24px;
+  }
+
+  /* Row 1 Right: Navigation Links & Logout */
+  .gs-links {
+    order: 2;
+    gap: 12px;
+  }
+
+  .gs-link {
+    font-size: 0.82rem;
+  }
+
+  .logout-btn {
+    padding: 4px 10px;
+    font-size: 0.78rem;
+  }
+
+  /* Row 2 Full-Width: Search Bar */
+  .gs-search {
+    order: 3;
+    width: 100%;
+    max-width: 100%; /* Takes full width below logo and links */
+    padding: 2px 3px 2px 12px;
+    margin-top: 2px;
+  }
+
+  .gs-search input {
+    font-size: 0.82rem;
+  }
+
+  .gs-search button {
+    padding: 6px 14px;
+    font-size: 0.78rem;
+  }
+}
+
+/* 3. Small Mobile Screens (<= 360px: iPhone SE, Galaxy Fold, 320px Mobile S) */
+@media (max-width: 360px) {
+  .gs-container {
+    padding: 0 10px;
+    row-gap: 8px;
+  }
+
+  .gs-logo span {
+    font-size: 1rem;
+  }
+
+  .gs-links {
+    gap: 8px;
+  }
+
+  .gs-link {
+    font-size: 0.78rem;
+  }
+
+  .logout-btn {
+    padding: 3px 8px;
+    font-size: 0.74rem;
+  }
+
+  .gs-search {
+    padding: 2px 3px 2px 10px;
+  }
+
+  .gs-search button {
+    padding: 5px 10px;
+    font-size: 0.74rem;
+  }
 }

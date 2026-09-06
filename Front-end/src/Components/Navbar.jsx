@@ -7,29 +7,26 @@ const Navbar = () => {
   const [search, setSearch] = useState("");
   const navigate = useNavigate();
 
-  // Check if a token exists to determine if the user is logged in
   const isLoggedIn = Boolean(localStorage.getItem("token"));
 
   const handleSubmit = (e) => {
     e.preventDefault();
     if (!search.trim()) return;
-    // Redirects user to the search results page
-    navigate(`/search/${search.trim()}`);
+    navigate(`/search/${encodeURIComponent(search.trim())}`);
     setSearch("");
   };
 
   const handleLogout = () => {
-    // Clear user data and redirect to login
     localStorage.removeItem("token");
+    localStorage.removeItem("user");
     navigate("/login");
   };
 
   return (
     <header className="gs-navbar">
       <div className="gs-container">
-        
         {/* LOGO & BRANDING */}
-        <Link to="/" className="gs-logo">
+        <Link to="/" className="gs-logo" title="GameStore Home">
           <img src={logo} alt="GameStore Logo" className="logo-img" />
           <span>GameStore</span>
         </Link>
@@ -48,7 +45,7 @@ const Navbar = () => {
           )}
         </nav>
 
-        {/* SEARCH FUNCTIONALITY */}
+        {/* SEARCH BAR (Wraps to second line on mobile/tablets cleanly) */}
         <form className="gs-search" onSubmit={handleSubmit}>
           <input
             type="text"

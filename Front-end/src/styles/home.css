@@ -1,0 +1,165 @@
+/* =========================================
+   UNIVERSAL ALIGNMENT CONTAINER
+   ========================================= */
+.home-container {
+  width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 24px;
+  box-sizing: border-box;
+}
+
+/* =========================================
+   CYBER GAMING HOME BACKGROUND & AMBIENT GLOW
+   ========================================= */
+.home-main-wrapper {
+  background-color: #07070a;
+  min-height: 100vh;
+  position: relative;
+  overflow-x: hidden;
+  color: #fff;
+}
+
+/* Glowing Ambient Orbs */
+.home-main-wrapper::before {
+  content: "";
+  position: absolute;
+  top: -100px;
+  left: 10%;
+  width: 500px;
+  height: 500px;
+  background: radial-gradient(circle, rgba(0, 255, 136, 0.08) 0%, transparent 70%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.home-main-wrapper::after {
+  content: "";
+  position: absolute;
+  top: 400px;
+  right: 5%;
+  width: 600px;
+  height: 600px;
+  background: radial-gradient(circle, rgba(0, 210, 255, 0.06) 0%, transparent 70%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Subtle Grid Pattern */
+.home-ambient-grid {
+  position: absolute;
+  inset: 0;
+  background-image: 
+    linear-gradient(rgba(255, 255, 255, 0.015) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.015) 1px, transparent 1px);
+  background-size: 40px 40px;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Content Container relative layer */
+.home-content-layer {
+  position: relative;
+  z-index: 1;
+}
+
+/* =========================================
+   WELCOME BANNER TYPOGRAPHY
+   ========================================= */
+.home-welcome-section {
+  padding-top: 28px;
+  margin-bottom: 22px;
+}
+
+.welcome-badge-wrap {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  padding: 4px 12px;
+  border-radius: 20px;
+  margin-bottom: 12px;
+}
+
+.status-dot {
+  width: 7px;
+  height: 7px;
+  background: #00ff88;
+  border-radius: 50%;
+  box-shadow: 0 0 8px #00ff88;
+  animation: pulseDot 2s infinite ease-in-out;
+}
+
+@keyframes pulseDot {
+  0%, 100% { opacity: 0.4; transform: scale(0.9); }
+  50% { opacity: 1; transform: scale(1.15); }
+}
+
+.welcome-badge-text {
+  font-size: 0.75rem;
+  font-weight: 800;
+  color: #888;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.home-welcome-text {
+  font-size: clamp(1.6rem, 3.5vw, 2.4rem);
+  font-weight: 900;
+  color: #fff;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  margin: 0;
+  line-height: 1.15;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+}
+
+.user-glow-name {
+  color: #00ff88;
+  text-shadow: 0 0 16px rgba(0, 255, 136, 0.5);
+}
+
+/* =========================================
+   UNIFORM SECTION SPACING & RESPONSIVENESS
+   ========================================= */
+.home-section-spacer {
+  margin-bottom: 38px;
+}
+
+@media (max-width: 1024px) {
+  .home-container {
+    padding: 0 20px;
+  }
+}
+
+@media (max-width: 768px) {
+  .home-container {
+    padding: 0 16px;
+  }
+  .home-welcome-section {
+    padding-top: 18px;
+    margin-bottom: 18px;
+  }
+  .home-welcome-text {
+    font-size: 1.5rem;
+    gap: 6px;
+  }
+  .home-section-spacer {
+    margin-bottom: 26px;
+  }
+}
+
+@media (max-width: 480px) {
+  .home-container {
+    padding: 0 12px;
+  }
+  .home-welcome-text {
+    font-size: 1.25rem;
+  }
+}

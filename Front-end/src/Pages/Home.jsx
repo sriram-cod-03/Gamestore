@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import "../styles/home.css";
 import "../styles/recommended.css";
 import "../styles/trending.css";
 import "../styles/freeGames.css";
@@ -39,52 +40,52 @@ const Home = ({ setAppLoading }) => {
   }, [setAppLoading]);
 
   return (
-    <div className="home-main-wrapper" style={{ backgroundColor: "#000", minHeight: "100vh", overflowX: "hidden" }}>
-      
-      {/* PERSONALIZED WELCOME */}
-      <div className="app-container" style={{ paddingTop: "24px", marginBottom: "18px" }}>
-        <h1 className="home-welcome-text" style={{ 
-          fontSize: "clamp(1.25rem, 3.5vw, 2rem)", 
-          fontWeight: "900", 
-          color: "#fff", 
-          textTransform: "uppercase",
-          letterSpacing: "1px",
-          margin: 0,
-          lineHeight: 1.2
-        }}>
-          Welcome back,{" "}
-          <span style={{ color: "#00ff88", textShadow: "0 0 10px rgba(0, 255, 136, 0.3)" }}>
-            {userName}
-          </span>
-        </h1>
+    <div className="home-main-wrapper">
+      {/* AMBIENT GRID TEXTURE */}
+      <div className="home-ambient-grid" />
+
+      {/* CONTENT WRAPPER */}
+      <div className="home-content-layer">
+        
+        {/* PERSONALIZED WELCOME BANNER */}
+        <div className="home-container home-welcome-section">
+          <div className="welcome-badge-wrap">
+            <span className="status-dot"></span>
+            <span className="welcome-badge-text">Player Online</span>
+          </div>
+
+          <h1 className="home-welcome-text">
+            WELCOME BACK, <span className="user-glow-name">{userName}</span>
+          </h1>
+        </div>
+
+        {/* 1. HERO CAROUSEL */}
+        <div className="home-container home-section-spacer">
+          <GameCarouselCard />
+        </div>
+
+        {/* 2. RECOMMENDED SECTION */}
+        <section className="home-container recommended-container home-section-spacer">
+          <RecommendedGameCards />
+        </section>
+
+        {/* 3. TRENDING SECTION */}
+        <section className="home-container trending-container home-section-spacer">
+          <TrendingGameCard />
+        </section>
+
+        {/* 4. FREE-TO-PLAY SECTION */}
+        <section className="home-container free-container home-section-spacer">
+          <FreeGameCard />
+        </section>
+
+        {/* 5. HORROR SECTION */}
+        <section className="home-container horror-container home-section-spacer">
+          <HorrorCard />
+        </section>
+
+        <div style={{ paddingBottom: "50px" }}></div>
       </div>
-
-      {/* 1. HERO CAROUSEL */}
-      <div className="app-container" style={{ marginBottom: "35px" }}>
-        <GameCarouselCard />
-      </div>
-
-      {/* 2. RECOMMENDED SECTION */}
-      <section className="app-container recommended-container" style={{ marginBottom: "35px" }}>
-        <RecommendedGameCards />
-      </section>
-
-      {/* 3. TRENDING SECTION */}
-      <section className="app-container trending-container" style={{ marginBottom: "35px" }}>
-        <TrendingGameCard />
-      </section>
-
-      {/* 4. FREE-TO-PLAY SECTION */}
-      <section className="app-container free-container" style={{ marginBottom: "35px" }}>
-        <FreeGameCard />
-      </section>
-
-      {/* 5. HORROR SECTION */}
-      <section className="app-container horror-container" style={{ marginBottom: "35px" }}>
-        <HorrorCard />
-      </section>
-
-      <div style={{ paddingBottom: "40px" }}></div>
     </div>
   );
 };

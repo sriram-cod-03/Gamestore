@@ -1,6 +1,6 @@
 import { useParams, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
-import "../styles/search.css"; // Ensure you create or update this file
+import "../styles/search.css";
 
 const SearchResults = () => {
   const { query } = useParams();
@@ -12,8 +12,10 @@ const SearchResults = () => {
     const fetchGames = async () => {
       try {
         setLoading(true);
+        window.scrollTo(0, 0);
+
         const response = await fetch(
-          `https://api.rawg.io/api/games?search=${query}&key=10339595c43349fe932bbf361059223a`
+          `https://api.rawg.io/api/games?search=${encodeURIComponent(query)}&key=10339595c43349fe932bbf361059223a`
         );
         const data = await response.json();
         setGames(data.results || []);
@@ -24,13 +26,18 @@ const SearchResults = () => {
       }
     };
 
-    fetchGames();
+    if (query) {
+      fetchGames();
+    }
   }, [query]);
 
   if (loading) {
     return (
       <div className="search-loading-container">
-        <p className="text-white">Loading Arena Data...</p>
+        <div className="search-loader-box">
+          <div className="search-cyber-spinner"></div>
+          <p className="search-loader-text">Loading Arena Data...</p>
+        </div>
       </div>
     );
   }
@@ -45,7 +52,7 @@ const SearchResults = () => {
         <p className="text-white no-results">No games found inside the database archive.</p>
       )}
 
-      {/* ✅ FLEX RESILIENT WRAPPER */}
+      {/* FLEX RESILIENT WRAPPER */}
       <div className="search-results-grid">
         {games.map((game) => (
           <div 

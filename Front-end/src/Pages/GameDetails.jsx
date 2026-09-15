@@ -1,9 +1,8 @@
+import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { useEffect, useState } from "react";
-import { FaStar, FaCalendarAlt, FaHourglassHalf, FaGamepad } from "react-icons/fa"; // Added icons for better UI
+import { FaStar, FaCalendarAlt, FaGamepad, FaArrowLeft, FaExclamationTriangle } from "react-icons/fa";
 import "../styles/gameDetails.css";
 
-// Using Vite's env variable
 const API_KEY = import.meta.env.VITE_RAWG_API_KEY || "10339595c43349fe932bbf361059223a";
 
 const GameDetails = () => {
@@ -19,7 +18,6 @@ const GameDetails = () => {
     const fetchGameDetails = async () => {
       try {
         setLoading(true);
-        // Scroll to top when opening a new game
         window.scrollTo(0, 0);
 
         const [gameRes, screenRes] = await Promise.all([
@@ -45,37 +43,48 @@ const GameDetails = () => {
     fetchGameDetails();
   }, [id]);
 
+  /* --- STYLED NEON LOADER --- */
   if (loading) {
     return (
-      <div className="details-loader-container">
-        <div className="details-loader"></div>
-        <p>Fetching Game Data...</p>
+      <div className="details-loader-screen">
+        <div className="loader-box">
+          <div className="cyber-spinner"></div>
+          <p className="loader-text">INITIALIZING GAME INTEL...</p>
+        </div>
       </div>
     );
   }
 
+  /* --- STYLED GLASS ERROR BOX --- */
   if (error) {
     return (
-      <div className="details-error-container">
-        <h2>Oops!</h2>
-        <p>{error}</p>
-        <button onClick={() => navigate("/browse")}>Back to Browse</button>
+      <div className="details-loader-screen">
+        <div className="details-error-card">
+          <FaExclamationTriangle className="error-icon" />
+          <h2>CONNECTION ERROR</h2>
+          <p>{error}</p>
+          <button className="error-back-btn" onClick={() => navigate("/browse")}>
+            Return to Browse
+          </button>
+        </div>
       </div>
     );
   }
 
   return (
     <div className="game-details-page">
-      {/* 🔥 HERO BANNER */}
+      {/* HERO BANNER */}
       <div
         className="game-hero"
         style={{
-          backgroundImage: `linear-gradient(to bottom, rgba(0,0,0,0.2), #0a0a0a), url(${game.background_image})`,
+          backgroundImage: `linear-gradient(to bottom, rgba(0,0,0,0.3) 0%, rgba(10,10,10,0.95) 100%), url(${game.background_image})`,
         }}
       >
         <div className="hero-content">
-          <button className="back-btn" onClick={() => navigate(-1)}>← Back</button>
-          <h1>{game.name}</h1>
+          <button className="back-nav-btn" onClick={() => navigate(-1)}>
+            <FaArrowLeft /> Back
+          </button>
+          <h1 className="game-detail-title">{game.name}</h1>
           <div className="hero-genres">
             {game.genres?.map((g) => (
               <span key={g.id} className="genre-badge">{g.name}</span>
@@ -85,7 +94,7 @@ const GameDetails = () => {
       </div>
 
       <div className="details-container">
-        {/* 🔍 INFO CARD */}
+        {/* INFO CARD */}
         <div className="game-info-card">
           <div className="info-grid">
             <div className="info-item">
@@ -93,33 +102,35 @@ const GameDetails = () => {
               <span><strong>Rating:</strong> {game.rating || "N/A"} / 5</span>
             </div>
             <div className="info-item">
-              <FaCalendarAlt className="icon" />
+              <FaCalendarAlt className="icon cal" />
               <span><strong>Released:</strong> {game.released || "Unknown"}</span>
             </div>
             <div className="info-item">
-              <FaGamepad className="icon" />
-              <span><strong>Platforms:</strong> {game.platforms?.map((p) => p.platform.name).join(", ")}</span>
+              <FaGamepad className="icon pad" />
+              <span><strong>Platforms:</strong> {game.platforms?.map((p) => p.platform.name).join(", ") || "PC"}</span>
             </div>
           </div>
 
           <div className="description">
             <h3>About {game.name}</h3>
-            {/* description_raw is safer than dangerouslySetInnerHTML for plain text */}
             <p>{game.description_raw || "No description available for this title."}</p>
           </div>
         </div>
 
-        {/* 📸 SCREENSHOTS */}
+        {/* SCREENSHOTS */}
         {screenshots.length > 0 && (
           <div className="screenshots-section">
-            <h3>Gallery</h3>
+            <h3>Intel Gallery</h3>
             <div className="screenshots-grid">
-              {screenshots.map((shot) => (
+              {screenshots.map((shot, index) => (
                 <div key={shot.id} className="screenshot-item">
                   <img
                     src={shot.image}
                     alt={`${game.name} screenshot`}
-                    /* Removing loading="lazy" to stop the Browser Intervention warning */
+                    loading={index < 2 ? "eager" : "lazy"}
+                    decoding="async"
+                    width="400"
+                    height="225"
                   />
                 </div>
               ))}
@@ -127,7 +138,7 @@ const GameDetails = () => {
           </div>
         )}
 
-        {/* 💰 BUY ACTION */}
+        {/* BUY / ACTION */}
         <div className="buy-section">
           <button className="buy-now-btn" onClick={() => navigate(`/payment/${id}`)}>
             Add to Library

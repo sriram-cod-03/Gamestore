@@ -19,6 +19,7 @@ import GameDetails from "./Pages/GameDetails";
 import BrowsePage from "./Pages/Browse";
 import NewReleases from "./Pages/NewReleases";
 import Profile from "./Pages/Profile";
+import PlatformGames from "./Pages/PlatformGames";
 
 // Special Category Pages
 import AllRecommended from "./Pages/AllRecommended";
@@ -177,6 +178,8 @@ function App() {
 
             {/* Fallback */}
             <Route path="*" element={<PageNotFound />} />
+
+            <Route path="/platform/:platformId" element={<PlatformGames />} />
           </Routes>
         </main>
 

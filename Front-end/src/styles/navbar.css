@@ -1,9 +1,14 @@
-/* --- NAVBAR WRAPPER --- */
-.gs-navbar {
+/* --- ROOT WRAPPER --- */
+.gs-navbar-root {
   position: sticky;
   top: 0;
   z-index: 1000;
-  background: rgba(0, 0, 0, 0.92);
+  width: 100%;
+}
+
+/* --- TOP NAVBAR --- */
+.gs-navbar {
+  background: rgba(8, 8, 12, 0.94);
   backdrop-filter: blur(14px);
   -webkit-backdrop-filter: blur(14px);
   border-bottom: 1px solid rgba(255, 255, 255, 0.08);
@@ -15,7 +20,7 @@
   width: 100%;
   max-width: 1400px;
   margin: 0 auto;
-  padding: 0 20px;
+  padding: 0 24px;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -30,10 +35,11 @@
   gap: 10px;
   text-decoration: none;
   color: #fff;
-  font-weight: 800;
+  font-weight: 900;
   font-size: 1.25rem;
   white-space: nowrap;
   flex-shrink: 0;
+  letter-spacing: 0.5px;
 }
 
 .logo-img {
@@ -53,10 +59,10 @@
 .gs-search {
   display: flex;
   align-items: center;
-  background: #111116;
+  background: #121217;
   border-radius: 30px;
   padding: 3px 4px 3px 14px;
-  border: 1px solid #25252d;
+  border: 1px solid #23232d;
   flex: 1;
   max-width: 420px;
   box-sizing: border-box;
@@ -65,7 +71,7 @@
 
 .gs-search:focus-within {
   border-color: #00ff88;
-  box-shadow: 0 0 10px rgba(0, 255, 136, 0.25);
+  box-shadow: 0 0 12px rgba(0, 255, 136, 0.25);
 }
 
 .gs-search input {
@@ -75,12 +81,12 @@
   color: #fff;
   font-size: 0.88rem;
   width: 100%;
-  min-width: 0; /* Prevents input from overflowing flex box */
+  min-width: 0;
   padding: 6px 0;
 }
 
 .gs-search input::placeholder {
-  color: #666;
+  color: #777;
 }
 
 .gs-search button {
@@ -88,7 +94,7 @@
   border: none;
   padding: 7px 18px;
   border-radius: 20px;
-  font-weight: 700;
+  font-weight: 800;
   font-size: 0.82rem;
   color: #000;
   cursor: pointer;
@@ -99,6 +105,7 @@
 
 .gs-search button:hover {
   filter: brightness(1.1);
+  transform: scale(1.02);
 }
 
 /* --- NAVIGATION LINKS --- */
@@ -112,14 +119,14 @@
 .gs-link {
   color: #aaa;
   text-decoration: none;
-  font-weight: 600;
-  font-size: 0.9rem;
+  font-weight: 700;
+  font-size: 0.88rem;
   transition: color 0.2s ease;
   white-space: nowrap;
 }
 
 .gs-link:hover {
-  color: #fff;
+  color: #00ff88;
 }
 
 .login-link {
@@ -145,112 +152,201 @@
 }
 
 /* ==========================================================================
-   RESPONSIVE BREAKPOINTS (Desktop -> Laptop -> Tablet -> Mobile 320px)
+   2. CATEGORY DROPDOWN SUBNAV (SCREENSHOT 2 STYLE)
    ========================================================================== */
+.gs-subnav-bar {
+  background: rgba(14, 14, 20, 0.95);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  padding: 8px 0;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
 
-/* 1. Laptops / Small Desktops (<= 1024px) */
-@media (max-width: 1024px) {
-  .gs-container {
-    padding: 0 16px;
-    gap: 14px;
+.gs-subnav-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.gs-dropdowns-group {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+/* DROPDOWN BUTTON WRAPPER */
+.gs-dropdown-wrap {
+  position: relative;
+}
+
+.gs-dropdown-trigger {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #e0e0e0;
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  padding: 8px 15px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  white-space: nowrap;
+}
+
+.gs-dropdown-trigger:hover,
+.gs-dropdown-trigger.active {
+  background: rgba(0, 255, 136, 0.12);
+  border-color: #00ff88;
+  color: #00ff88;
+}
+
+.platform-icon {
+  font-size: 1rem;
+}
+
+.ps-icon { color: #0070d1; }
+.xbox-icon { color: #107c10; }
+.nintendo-icon { color: #e60012; }
+
+.arrow-icon {
+  font-size: 0.72rem;
+  transition: transform 0.25s ease;
+}
+
+.arrow-icon.rotate {
+  transform: rotate(180deg);
+}
+
+/* DROPDOWN POPUP MENU */
+.gs-dropdown-menu {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 0;
+  background: #13131a;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 12px;
+  padding: 6px;
+  min-width: 200px;
+  list-style: none;
+  margin: 0;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.8), 0 0 15px rgba(0, 255, 136, 0.15);
+  animation: dropdownFadeIn 0.2s ease-out;
+  z-index: 1001;
+}
+
+@keyframes dropdownFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
   }
-  .gs-search {
-    max-width: 300px;
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
 }
 
-/* 2. Tablets & Mobile Devices (<= 768px) -> Flex-wrap 2-Row Alignment */
+.gs-dropdown-item-btn {
+  width: 100%;
+  text-align: left;
+  background: transparent;
+  border: none;
+  color: #bbb;
+  font-size: 0.84rem;
+  font-weight: 600;
+  padding: 10px 14px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.gs-dropdown-item-btn:hover {
+  background: rgba(0, 255, 136, 0.15);
+  color: #00ff88;
+  padding-left: 18px;
+}
+
+.subnav-tagline {
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 1.2px;
+  color: #666;
+}
+
+/* ==========================================================================
+   RESPONSIVE BREAKPOINTS (Mobile, Tablet, Desktop)
+   ========================================================================== */
+@media (max-width: 1024px) {
+  .gs-container {
+    padding: 0 16px;
+  }
+  .gs-search {
+    max-width: 320px;
+  }
+  .subnav-tagline {
+    display: none;
+  }
+}
+
 @media (max-width: 768px) {
   .gs-navbar {
     padding: 10px 0;
   }
 
   .gs-container {
-    display: flex;
     flex-wrap: wrap;
-    align-items: center;
-    justify-content: space-between;
     row-gap: 10px;
     column-gap: 8px;
     padding: 0 14px;
   }
 
-  /* Row 1 Left: Brand Logo */
   .gs-logo {
     order: 1;
     font-size: 1.15rem;
-    gap: 8px;
   }
 
-  .logo-img {
-    width: 24px;
-    height: 24px;
-  }
-
-  /* Row 1 Right: Navigation Links & Logout */
   .gs-links {
     order: 2;
     gap: 12px;
   }
 
-  .gs-link {
-    font-size: 0.82rem;
-  }
-
-  .logout-btn {
-    padding: 4px 10px;
-    font-size: 0.78rem;
-  }
-
-  /* Row 2 Full-Width: Search Bar */
   .gs-search {
     order: 3;
     width: 100%;
-    max-width: 100%; /* Takes full width below logo and links */
-    padding: 2px 3px 2px 12px;
-    margin-top: 2px;
+    max-width: 100%;
   }
 
-  .gs-search input {
-    font-size: 0.82rem;
+  /* Horizontal scrolling for category buttons on mobile */
+  .gs-subnav-container {
+    overflow-x: auto;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
   }
 
-  .gs-search button {
-    padding: 6px 14px;
-    font-size: 0.78rem;
+  .gs-subnav-container::-webkit-scrollbar {
+    display: none;
+  }
+
+  .gs-dropdowns-group {
+    padding-bottom: 2px;
+  }
+
+  .gs-dropdown-trigger {
+    padding: 6px 12px;
+    font-size: 0.76rem;
   }
 }
 
-/* 3. Small Mobile Screens (<= 360px: iPhone SE, Galaxy Fold, 320px Mobile S) */
 @media (max-width: 360px) {
   .gs-container {
     padding: 0 10px;
-    row-gap: 8px;
   }
-
   .gs-logo span {
     font-size: 1rem;
   }
-
   .gs-links {
     gap: 8px;
-  }
-
-  .gs-link {
-    font-size: 0.78rem;
-  }
-
-  .logout-btn {
-    padding: 3px 8px;
-    font-size: 0.74rem;
-  }
-
-  .gs-search {
-    padding: 2px 3px 2px 10px;
-  }
-
-  .gs-search button {
-    padding: 5px 10px;
-    font-size: 0.74rem;
   }
 }

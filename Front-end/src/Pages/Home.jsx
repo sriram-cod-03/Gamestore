@@ -13,12 +13,17 @@ import TrendingGameCard from "../Components/TrendingCard";
 import FreeGameCard from "../Components/Freecard";
 import HorrorCard from "../Components/HorrorCard";
 
+const RAWG_API_KEY = "10339595c43349fe932bbf361059223a";
+
+// Essential game IDs to pre-cache before hiding loader
+const PRELOAD_IDS = [3498, 28, 4200, 58175];
+
 const Home = ({ setAppLoading }) => {
   const [userName, setUserName] = useState("Player");
 
   useEffect(() => {
+    // 1. User details setup
     const storedUser = localStorage.getItem("user");
-    
     if (storedUser) {
       try {
         const userData = JSON.parse(storedUser);
@@ -34,9 +39,51 @@ const Home = ({ setAppLoading }) => {
       }
     }
 
-    if (typeof setAppLoading === "function") {
-      setTimeout(() => setAppLoading(false), 800);
-    }
+    // 2. Pre-fetch API & Images before removing preloader
+    let isMounted = true;
+
+    const preloadHomeAssets = async () => {
+      try {
+        const fetchPromises = PRELOAD_IDS.map(async (id) => {
+          try {
+            const res = await fetch(`https://api.rawg.io/api/games/${id}?key=${RAWG_API_KEY}`);
+            if (!res.ok) return null;
+            const data = await res.json();
+            
+            // Prefetch and cache image into browser memory
+            if (data.background_image) {
+              await new Promise((resolve) => {
+                const img = new Image();
+                img.src = data.background_image;
+                img.onload = resolve;
+                img.onerror = resolve;
+              });
+            }
+            return data;
+          } catch {
+            return null;
+          }
+        });
+
+        // Wait for all initial cards to load in parallel (max 2.2s fallback)
+        await Promise.race([
+          Promise.all(fetchPromises),
+          new Promise((resolve) => setTimeout(resolve, 2200))
+        ]);
+      } catch (err) {
+        console.error("Preload error:", err);
+      } finally {
+        if (isMounted && typeof setAppLoading === "function") {
+          setAppLoading(false);
+        }
+      }
+    };
+
+    preloadHomeAssets();
+
+    return () => {
+      isMounted = false;
+    };
   }, [setAppLoading]);
 
   return (

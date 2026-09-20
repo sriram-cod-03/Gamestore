@@ -4,14 +4,13 @@ import { FaStar, FaChevronLeft, FaChevronRight } from "react-icons/fa";
 import "../styles/platformGames.css";
 
 const RAWG_API_KEY = "10339595c43349fe932bbf361059223a";
-const PAGE_SIZE = 15; // 3 rows of 5 cards = 15 cards per page
+const PAGE_SIZE = 15; // 3 rows x 5 cards = 15 cards per page
 
 const PlatformGames = () => {
   const { platformId } = useParams();
   const location = useLocation();
   const navigate = useNavigate();
 
-  // Get dynamic title from query param (e.g. ?title=PS4%20Games)
   const queryParams = new URLSearchParams(location.search);
   const pageTitle = queryParams.get("title") || "Console Games";
 
@@ -21,7 +20,6 @@ const PlatformGames = () => {
   const [totalCount, setTotalCount] = useState(0);
 
   useEffect(() => {
-    // Reset page to 1 whenever platform changes
     setPage(1);
   }, [platformId]);
 
@@ -53,7 +51,41 @@ const PlatformGames = () => {
     };
   }, [platformId, page]);
 
-  const totalPages = Math.min(Math.ceil(totalCount / PAGE_SIZE), 20);
+  const totalPages = Math.min(Math.ceil(totalCount / PAGE_SIZE), 20) || 1;
+
+  // Dynamic pagination generator to handle sliding numbers
+  const getPaginationItems = () => {
+    const items = [];
+    const delta = 2; // Number of pages to show before & after the active page
+
+    const start = Math.max(2, page - delta);
+    const end = Math.min(totalPages - 1, page + delta);
+
+    // Always include page 1
+    items.push(1);
+
+    // Add ellipsis if there's a gap between 1 and start
+    if (start > 2) {
+      items.push("dots-left");
+    }
+
+    // Add surrounding pages
+    for (let i = start; i <= end; i++) {
+      items.push(i);
+    }
+
+    // Add ellipsis if there's a gap between end and last page
+    if (end < totalPages - 1) {
+      items.push("dots-right");
+    }
+
+    // Always include last page if more than 1 page exists
+    if (totalPages > 1) {
+      items.push(totalPages);
+    }
+
+    return items;
+  };
 
   return (
     <div className="platform-page-root">
@@ -66,11 +98,11 @@ const PlatformGames = () => {
             {pageTitle.toUpperCase()} <span className="platform-glow-dot">.</span>
           </h1>
           <p className="platform-subtitle">
-            Showing Page {page} of {totalPages || 1} • {PAGE_SIZE} Games / Page
+            Showing Page {page} of {totalPages} • {PAGE_SIZE} Games / Page
           </p>
         </div>
 
-        {/* LOADING SPINNER */}
+        {/* LOADING STATE */}
         {loading ? (
           <div className="platform-loader-wrap">
             <div className="platform-spinner"></div>
@@ -78,7 +110,7 @@ const PlatformGames = () => {
           </div>
         ) : (
           <>
-            {/* 5-COLUMN GRID (Screenshot 4 format) */}
+            {/* 5-COLUMN GRID */}
             <div className="platform-games-grid">
               {games.map((game) => (
                 <div
@@ -119,7 +151,7 @@ const PlatformGames = () => {
               ))}
             </div>
 
-            {/* SCREENSHOT 4 STYLE PAGINATION */}
+            {/* DYNAMIC SLIDING PAGINATION */}
             <div className="platform-pagination">
               <button
                 className="pag-nav-btn"
@@ -130,25 +162,31 @@ const PlatformGames = () => {
               </button>
 
               <div className="pag-numbers">
-                {Array.from({ length: Math.min(totalPages, 5) }, (_, i) => {
-                  const pNum = i + 1;
+                {getPaginationItems().map((item, idx) => {
+                  if (item === "dots-left" || item === "dots-right") {
+                    return (
+                      <span key={`dots-${idx}`} className="pag-dots">
+                        ...
+                      </span>
+                    );
+                  }
+
                   return (
                     <button
-                      key={pNum}
-                      className={`pag-num-btn ${page === pNum ? "active" : ""}`}
-                      onClick={() => setPage(pNum)}
+                      key={item}
+                      className={`pag-num-btn ${page === item ? "active" : ""}`}
+                      onClick={() => setPage(item)}
                     >
-                      {pNum}
+                      {item}
                     </button>
                   );
                 })}
-                {totalPages > 5 && <span className="pag-dots">...</span>}
               </div>
 
               <button
                 className="pag-nav-btn"
                 disabled={page >= totalPages}
-                onClick={() => setPage((prev) => prev + 1)}
+                onClick={() => setPage((prev) => Math.min(prev + 1, totalPages))}
               >
                 Next <FaChevronRight />
               </button>

@@ -1,14 +1,15 @@
-/* --- ROOT WRAPPER --- */
+/* --- ROOT NAV WRAPPER --- */
 .gs-navbar-root {
   position: sticky;
   top: 0;
   z-index: 1000;
   width: 100%;
+  overflow: visible !important;
 }
 
 /* --- TOP NAVBAR --- */
 .gs-navbar {
-  background: rgba(8, 8, 12, 0.94);
+  background: rgba(8, 8, 12, 0.96);
   backdrop-filter: blur(14px);
   -webkit-backdrop-filter: blur(14px);
   border-bottom: 1px solid rgba(255, 255, 255, 0.08);
@@ -152,31 +153,35 @@
 }
 
 /* ==========================================================================
-   2. CATEGORY DROPDOWN SUBNAV (SCREENSHOT 2 STYLE)
+   2. CATEGORY DROPDOWN SUBNAV
    ========================================================================== */
 .gs-subnav-bar {
-  background: rgba(14, 14, 20, 0.95);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  background: rgba(14, 14, 20, 0.98);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
   padding: 8px 0;
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+  overflow: visible !important;
+  position: relative;
+  z-index: 999;
 }
 
 .gs-subnav-container {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  overflow: visible !important;
 }
 
 .gs-dropdowns-group {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 10px;
+  overflow: visible !important;
 }
 
-/* DROPDOWN BUTTON WRAPPER */
+/* TRIGGER BUTTON */
 .gs-dropdown-wrap {
   position: relative;
+  overflow: visible !important;
 }
 
 .gs-dropdown-trigger {
@@ -184,27 +189,26 @@
   align-items: center;
   gap: 8px;
   background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.12);
   color: #e0e0e0;
   font-size: 0.82rem;
   font-weight: 700;
-  letter-spacing: 0.5px;
-  padding: 8px 15px;
+  padding: 8px 14px;
   border-radius: 8px;
   cursor: pointer;
-  transition: all 0.25s ease;
+  transition: all 0.2s ease;
   white-space: nowrap;
 }
 
 .gs-dropdown-trigger:hover,
 .gs-dropdown-trigger.active {
-  background: rgba(0, 255, 136, 0.12);
+  background: rgba(0, 255, 136, 0.14);
   border-color: #00ff88;
   color: #00ff88;
 }
 
 .platform-icon {
-  font-size: 1rem;
+  font-size: 0.95rem;
 }
 
 .ps-icon { color: #0070d1; }
@@ -212,7 +216,7 @@
 .nintendo-icon { color: #e60012; }
 
 .arrow-icon {
-  font-size: 0.72rem;
+  font-size: 0.7rem;
   transition: transform 0.25s ease;
 }
 
@@ -223,24 +227,24 @@
 /* DROPDOWN POPUP MENU */
 .gs-dropdown-menu {
   position: absolute;
-  top: calc(100% + 8px);
+  top: calc(100% + 6px);
   left: 0;
-  background: #13131a;
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  border-radius: 12px;
+  background: #121218;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 10px;
   padding: 6px;
-  min-width: 200px;
+  min-width: 190px;
   list-style: none;
   margin: 0;
-  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.8), 0 0 15px rgba(0, 255, 136, 0.15);
-  animation: dropdownFadeIn 0.2s ease-out;
-  z-index: 1001;
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.9), 0 0 16px rgba(0, 255, 136, 0.2);
+  animation: gsDropdownIn 0.2s ease-out;
+  z-index: 99999 !important;
 }
 
-@keyframes dropdownFadeIn {
+@keyframes gsDropdownIn {
   from {
     opacity: 0;
-    transform: translateY(-8px);
+    transform: translateY(-6px);
   }
   to {
     opacity: 1;
@@ -253,19 +257,19 @@
   text-align: left;
   background: transparent;
   border: none;
-  color: #bbb;
+  color: #ccc;
   font-size: 0.84rem;
   font-weight: 600;
-  padding: 10px 14px;
+  padding: 9px 12px;
   border-radius: 6px;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: all 0.18s ease;
 }
 
 .gs-dropdown-item-btn:hover {
   background: rgba(0, 255, 136, 0.15);
   color: #00ff88;
-  padding-left: 18px;
+  padding-left: 16px;
 }
 
 .subnav-tagline {
@@ -276,77 +280,144 @@
 }
 
 /* ==========================================================================
-   RESPONSIVE BREAKPOINTS (Mobile, Tablet, Desktop)
+   RESPONSIVE LAYOUT (TABLETS & MOBILE S, M, L)
    ========================================================================== */
-@media (max-width: 1024px) {
+
+/* 1. TABLET & IPAD (<= 992px) */
+@media (max-width: 992px) {
   .gs-container {
     padding: 0 16px;
-  }
-  .gs-search {
-    max-width: 320px;
   }
   .subnav-tagline {
     display: none;
   }
 }
 
+/* 2. MOBILE L & TABLETS (<= 768px) */
 @media (max-width: 768px) {
   .gs-navbar {
     padding: 10px 0;
   }
 
   .gs-container {
+    display: flex;
     flex-wrap: wrap;
-    row-gap: 10px;
+    align-items: center;
+    justify-content: space-between;
+    row-gap: 12px;
     column-gap: 8px;
-    padding: 0 14px;
+    padding: 0 16px;
   }
 
+  /* Row 1 Left: Logo */
   .gs-logo {
     order: 1;
     font-size: 1.15rem;
   }
 
+  /* Row 1 Right: Nav Links */
   .gs-links {
     order: 2;
     gap: 12px;
   }
 
+  .gs-link {
+    font-size: 0.84rem;
+  }
+
+  .logout-btn {
+    padding: 4px 10px;
+    font-size: 0.78rem;
+  }
+
+  /* Row 2 Full-Width: Search Bar */
   .gs-search {
     order: 3;
-    width: 100%;
-    max-width: 100%;
+    width: 100% !important;
+    flex-basis: 100% !important;
+    max-width: 100% !important;
+    margin: 0;
+    padding: 3px 4px 3px 12px;
   }
 
-  /* Horizontal scrolling for category buttons on mobile */
+  .gs-search input {
+    font-size: 0.84rem;
+  }
+
+  .gs-search button {
+    padding: 6px 14px;
+    font-size: 0.78rem;
+  }
+
+  /* Subnav category buttons */
+  .gs-subnav-bar {
+    padding: 6px 0;
+  }
+
   .gs-subnav-container {
-    overflow-x: auto;
-    scrollbar-width: none;
-    -ms-overflow-style: none;
-  }
-
-  .gs-subnav-container::-webkit-scrollbar {
-    display: none;
+    padding: 0 16px;
   }
 
   .gs-dropdowns-group {
-    padding-bottom: 2px;
+    gap: 8px;
+    width: 100%;
   }
 
   .gs-dropdown-trigger {
-    padding: 6px 12px;
+    padding: 6px 10px;
     font-size: 0.76rem;
+    gap: 6px;
   }
 }
 
-@media (max-width: 360px) {
+/* 3. MOBILE M & S (<= 425px & 320px) */
+@media (max-width: 425px) {
   .gs-container {
-    padding: 0 10px;
+    padding: 0 12px;
   }
+
+  .gs-subnav-container {
+    padding: 0 12px;
+  }
+
   .gs-logo span {
-    font-size: 1rem;
+    font-size: 1.05rem;
   }
+
   .gs-links {
     gap: 8px;
+  }
+
+  .gs-link {
+    font-size: 0.8rem;
+  }
+
+  .logout-btn {
+    padding: 3px 8px;
+    font-size: 0.74rem;
+  }
+
+  /* Compact button styling on small screens */
+  .gs-dropdowns-group {
+    justify-content: space-between;
+  }
+
+  .gs-dropdown-trigger {
+    padding: 6px 8px;
+    font-size: 0.72rem;
+    gap: 4px;
+  }
+
+  .platform-icon {
+    font-size: 0.85rem;
+  }
+
+  .gs-dropdown-menu {
+    min-width: 160px;
+  }
+
+  .gs-dropdown-item-btn {
+    font-size: 0.78rem;
+    padding: 8px 10px;
   }
 }

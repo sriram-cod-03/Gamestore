@@ -40,7 +40,7 @@ const Navbar = () => {
 
   const isLoggedIn = Boolean(localStorage.getItem("token"));
 
-  // Click outside close handler
+  // Click outside to close dropdown
   useEffect(() => {
     const handleClickOutside = (e) => {
       if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
@@ -48,7 +48,11 @@ const Navbar = () => {
       }
     };
     document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
+    document.addEventListener("touchstart", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+      document.removeEventListener("touchstart", handleClickOutside);
+    };
   }, []);
 
   const handleSubmit = (e) => {
@@ -79,13 +83,14 @@ const Navbar = () => {
       {/* 1. TOP NAVBAR */}
       <div className="gs-navbar">
         <div className="gs-container">
-          {/* LOGO & BRANDING */}
+          
+          {/* LOGO */}
           <Link to="/" className="gs-logo" title="GameStore Home">
             <img src={logo} alt="GameStore Logo" className="logo-img" />
             <span>GameStore</span>
           </Link>
 
-          {/* NAVIGATION LINKS */}
+          {/* NAV LINKS */}
           <nav className="gs-links">
             <Link to="/" className="gs-link">Home</Link>
             <Link to="/browse" className="gs-link">Browse</Link>
@@ -99,7 +104,7 @@ const Navbar = () => {
             )}
           </nav>
 
-          {/* SEARCH BAR */}
+          {/* SEARCH BAR (Full line on mobile) */}
           <form className="gs-search" onSubmit={handleSubmit}>
             <input
               type="text"
@@ -109,10 +114,11 @@ const Navbar = () => {
             />
             <button type="submit">Search</button>
           </form>
+
         </div>
       </div>
 
-      {/* 2. CATEGORY DROPDOWNS BAR */}
+      {/* 2. CONSOLE CATEGORIES BAR */}
       <div className="gs-subnav-bar">
         <div className="gs-container gs-subnav-container">
           <div className="gs-dropdowns-group">

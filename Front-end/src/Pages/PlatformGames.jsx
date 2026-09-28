@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useLocation, useParams, useNavigate } from "react-router-dom";
-import { FaStar, FaChevronLeft, FaChevronRight } from "react-icons/fa";
+import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
+import GameCard from "../Components/GameCard";
 import "../styles/platformGames.css";
 
 const RAWG_API_KEY = "10339595c43349fe932bbf361059223a";
@@ -110,44 +111,10 @@ const PlatformGames = () => {
           </div>
         ) : (
           <>
-            {/* 5-COLUMN GRID */}
+            {/* 5-COLUMN GRID USING GAMECARD COMPONENT */}
             <div className="platform-games-grid">
               {games.map((game) => (
-                <div
-                  key={game.id}
-                  className="game-catalog-card"
-                  onClick={() => navigate(`/game/${game.id}`)}
-                >
-                  <div className="card-thumb-wrap">
-                    <img
-                      src={
-                        game.background_image ||
-                        "https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=600&q=80"
-                      }
-                      alt={game.name}
-                      className="card-thumb-img"
-                      loading="lazy"
-                    />
-                    <span className="card-rating-badge">
-                      <FaStar className="star" /> {game.rating || "4.0"}
-                    </span>
-                  </div>
-
-                  <div className="card-meta">
-                    <span className="card-release">
-                      {game.released ? game.released.substring(0, 4) : "2024"}
-                    </span>
-                    <h3 className="card-title" title={game.name}>
-                      {game.name}
-                    </h3>
-                    <div className="card-footer-row">
-                      <span className="card-price">
-                        ₹{(1299 + (game.id % 2000)).toLocaleString()}
-                      </span>
-                      <button className="card-view-btn">VIEW</button>
-                    </div>
-                  </div>
-                </div>
+                <GameCard key={game.id} game={game} />
               ))}
             </div>
 

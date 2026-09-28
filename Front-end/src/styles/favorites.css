@@ -1,0 +1,108 @@
+/* ==========================================================================
+   FAVORITES PAGE STYLES
+   ========================================================================== */
+
+.favorites-page-root {
+  min-height: 100vh;
+  background-color: #0b0b10;
+  color: #ffffff;
+  padding: 40px 0 80px;
+}
+
+.favorites-container {
+  width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 24px;
+  box-sizing: border-box;
+}
+
+.favorites-header {
+  margin-bottom: 36px;
+}
+
+.favorites-badge {
+  display: inline-block;
+  background: rgba(255, 77, 77, 0.12);
+  border: 1px solid rgba(255, 77, 77, 0.3);
+  color: #ff4d4d;
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 1.5px;
+  padding: 4px 12px;
+  border-radius: 20px;
+  margin-bottom: 12px;
+}
+
+.favorites-title {
+  font-size: 2rem;
+  font-weight: 900;
+  letter-spacing: 0.5px;
+  margin: 0 0 8px 0;
+}
+
+.favorites-subtitle {
+  color: #888899;
+  font-size: 0.9rem;
+  margin: 0;
+}
+
+/* EMPTY STATE */
+.favorites-empty-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 80px 20px;
+  background: #121218;
+  border: 1px solid #23232d;
+  border-radius: 16px;
+  margin-top: 20px;
+}
+
+.favorites-empty-icon {
+  font-size: 3.5rem;
+  color: #ff4d4d;
+  opacity: 0.5;
+  margin-bottom: 16px;
+}
+
+.favorites-empty-title {
+  font-size: 1.4rem;
+  font-weight: 800;
+  margin: 0 0 8px 0;
+}
+
+.favorites-empty-desc {
+  color: #888899;
+  font-size: 0.9rem;
+  max-width: 400px;
+  margin: 0 0 24px 0;
+}
+
+.browse-btn {
+  background: linear-gradient(135deg, #00ff88, #00c9ff);
+  color: #000;
+  font-weight: 800;
+  font-size: 0.88rem;
+  padding: 10px 24px;
+  border-radius: 25px;
+  text-decoration: none;
+  transition: transform 0.2s ease, filter 0.2s ease;
+}
+
+.browse-btn:hover {
+  filter: brightness(1.1);
+  transform: translateY(-2px);
+}
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+  .favorites-page-root {
+    padding: 24px 0 60px;
+  }
+  .favorites-title {
+    font-size: 1.6rem;
+  }
+}

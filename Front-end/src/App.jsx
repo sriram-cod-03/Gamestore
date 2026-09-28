@@ -3,6 +3,7 @@ import { Routes, Route, useLocation, Navigate } from "react-router-dom";
 
 // Context
 import { NotificationProvider } from "./context/NotificationContext";
+import { ShopProvider } from "./context/ShopContext";
 
 // Components & Pages
 import Navbar from "./Components/Navbar";
@@ -20,6 +21,8 @@ import BrowsePage from "./Pages/Browse";
 import NewReleases from "./Pages/NewReleases";
 import Profile from "./Pages/Profile";
 import PlatformGames from "./Pages/PlatformGames";
+import Favorites from "./Pages/Favorites";
+import Cart from "./Pages/Cart";
 
 // Special Category Pages
 import AllRecommended from "./Pages/AllRecommended";
@@ -175,11 +178,33 @@ function App() {
                 </ProtectedRoute>
               }
             />
+            <Route
+              path="/platform/:platformId"
+              element={
+                <ProtectedRoute>
+                  <PlatformGames />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/favorites"
+              element={
+                <ProtectedRoute>
+                  <Favorites />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/cart"
+              element={
+                <ProtectedRoute>
+                  <Cart />
+                </ProtectedRoute>
+              }
+            />
 
             {/* Fallback */}
             <Route path="*" element={<PageNotFound />} />
-
-            <Route path="/platform/:platformId" element={<PlatformGames />} />
           </Routes>
         </main>
 

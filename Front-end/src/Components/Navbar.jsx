@@ -1,6 +1,14 @@
 import React, { useState, useRef, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { FaPlaystation, FaXbox, FaGamepad, FaChevronDown } from "react-icons/fa";
+import {
+  FaPlaystation,
+  FaXbox,
+  FaGamepad,
+  FaChevronDown,
+  FaHeart,
+  FaShoppingCart,
+} from "react-icons/fa";
+import { useShop } from "../context/ShopContext";
 import logo from "../assets/images/GameStoreicon.png";
 import "../styles/navbar.css";
 
@@ -11,8 +19,8 @@ const PLATFORM_MENUS = [
     items: [
       { label: "PS5 Games", platformId: 187 },
       { label: "PS4 Games", platformId: 18 },
-      { label: "PS3 Games", platformId: 16 }
-    ]
+      { label: "PS3 Games", platformId: 16 },
+    ],
   },
   {
     name: "Xbox",
@@ -20,16 +28,14 @@ const PLATFORM_MENUS = [
     items: [
       { label: "Xbox Series Games", platformId: 186 },
       { label: "Xbox One Games", platformId: 1 },
-      { label: "Xbox 360 Games", platformId: 14 }
-    ]
+      { label: "Xbox 360 Games", platformId: 14 },
+    ],
   },
   {
     name: "Nintendo",
     icon: <FaGamepad className="platform-icon nintendo-icon" />,
-    items: [
-      { label: "Nintendo Switch Games", platformId: 7 }
-    ]
-  }
+    items: [{ label: "Nintendo Switch Games", platformId: 7 }],
+  },
 ];
 
 const Navbar = () => {
@@ -38,9 +44,11 @@ const Navbar = () => {
   const dropdownRef = useRef(null);
   const navigate = useNavigate();
 
+  // Consume Shop Context for badges
+  const { favorites, getCartCount } = useShop();
+
   const isLoggedIn = Boolean(localStorage.getItem("token"));
 
-  // Click outside to close dropdown
   useEffect(() => {
     const handleClickOutside = (e) => {
       if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
@@ -83,20 +91,41 @@ const Navbar = () => {
       {/* 1. TOP NAVBAR */}
       <div className="gs-navbar">
         <div className="gs-container">
-          
           {/* LOGO */}
           <Link to="/" className="gs-logo" title="GameStore Home">
             <img src={logo} alt="GameStore Logo" className="logo-img" />
             <span>GameStore</span>
           </Link>
 
-          {/* NAV LINKS */}
+          {/* NAV LINKS (UPDATED WITH FAVORITES & CART BADGES) */}
           <nav className="gs-links">
-            <Link to="/" className="gs-link">Home</Link>
-            <Link to="/browse" className="gs-link">Browse</Link>
+            <Link to="/" className="gs-link">
+              Home
+            </Link>
+            <Link to="/browse" className="gs-link">
+              Browse
+            </Link>
+
+            {/* FAVORITES LINK */}
+            <Link to="/favorites" className="gs-link gs-icon-link" title="Favorites">
+              <FaHeart className="nav-icon-fav" />
+              {favorites.length > 0 && (
+                <span className="nav-badge">{favorites.length}</span>
+              )}
+            </Link>
+
+            {/* CART LINK */}
+            <Link to="/cart" className="gs-link gs-icon-link" title="Cart">
+              <FaShoppingCart className="nav-icon-cart" />
+              {getCartCount() > 0 && (
+                <span className="nav-badge">{getCartCount()}</span>
+              )}
+            </Link>
 
             {!isLoggedIn ? (
-              <Link to="/login" className="gs-link login-link">Login</Link>
+              <Link to="/login" className="gs-link login-link">
+                Login
+              </Link>
             ) : (
               <button className="logout-btn" onClick={handleLogout}>
                 Logout
@@ -104,7 +133,7 @@ const Navbar = () => {
             )}
           </nav>
 
-          {/* SEARCH BAR (Full line on mobile) */}
+          {/* SEARCH BAR */}
           <form className="gs-search" onSubmit={handleSubmit}>
             <input
               type="text"
@@ -114,7 +143,6 @@ const Navbar = () => {
             />
             <button type="submit">Search</button>
           </form>
-
         </div>
       </div>
 

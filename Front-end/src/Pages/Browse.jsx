@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "../styles/browse.css";
 import { FaStar, FaFilter, FaSortAmountDown, FaGamepad } from "react-icons/fa";
+import GameCard from "../Components/GameCard";
 
 const BrowsePage = () => {
   const [games, setGames] = useState([]);
